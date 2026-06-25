@@ -1,16 +1,13 @@
 import type { ConsultingContent } from '@/types/project-content';
 import { ConsultingTitleGroup } from './ConsultingTitleGroup';
 
-// Map a tier's data-driven accent name to a semantic accent class. Legacy
-// brand names (magenta/turquoise/yellow) resolve to the three semantic
-// accents; the semantic names pass through unchanged.
+// Map a tier's data-authored accent name to a semantic accent class. Content
+// keeps human-readable color names; the engine renders them as the three theme
+// accents. Unknown values fall back to the primary accent (see usage below).
 const TIER_ACCENT_CLASS: Record<string, string> = {
   magenta: 'accent',
-  primary: 'accent',
   turquoise: 'accent-secondary',
-  secondary: 'accent-secondary',
   yellow: 'accent-tertiary',
-  tertiary: 'accent-tertiary',
 };
 
 export function ConsultingDossier({ data }: { data: ConsultingContent }) {
