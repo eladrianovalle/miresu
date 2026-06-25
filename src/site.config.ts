@@ -31,6 +31,24 @@ export interface SiteConfig {
     instagram: string;
     facebook: string;
   };
+  /** Display labels for the project taxonomy. The category/relationship keys are
+   *  structural (content dirs, schemas, resume grouping); only the labels are
+   *  branding. Omit any subset to fall back to the neutral defaults in
+   *  src/lib/site-labels.ts. */
+  labels?: {
+    /** Filter-tab + directory-row labels for the three project categories. */
+    categories?: Partial<Record<'games' | 'client' | 'personal', string>>;
+    /** Dossier meta label for a project's organization, by relationship. */
+    relationships?: Partial<
+      Record<'own' | 'client' | 'employer' | 'collaboration', string>
+    >;
+  };
+  /** Optional stylized identity chrome — the "operator" eyebrow + topbar handle
+   *  and the "ID: …" line. Off by default; a fork opts in. */
+  chrome?: {
+    operator?: boolean;
+    showId?: boolean;
+  };
 }
 
 export const siteConfig: SiteConfig = {
@@ -48,5 +66,25 @@ export const siteConfig: SiteConfig = {
     twitter: '@samrivera',
     instagram: 'https://www.instagram.com/samrivera',
     facebook: 'https://www.facebook.com/samrivera',
+  },
+  // Neutral, generic taxonomy labels for the base template. Rename these per
+  // fork (e.g. games -> 'Games', personal -> 'Collabs') to match your domain.
+  labels: {
+    categories: {
+      games: 'Projects',
+      client: 'Clients',
+      personal: 'Personal',
+    },
+    relationships: {
+      own: 'Independent',
+      client: 'Client',
+      employer: 'Employer',
+      collaboration: 'Collaboration',
+    },
+  },
+  // The stylized "operator"/"ID" chrome stays off in the neutral base.
+  chrome: {
+    operator: false,
+    showId: false,
   },
 };

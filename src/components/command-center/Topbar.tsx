@@ -1,5 +1,6 @@
 import type { Identity } from '@/types/project-content';
 import { siteConfig } from '@/site.config';
+import { chrome } from '@/lib/site-labels';
 
 interface TopbarProps {
   identity: Identity;
@@ -18,10 +19,14 @@ export function Topbar({ identity }: TopbarProps) {
           alt={siteConfig.brandName}
           className="cc-topbar-logo"
         />
-        <span className="cc-topbar-divider" />
-        <span className="cc-topbar-operator">
-          operator: {operatorHandle}
-        </span>
+        {chrome.operator && (
+          <>
+            <span className="cc-topbar-divider" />
+            <span className="cc-topbar-operator">
+              operator: {operatorHandle}
+            </span>
+          </>
+        )}
       </div>
 
       <div className="cc-topbar-right">

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import type { Project } from '@/lib/projects';
 import { getHeroImage } from '@/lib/project-utils';
+import { categoryLabels } from '@/lib/site-labels';
 import { DraftBadge } from '@/components/ui/DraftBadge';
 
 type DirectoryItemProps = {
@@ -24,12 +25,7 @@ function StatusBadge({ project }: { project: Project }) {
 export function DirectoryItem({ project, index = 0 }: DirectoryItemProps) {
   const searchParams = useSearchParams();
   const imageSrc = project.confidential ? null : (project.thumbnail ?? getHeroImage(project));
-  const categoryLabel =
-    project.category === 'games'
-      ? 'Games'
-      : project.category === 'client'
-        ? 'Clients'
-        : 'Collabs';
+  const categoryLabel = categoryLabels[project.category];
 
   const query = searchParams.toString();
   const href = `/projects/${project.slug}/${query ? `?${query}` : ''}`;

@@ -1,17 +1,10 @@
 import type { Project } from '@/lib/projects';
+import { relationshipLabels } from '@/lib/site-labels';
 
 const CATEGORY_ACCENT: Record<Project['category'], string> = {
   games: 'accent',
   client: 'accent-secondary',
   personal: 'accent-tertiary',
-};
-
-// Dossier label for the organization, by relationship.
-const RELATIONSHIP_LABEL: Record<Project['relationship'], string> = {
-  own: 'Entity',
-  client: 'Client',
-  employer: 'Employer',
-  collaboration: 'Collab',
 };
 
 export function DossierMeta({ project }: { project: Project }) {
@@ -24,7 +17,7 @@ export function DossierMeta({ project }: { project: Project }) {
         <span className={`cc-meta-value ${accent}`}>{project.role}</span>
       </div>
       <div className="cc-meta-field">
-        <span className="cc-meta-label">{RELATIONSHIP_LABEL[project.relationship]}</span>
+        <span className="cc-meta-label">{relationshipLabels[project.relationship]}</span>
         <span className="cc-meta-value">{project.organization}</span>
       </div>
       <div className="cc-meta-field">
