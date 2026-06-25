@@ -1,0 +1,82 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  validate:
+    name: Validate content
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm install
+      - run: npm run validate:content
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm install
+      - run: npm run lint
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm install
+      - run: npm test
+
+  build:
+    name: Static export build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm install
+      - run: npm run build:staging
+
+      - name: Verify critical assets exist in export
+        run: |
+          echo "Checking critical outputs in dist-staging/..."
+          missing=0
+          # Fixed routes + build-time resume artifacts.
+          for f in index.html resume/index.html consulting/index.html \
+                   assets/resume/resume.pdf assets/resume/resume.json; do
+            if [ ! -f "dist-staging/$f" ]; then
+              echo "MISSING: /$f"
+              missing=$((missing + 1))
+            fi
+          done
+          # At least one project page must generate (slugs are content-defined,
+          # so this stays correct after a fork swaps the sample content).
+          if ! ls dist-staging/projects/*/index.html >/dev/null 2>&1; then
+            echo "MISSING: no /projects/*/index.html generated"
+            missing=$((missing + 1))
+          fi
+          if [ "$missing" -gt 0 ]; then
+            echo "ERROR: $missing critical output(s) missing from static export"
+            exit 1
+          fi
+          echo "All critical outputs present."
