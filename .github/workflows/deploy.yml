@@ -1,0 +1,93 @@
+name: Deploy to GitHub Pages
+
+# Publishes your fork to GitHub Pages.
+#
+# ONE-TIME SETUP (the maintainer/forker does this once):
+#   Repo → Settings → Pages → Build and deployment → Source: "GitHub Actions".
+#   After that, every push to `main` (or a manual run below) publishes the site.
+#
+# BASE PATH — handled automatically (no manual config):
+#   GitHub Pages serves a *project* site at https://<user>.github.io/<repo>/, so
+#   the build needs NEXT_PUBLIC_BASE_PATH=/<repo>. But a *user/org* site (the repo
+#   named <user>.github.io) and a *custom domain* both serve at the root, so the
+#   base path must be empty. The "Compute base path" step below derives this:
+#     - empty when the repo name ends in `.github.io` (user/org site), OR
+#     - empty when a custom domain is in use (a `public/CNAME` is committed), OR
+#     - `/<repo>` otherwise (the common project-site case).
+#
+# CUSTOM DOMAIN:
+#   Commit a `public/CNAME` file containing your domain (e.g. `portfolio.example.com`).
+#   Next.js copies `public/` into the export, so the CNAME lands at the site root
+#   and the base path is forced empty automatically.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+# Least-privilege token: read the repo, write the Pages deployment, OIDC for deploy.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Only one Pages deploy at a time; let an in-flight run finish (don't cancel).
+concurrency:
+  group: 'pages'
+  cancel-in-progress: false
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  build:
+    name: Build static export
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Compute base path
+        id: basepath
+        run: |
+          repo="${GITHUB_REPOSITORY##*/}"   # owner/name -> name
+          base="/$repo"                      # project-site default
+          # User/org site (repo named <user>.github.io) serves at the root.
+          case "$repo" in
+            *.github.io) base="" ;;
+          esac
+          # Custom domain (committed public/CNAME) also serves at the root.
+          if [ -f public/CNAME ]; then
+            base=""
+          fi
+          echo "Resolved NEXT_PUBLIC_BASE_PATH='$base' (repo: $repo)"
+          echo "base_path=$base" >> "$GITHUB_OUTPUT"
+
+      - name: Build static export
+        env:
+          NEXT_PUBLIC_BASE_PATH: ${{ steps.basepath.outputs.base_path }}
+        run: npm run build:staging
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-staging
+
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+    needs: build
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

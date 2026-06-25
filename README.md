@@ -21,8 +21,8 @@ both surfaces update.
 - **A dev-only `/admin` editor** — edit all of your content (projects, identity,
   consulting, and the resume sections) through forms auto-generated from the
   content schemas. Disabled in production.
-- **Static export** — deploys as pure static files (no server). GitHub Pages
-  deploy support is forthcoming (template step 4b).
+- **Static export** — deploys as pure static files (no server). A one-command
+  [GitHub Pages deploy](#deploy-to-github-pages) is included.
 
 It is **one content model, two views.** A project can surface on the site, on the
 resume, on both, or neither (via each entry's `surfaces` toggle), so the resume
@@ -106,10 +106,36 @@ stay untouched). The engine exposes three semantic accents — `accent` (primary
 each a distinct value to differentiate (e.g. per category). Custom command-center
 CSS lives under `src/styles/`.
 
+## Deploy to GitHub Pages
+
+Your fork ships with a Pages deploy workflow (`.github/workflows/deploy.yml`).
+
+**One-time setup:** in your fork, go to **Settings → Pages → Build and deployment**
+and set **Source** to **"GitHub Actions"**. That's it.
+
+After that, every push to `main` publishes your site (you can also run the
+**Deploy to GitHub Pages** workflow manually from the Actions tab). Your site
+goes live at `https://<your-username>.github.io/<repo-name>/`.
+
+**The base path is handled for you.** GitHub Pages serves a project site under a
+`/<repo-name>/` subpath, so the build needs `NEXT_PUBLIC_BASE_PATH=/<repo-name>`
+to make asset and link URLs resolve. The workflow derives this automatically:
+
+- a normal fork (e.g. `your-name/my-portfolio`) builds with `/<repo-name>`;
+- a **user/org site** (the repo named `<your-username>.github.io`) serves at the
+  root, so the base path is left empty;
+- a **custom domain** (see below) also serves at the root, so the base path is
+  left empty.
+
+**Custom domain.** Commit a `public/CNAME` file containing your domain (one line,
+e.g. `portfolio.example.com`), then set the same domain under Settings → Pages.
+Next.js copies `public/` into the export, so the `CNAME` lands at the site root,
+and the workflow detects it and builds with an empty base path automatically.
+
 ## Roadmap
 
-- **4b — GitHub Pages deploy:** a one-command path to publish your fork to your
-  own GitHub Pages (exercises the base-path / static-export config). Coming next.
+The template milestones are complete, including **4b — GitHub Pages deploy**
+(see [Deploy to GitHub Pages](#deploy-to-github-pages)).
 
 ## License
 
