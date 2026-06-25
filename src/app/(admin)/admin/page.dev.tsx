@@ -3,9 +3,9 @@ import { CONTENT_TYPES } from '@/lib/admin/schemas';
 import { listProjectSlugs } from '@/lib/admin/file-ops';
 
 const ACCENT_MAP: Record<string, string> = {
-  'projects/games': 'border-magenta/40 hover:border-magenta/70 hover:shadow-[0_0_20px_rgba(139, 163, 199,0.1)]',
-  'projects/client': 'border-turquoise/40 hover:border-turquoise/70 hover:shadow-[0_0_20px_rgba(139, 163, 199,0.1)]',
-  'projects/personal': 'border-yellow/40 hover:border-yellow/70 hover:shadow-[0_0_20px_rgba(139, 163, 199,0.08)]',
+  'projects/games': 'border-surface-3 hover:border-accent',
+  'projects/client': 'border-surface-3 hover:border-accent',
+  'projects/personal': 'border-surface-3 hover:border-accent',
   consulting: 'border-surface-3 hover:border-text-muted',
   identity: 'border-surface-3 hover:border-text-muted',
 };
