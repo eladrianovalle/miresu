@@ -35,7 +35,7 @@
   outline-offset: 2px;
 }
 
-/* Focus indicators — turquoise ring on all interactive elements */
+/* Focus indicators — accent ring on all interactive elements */
 .cc-shell a:focus-visible,
 .cc-shell button:focus-visible,
 .cc-shell [role="tab"]:focus-visible,

@@ -97,9 +97,14 @@ after content or theme changes with `npm run test:visual -- --update-snapshots`.
 
 ## Theme
 
-The default theme is currently the placeholder visual identity carried over while
-this template is generalized — restyle it to make it yours. Design tokens live in
-`tailwind.config.ts` and the custom CSS under `src/styles/`.
+The default theme is a restrained neutral — a clean starting point you restyle to
+make it yours. Edit the palette in `src/theme.config.ts` and the typefaces in
+`src/app/fonts.ts`; the engine reads from there (`tailwind.config.ts` imports the
+palette and the root layout injects it as `:root` CSS variables, so engine files
+stay untouched). The engine exposes three semantic accents — `accent` (primary),
+`accent-secondary`, `accent-tertiary` — all equal in the neutral default; give
+each a distinct value to differentiate (e.g. per category). Custom command-center
+CSS lives under `src/styles/`.
 
 ## Roadmap
 

@@ -377,14 +377,14 @@
   gap: 12px;
 }
 
-/* Secondary CTA — turquoise ghost, legible at rest, subordinate to Hire's
-   solid-yellow primary via a dimmer resting border and no idle drift. */
+/* Secondary CTA — accent-secondary ghost, legible at rest, subordinate to Hire's
+   solid accent-tertiary primary via a dimmer resting border and no idle drift. */
 .cc-identity-cta--secondary {
   border-color: rgba(139, 163, 199, 0.45);
   color: var(--cc-color-accent-secondary);
   /* The primary CTA gets its stacking context from the running cc-drift
      transform animation, which contains the z-index:-1 fill. This variant has
-     no drift, so isolate to keep the turquoise fill from painting behind the
+     no drift, so isolate to keep the accent-secondary fill from painting behind the
      panel (otherwise hover text goes dark-on-dark). */
   animation: none;
   isolation: isolate;
@@ -400,7 +400,7 @@
   box-shadow: 0 0 18px rgba(139, 163, 199, 0.28);
 }
 
-/* Brand CTA (Hire) — primary yellow, kept beside the logo; never shrinks below
+/* Brand CTA (Hire) — solid accent-tertiary, kept beside the logo; never shrinks below
    its label so it stays a clean tap target next to the mark. */
 .cc-identity-cta--brand {
   flex: 0 0 auto;
