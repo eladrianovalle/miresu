@@ -117,7 +117,15 @@ export function ContentForm({
   const [saveResult, setSaveResult] = useState<{ ok: boolean; message: string } | null>(null);
   const [fieldErrors, setFieldErrors] = useState<Map<string, string>>(new Map());
   const [showJson, setShowJson] = useState(false);
+  // `navigator` only exists in the browser — read it after mount so this
+  // component still renders during SSR. Server (and first client paint) shows
+  // "Ctrl"; on a Mac the effect upgrades it to ⌘, with no hydration mismatch.
+  const [isMac, setIsMac] = useState(false);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    setIsMac(navigator.platform?.includes('Mac') ?? false);
+  }, []);
 
   // Track dirty state
   const isDirty = JSON.stringify(formData) !== JSON.stringify(initialData);
@@ -315,7 +323,7 @@ export function ContentForm({
           </span>
         )}
         <span className="ml-auto text-[10px] text-text-muted/40 font-space-mono">
-          {navigator.platform?.includes('Mac') ? '\u2318' : 'Ctrl'}+S
+          {isMac ? '\u2318' : 'Ctrl'}+S
         </span>
       </div>
     </div>
