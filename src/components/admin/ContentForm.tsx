@@ -284,7 +284,7 @@ export function ContentForm({
           type="button"
           onClick={() => void handleSave()}
           disabled={saving}
-          className="px-4 py-2 rounded-md bg-turquoise/90 text-primary-dark font-space-mono font-bold text-xs tracking-wide hover:bg-turquoise disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 rounded-md bg-accent-secondary/90 text-primary-dark font-space-mono font-bold text-xs tracking-wide hover:bg-accent-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {saving ? 'SAVING...' : 'SAVE'}
         </button>
@@ -301,24 +301,24 @@ export function ContentForm({
           onClick={() => setShowJson((v) => !v)}
           className={`px-2.5 py-2 rounded-md border text-xs font-space-mono transition-colors ${
             showJson
-              ? 'border-turquoise/50 text-turquoise bg-turquoise/5'
+              ? 'border-accent-secondary/50 text-accent-secondary bg-accent-secondary/5'
               : 'border-surface-3 text-text-muted hover:text-text-secondary hover:border-text-muted'
           }`}
         >
           {'{ }'}
         </button>
         {isDirty && !saveResult && (
-          <span className="text-[10px] font-space-mono text-yellow tracking-wide">UNSAVED</span>
+          <span className="text-[10px] font-space-mono text-accent-tertiary tracking-wide">UNSAVED</span>
         )}
         {saveResult && (
           <span
-            className={`text-xs font-space-mono transition-opacity ${saveResult.ok ? 'text-turquoise' : 'text-magenta'}`}
+            className={`text-xs font-space-mono transition-opacity ${saveResult.ok ? 'text-accent-secondary' : 'text-accent'}`}
           >
             {saveResult.message}
           </span>
         )}
         {fieldErrors.size > 0 && (
-          <span className="text-[10px] font-space-mono text-magenta">
+          <span className="text-[10px] font-space-mono text-accent">
             {fieldErrors.size} error{fieldErrors.size !== 1 ? 's' : ''} &mdash; scroll up
           </span>
         )}

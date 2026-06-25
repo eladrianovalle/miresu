@@ -1,6 +1,18 @@
 import type { ConsultingContent } from '@/types/project-content';
 import { ConsultingTitleGroup } from './ConsultingTitleGroup';
 
+// Map a tier's data-driven accent name to a semantic accent class. Legacy
+// brand names (magenta/turquoise/yellow) resolve to the three semantic
+// accents; the semantic names pass through unchanged.
+const TIER_ACCENT_CLASS: Record<string, string> = {
+  magenta: 'accent',
+  primary: 'accent',
+  turquoise: 'accent-secondary',
+  secondary: 'accent-secondary',
+  yellow: 'accent-tertiary',
+  tertiary: 'accent-tertiary',
+};
+
 export function ConsultingDossier({ data }: { data: ConsultingContent }) {
   return (
     <div>
@@ -18,7 +30,7 @@ export function ConsultingDossier({ data }: { data: ConsultingContent }) {
         <div className="cc-dossier-meta">
           <div className="cc-meta-field">
             <span className="cc-meta-label">Status</span>
-            <span className="cc-meta-value accent-yellow">Available</span>
+            <span className="cc-meta-value accent-tertiary">Available</span>
           </div>
           <div className="cc-meta-field">
             <span className="cc-meta-label">Based In</span>
@@ -48,7 +60,7 @@ export function ConsultingDossier({ data }: { data: ConsultingContent }) {
             {data.engagements.tiers.map((tier) => (
               <div
                 key={tier.id}
-                className={`cc-consulting-tier accent-${tier.accentColor}`}
+                className={`cc-consulting-tier ${TIER_ACCENT_CLASS[tier.accentColor] ?? 'accent'}`}
               >
                 <h3 className="cc-tier-title">{tier.title}</h3>
                 <p className="cc-tier-description">{tier.description}</p>

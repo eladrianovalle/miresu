@@ -68,9 +68,9 @@ export default async function AdminDashboard() {
       <div className="mt-10">
         <Link
           href="/admin/projects/new/"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-surface-2 border border-surface-3 text-sm font-space-mono text-text-secondary hover:text-turquoise hover:border-turquoise/40 transition-all duration-200"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-surface-2 border border-surface-3 text-sm font-space-mono text-text-secondary hover:text-accent-secondary hover:border-accent-secondary/40 transition-all duration-200"
         >
-          <span className="text-turquoise">+</span>
+          <span className="text-accent-secondary">+</span>
           New Project
         </Link>
       </div>

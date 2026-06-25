@@ -62,7 +62,7 @@ export function ObjectField({ schema, path, value, onChange, errors, optional }:
           <button
             type="button"
             onClick={() => onChange(path, undefined)}
-            className="ml-2 text-text-muted/60 hover:text-magenta normal-case font-normal"
+            className="ml-2 text-text-muted/60 hover:text-accent normal-case font-normal"
           >
             (remove)
           </button>

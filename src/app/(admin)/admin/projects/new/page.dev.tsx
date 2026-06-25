@@ -21,9 +21,9 @@ type CategoryOption = {
 };
 
 const CATEGORIES: CategoryOption[] = [
-  { key: 'games', label: 'Game Projects', accent: 'border-magenta/50 bg-magenta/10 text-magenta' },
-  { key: 'client', label: 'Client Projects', accent: 'border-turquoise/50 bg-turquoise/10 text-turquoise' },
-  { key: 'personal', label: 'Collaborations', accent: 'border-yellow/50 bg-yellow/10 text-yellow' },
+  { key: 'games', label: 'Game Projects', accent: 'border-accent/50 bg-accent/10 text-accent' },
+  { key: 'client', label: 'Client Projects', accent: 'border-accent-secondary/50 bg-accent-secondary/10 text-accent-secondary' },
+  { key: 'personal', label: 'Collaborations', accent: 'border-accent-tertiary/50 bg-accent-tertiary/10 text-accent-tertiary' },
 ];
 
 export default function NewProjectPage() {
@@ -70,7 +70,7 @@ export default function NewProjectPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/admin/"
-          className="text-xs font-space-mono text-text-muted hover:text-turquoise transition-colors"
+          className="text-xs font-space-mono text-text-muted hover:text-accent-secondary transition-colors"
         >
           &larr; Dashboard
         </Link>

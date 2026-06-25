@@ -28,10 +28,10 @@ export const metadata: Metadata = buildMetadata({
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
     <div className="mb-5 flex items-center gap-4">
-      <h2 className="whitespace-nowrap font-space-mono text-xs uppercase tracking-widest text-magenta">
+      <h2 className="whitespace-nowrap font-space-mono text-xs uppercase tracking-widest text-accent">
         {children}
       </h2>
-      <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-magenta/60 via-magenta/20 to-transparent" />
+      <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-accent/60 via-accent/20 to-transparent" />
     </div>
   );
 }
@@ -109,7 +109,7 @@ export default async function ResumePage() {
             <a
               href={withBasePath(RESUME_PDF_PUBLIC_PATH)}
               download
-              className="group inline-flex items-center gap-2 rounded-sm border border-turquoise/50 px-4 py-1.5 font-space-mono text-xs uppercase tracking-widest text-turquoise no-underline transition-colors hover:bg-turquoise hover:text-primary-dark"
+              className="group inline-flex items-center gap-2 rounded-sm border border-accent-secondary/50 px-4 py-1.5 font-space-mono text-xs uppercase tracking-widest text-accent-secondary no-underline transition-colors hover:bg-accent-secondary hover:text-primary-dark"
             >
               Download PDF
               <span className="transition-transform group-hover:translate-y-0.5">↓</span>

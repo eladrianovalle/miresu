@@ -123,7 +123,7 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
                 type="text"
                 value={item as string}
                 onChange={(e) => handleItemChange(index, '', e.target.value)}
-                className="w-full bg-surface-1 border border-surface-3 rounded-md px-3 py-2 text-sm font-space-mono text-text-primary hover:border-text-muted focus:border-turquoise/60 focus:outline-none focus:ring-1 focus:ring-turquoise/30"
+                className="w-full bg-surface-1 border border-surface-3 rounded-md px-3 py-2 text-sm font-space-mono text-text-primary hover:border-text-muted focus:border-accent-secondary/60 focus:outline-none focus:ring-1 focus:ring-accent-secondary/30"
               />
             ) : (
               <div className="border border-surface-3 rounded p-3 space-y-3">
@@ -146,7 +146,7 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
           <button
             type="button"
             onClick={() => removeItem(index)}
-            className="text-xs text-text-muted/60 hover:text-magenta pt-2 transition-colors"
+            className="text-xs text-text-muted/60 hover:text-accent pt-2 transition-colors"
             aria-label={`Remove item ${index + 1}`}
           >
             &#10005;

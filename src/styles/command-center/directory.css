@@ -302,15 +302,15 @@
 }
 
 .cc-category-tag[data-cat="games"] {
-  color: var(--cc-color-accent-magenta);
+  color: var(--cc-color-accent);
 }
 
 .cc-category-tag[data-cat="client"] {
-  color: var(--cc-color-accent-turquoise);
+  color: var(--cc-color-accent-secondary);
 }
 
 .cc-category-tag[data-cat="personal"] {
-  color: var(--cc-color-accent-yellow);
+  color: var(--cc-color-accent-tertiary);
 }
 
 .cc-meta-role {

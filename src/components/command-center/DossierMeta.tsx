@@ -1,9 +1,9 @@
 import type { Project } from '@/lib/projects';
 
 const CATEGORY_ACCENT: Record<Project['category'], string> = {
-  games: 'accent-magenta',
-  client: 'accent-turquoise',
-  personal: 'accent-yellow',
+  games: 'accent',
+  client: 'accent-secondary',
+  personal: 'accent-tertiary',
 };
 
 // Dossier label for the organization, by relationship.
