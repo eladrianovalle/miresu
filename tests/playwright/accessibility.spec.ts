@@ -1,31 +1,49 @@
 import { test, expect } from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
+import { firstProjectSlug } from './helpers/content';
 
-/** Shared axe builder that excludes Next.js dev overlay elements */
-function axeScan(page: import('@playwright/test').Page) {
+// Resolve the dossier slug once from content so this survives content swaps.
+const PROJECT_SLUG = firstProjectSlug();
+
+/**
+ * Run axe against the settled page. Entrance animations (the dossier content
+ * staggers in over ~0.4s via cc-juice-in) are jumped to their end state first,
+ * so contrast is measured against final colors rather than mid-fade opacity —
+ * a transient opacity is not a real WCAG contrast failure.
+ */
+async function scanSettled(page: import('@playwright/test').Page) {
+  await page.addStyleTag({
+    content: `*, *::before, *::after {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+      transition-duration: 0s !important;
+      transition-delay: 0s !important;
+    }`,
+  });
   return new AxeBuilder({ page })
     .withTags(['wcag2a', 'wcag2aa'])
     .exclude('nextjs-portal')
     .exclude('#__next-build-indicator')
-    .exclude('[data-next-mark]');
+    .exclude('[data-next-mark]')
+    .analyze();
 }
 
 test.describe('WCAG AA — axe-core', () => {
   test('command center has no violations', async ({ page }) => {
     await page.goto('/');
-    const results = await axeScan(page).analyze();
+    const results = await scanSettled(page);
     expect(results.violations).toEqual([]);
   });
 
   test('project dossier has no violations', async ({ page }) => {
-    await page.goto('/projects/narakan/');
-    const results = await axeScan(page).analyze();
+    await page.goto(`/projects/${PROJECT_SLUG}/`);
+    const results = await scanSettled(page);
     expect(results.violations).toEqual([]);
   });
 
   test('consulting dossier has no violations', async ({ page }) => {
     await page.goto('/consulting/');
-    const results = await axeScan(page).analyze();
+    const results = await scanSettled(page);
     expect(results.violations).toEqual([]);
   });
 });
@@ -35,13 +53,13 @@ test.describe('WCAG AA — Mobile', () => {
 
   test('mobile directory has no violations', async ({ page }) => {
     await page.goto('/');
-    const results = await axeScan(page).analyze();
+    const results = await scanSettled(page);
     expect(results.violations).toEqual([]);
   });
 
   test('mobile dossier has no violations', async ({ page }) => {
-    await page.goto('/projects/narakan/');
-    const results = await axeScan(page).analyze();
+    await page.goto(`/projects/${PROJECT_SLUG}/`);
+    const results = await scanSettled(page);
     expect(results.violations).toEqual([]);
   });
 });
@@ -103,7 +121,7 @@ test.describe('Keyboard Navigation', () => {
 
   test('Escape in mobile detail returns to directory', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto('/projects/narakan/');
+    await page.goto(`/projects/${PROJECT_SLUG}/`);
     await page.keyboard.press('Escape');
     await expect(page).toHaveURL(/\/$/);
   });
@@ -162,7 +180,7 @@ test.describe('ARIA Structure', () => {
 
 test.describe('Focus Management', () => {
   test('project dossier title receives focus on load', async ({ page }) => {
-    await page.goto('/projects/narakan/');
+    await page.goto(`/projects/${PROJECT_SLUG}/`);
     // Wait for focus to settle
     await page.waitForTimeout(500);
 

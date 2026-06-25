@@ -18,7 +18,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm run validate:content
 
   lint:
@@ -30,7 +30,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm run lint
 
   test:
@@ -42,8 +42,39 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm test
+
+  e2e:
+    name: E2E + a11y (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      # Only Chromium is needed — every project targets Desktop/Mobile Chrome.
+      - name: Install Playwright (Chromium + system deps)
+        run: npx playwright install --with-deps chromium
+      # playwright.config.ts starts `npm run dev` itself (webServer), which also
+      # serves the dev-only /admin editor the e2e suite drives.
+      - name: Functional e2e (dev-only /admin editor)
+        run: npm run test:e2e
+      - name: Accessibility (axe / WCAG AA)
+        run: npm run test:a11y
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # NOTE: visual regression (`npm run test:visual`) is intentionally NOT a CI
+  # gate. Snapshots are per-OS and tied to specific content, so they belong to a
+  # local pre-merge check the maintainer runs — not a check every fork inherits.
 
   build:
     name: Static export build
@@ -54,7 +85,7 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'npm'
-      - run: npm install
+      - run: npm ci
       - run: npm run build:staging
 
       - name: Verify critical assets exist in export
