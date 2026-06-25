@@ -2,6 +2,8 @@
 
 **Fork your own portfolio site + an aligned resume from one content store.**
 
+**Live demo:** <https://eladrianovalle.github.io/miresu/> (the fictional "Sam Rivera" seed content, deployed by the included Pages workflow).
+
 miresu is a Next.js template for people who live in GitHub. You get a portfolio
 site *and* a resume that never drifts out of sync — because the resume is just a
 second rendering of the same content you already edit for the site. Edit once,
