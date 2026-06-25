@@ -71,6 +71,9 @@ const styles = StyleSheet.create({
   },
   // Experience entry
   entry: { marginBottom: 4 },
+  // Hairline above every entry after the first — lighter than the 0.75pt
+  // section-heading rule so inter-entry separators don't compete.
+  entrySep: { borderTopWidth: 0.5, borderTopColor: COLORS.rule, paddingTop: 4, marginTop: 4 },
   entryHeaderRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -165,7 +168,7 @@ function Section({ title, items }: { title: string; items: ReactNode[] }) {
 
 function ExperienceSection({ entries }: { entries: ExperienceEntry[] }) {
   const items = entries.map((entry, i) => (
-    <View key={`${entry.org}-${i}`} style={styles.entry} wrap={false}>
+    <View key={`${entry.org}-${i}`} style={i > 0 ? [styles.entry, styles.entrySep] : styles.entry} wrap={false}>
       <View style={styles.entryHeaderRow}>
         <Text style={styles.entryTitle}>
           {entry.title}
@@ -186,7 +189,7 @@ function ExperienceSection({ entries }: { entries: ExperienceEntry[] }) {
 
 function ProjectsSection({ entries }: { entries: ProjectEntry[] }) {
   const items = entries.map((project, i) => (
-    <View key={`${project.slug}-${i}`} style={styles.project} wrap={false}>
+    <View key={`${project.slug}-${i}`} style={i > 0 ? [styles.project, styles.entrySep] : styles.project} wrap={false}>
       <View style={styles.entryHeaderRow}>
         <Link src={`${SITE_ORIGIN}${projectPath(project.slug)}`} style={styles.projectTitle}>
           {project.title}
