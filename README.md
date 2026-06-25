@@ -81,8 +81,16 @@ npm run dev               # dev server (site + /resume + /admin)
 npm run validate:content  # validate all content JSON against the schemas
 npm run lint              # ESLint (zero warnings)
 npm run test              # unit tests (Vitest)
+npm run test:e2e          # Playwright functional e2e (auto-starts the dev server)
+npm run test:a11y         # Playwright accessibility (axe / WCAG AA)
+npm run test:visual       # Playwright visual regression — local only (see note)
 npm run build             # build the resume PDF + JSON, then build the site
 ```
+
+The Playwright suites auto-start a dev server (reusing one you already have
+running). `test:e2e` and `test:a11y` run in CI; `test:visual` does **not** — its
+snapshots are per-OS and tied to specific content, so regenerate them locally
+after content or theme changes with `npm run test:visual -- --update-snapshots`.
 
 `npm run build` runs the resume PDF/JSON generators first (`build:resume`), then
 `next build`, so the resume artifacts are present in `public/` for the site.

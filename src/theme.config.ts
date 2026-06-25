@@ -22,7 +22,9 @@ export const theme = {
     /** Text scale. */
     textPrimary: '#ededee',
     textSecondary: '#a1a1aa',
-    textMuted: '#71717a',
+    // Lightened from #71717a (4.0:1, below WCAG AA) so muted text clears the
+    // 4.5:1 contrast bar on every surface in the palette.
+    textMuted: '#95959f',
   },
 } as const;
 

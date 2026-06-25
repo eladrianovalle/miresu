@@ -1,12 +1,32 @@
 import { test, expect } from '@playwright/test';
 import * as fs from 'fs';
 import * as path from 'path';
+import { firstGameWith } from './helpers/content';
 
 // All tests mutate the same JSON file — must run serially
 test.describe.configure({ mode: 'serial' });
 
 const BASE_URL = process.env.PLAYWRIGHT_TEST_BASE_URL ?? 'http://localhost:3000';
 const CONTENT_ROOT = path.resolve(process.cwd(), 'src/content');
+
+// ------------------------------------------------------------------
+// Content-derived targets
+//
+// These specs were originally pinned to a sample project ("narakan") that no
+// longer exists. To survive content swaps in forks we derive each block's
+// target games project from whatever content is present, and skip the block
+// when the sample content lacks the feature under test.
+// ------------------------------------------------------------------
+
+const testimonialTarget = firstGameWith((g) => g.hasTestimonial);
+const storeLinksTarget = firstGameWith((g) => g.storeLinkCount > 0);
+const stackTarget = firstGameWith((g) => g.stackCount > 0);
+// Any non-draft games project is fine for the generic save/validate/reset blocks.
+const anyGame = firstGameWith(() => true);
+
+function adminUrlForSlug(slug: string): string {
+  return `${BASE_URL}/admin/projects/games/${slug}/`;
+}
 
 // ------------------------------------------------------------------
 // Helpers
@@ -24,12 +44,31 @@ function writeContentJson(relPath: string, data: Record<string, unknown>) {
   );
 }
 
+/** Read a project's stack array (derived expected values for assertions). */
+function stackValues(relPath: string): string[] {
+  const data = readContentJson(relPath);
+  return Array.isArray(data.stack) ? (data.stack as string[]) : [];
+}
+
+/** Read a project's storeLinks platform values, in order. */
+function storeLinkPlatforms(relPath: string): string[] {
+  const data = readContentJson(relPath);
+  const links = Array.isArray(data.storeLinks) ? data.storeLinks : [];
+  return (links as Array<Record<string, unknown>>).map((l) => String(l.platform ?? ''));
+}
+
 // ------------------------------------------------------------------
 // Nested objects — optional fieldset (testimonial)
 // ------------------------------------------------------------------
 
 test.describe('Nested objects — optional fieldsets', () => {
-  const projectFile = 'projects/games/narakan.json';
+  test.skip(
+    !testimonialTarget,
+    'No non-draft games project has a testimonial in the sample content',
+  );
+
+  const projectFile = testimonialTarget?.relPath ?? '';
+  const slug = testimonialTarget?.slug ?? '';
   let originalData: Record<string, unknown>;
 
   test.beforeEach(() => {
@@ -41,7 +80,7 @@ test.describe('Nested objects — optional fieldsets', () => {
   });
 
   test('testimonial fieldset is visible with quote and author fields', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Testimonial renders as a group (fieldset)
     const fieldset = page.getByRole('group', { name: /Testimonial/ });
@@ -53,7 +92,7 @@ test.describe('Nested objects — optional fieldsets', () => {
   });
 
   test('optional object can be removed and re-added', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Remove testimonial
     const fieldset = page.getByRole('group', { name: /Testimonial/ });
@@ -79,7 +118,13 @@ test.describe('Nested objects — optional fieldsets', () => {
 // ------------------------------------------------------------------
 
 test.describe('Nested objects — store links (object array)', () => {
-  const projectFile = 'projects/games/narakan.json';
+  test.skip(
+    !storeLinksTarget,
+    'No non-draft games project has store links in the sample content',
+  );
+
+  const projectFile = storeLinksTarget?.relPath ?? '';
+  const slug = storeLinksTarget?.slug ?? '';
   let originalData: Record<string, unknown>;
 
   test.beforeEach(() => {
@@ -91,19 +136,21 @@ test.describe('Nested objects — store links (object array)', () => {
   });
 
   test('store links render with platform select and url input', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
-    // narakan has 2 store links — each has a Platform combobox
+    // Count of store links is derived from the JSON.
+    const platforms = storeLinkPlatforms(projectFile);
     const platformSelects = page.getByRole('combobox', { name: 'Platform' });
-    await expect(platformSelects).toHaveCount(2);
+    await expect(platformSelects).toHaveCount(platforms.length);
 
-    // First should be appstore, second playstore
-    await expect(platformSelects.first()).toHaveValue('appstore');
-    await expect(platformSelects.nth(1)).toHaveValue('playstore');
+    // Each select should reflect the platform value from the JSON, in order.
+    for (let i = 0; i < platforms.length; i++) {
+      await expect(platformSelects.nth(i)).toHaveValue(platforms[i]);
+    }
   });
 
   test('can add a new store link item', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     const platformSelects = page.getByRole('combobox', { name: 'Platform' });
     const countBefore = await platformSelects.count();
@@ -120,7 +167,13 @@ test.describe('Nested objects — store links (object array)', () => {
 // ------------------------------------------------------------------
 
 test.describe('Array fields — string arrays', () => {
-  const projectFile = 'projects/games/narakan.json';
+  test.skip(
+    !stackTarget,
+    'No non-draft games project has a stack in the sample content',
+  );
+
+  const projectFile = stackTarget?.relPath ?? '';
+  const slug = stackTarget?.slug ?? '';
   let originalData: Record<string, unknown>;
 
   test.beforeEach(() => {
@@ -132,19 +185,21 @@ test.describe('Array fields — string arrays', () => {
   });
 
   test('stack array shows current items', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
-    // Stack section — find by the text "Stack" and its count "(2)"
+    const stack = stackValues(projectFile);
+
+    // Stack section — find by the text "Stack" and its derived count.
     const stackSection = page.getByText('Stack').locator('..').locator('..');
-    await expect(stackSection.getByText('(2)')).toBeVisible();
+    await expect(stackSection.getByText(`(${stack.length})`)).toBeVisible();
 
-    // First textbox should have value "Unity"
+    // First textbox should have the first stack value from the JSON.
     const textboxes = stackSection.getByRole('textbox');
-    await expect(textboxes.first()).toHaveValue('Unity');
+    await expect(textboxes.first()).toHaveValue(stack[0]);
   });
 
   test('can add and remove string array items', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Count remove buttons for Stack section
     const stackSection = page.getByText('Stack').locator('..').locator('..');
@@ -161,24 +216,27 @@ test.describe('Array fields — string arrays', () => {
   });
 
   test('can reorder string array items', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    const stack = stackValues(projectFile);
+    test.skip(stack.length < 2, 'Stack needs at least 2 items to reorder');
 
-    // Stack items: Unity, C#
+    await page.goto(adminUrlForSlug(slug));
+
+    // First two stack items come from the JSON.
     const stackSection = page.getByText('Stack').locator('..').locator('..');
     const textboxes = stackSection.getByRole('textbox');
-    await expect(textboxes.first()).toHaveValue('Unity');
-    await expect(textboxes.nth(1)).toHaveValue('C#');
+    await expect(textboxes.first()).toHaveValue(stack[0]);
+    await expect(textboxes.nth(1)).toHaveValue(stack[1]);
 
     // Move first item down
     await stackSection.getByRole('button', { name: 'Move item 1 down' }).click();
 
-    // Now: C#, Unity
-    await expect(textboxes.first()).toHaveValue('C#');
-    await expect(textboxes.nth(1)).toHaveValue('Unity');
+    // Now the first two should be swapped.
+    await expect(textboxes.first()).toHaveValue(stack[1]);
+    await expect(textboxes.nth(1)).toHaveValue(stack[0]);
   });
 
   test('array changes persist to disk on save', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     const stackSection = page.getByText('Stack').locator('..').locator('..');
 
@@ -206,7 +264,10 @@ test.describe('Array fields — string arrays', () => {
 // ------------------------------------------------------------------
 
 test.describe('Validation errors', () => {
-  const projectFile = 'projects/games/narakan.json';
+  test.skip(!anyGame, 'No non-draft games project in the sample content');
+
+  const projectFile = anyGame?.relPath ?? '';
+  const slug = anyGame?.slug ?? '';
   let originalData: Record<string, unknown>;
 
   test.beforeEach(() => {
@@ -218,7 +279,7 @@ test.describe('Validation errors', () => {
   });
 
   test('setting invalid enum value shows validation error on save', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Set status to the empty "— Select —" option (invalid for enum)
     const statusSelect = page.getByRole('combobox', { name: 'Status' });
@@ -236,7 +297,7 @@ test.describe('Validation errors', () => {
   });
 
   test('validation error clears when field is corrected', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Break the status field
     const statusSelect = page.getByRole('combobox', { name: 'Status' });
@@ -244,15 +305,15 @@ test.describe('Validation errors', () => {
     await page.getByRole('button', { name: 'Save' }).click();
     await expect(page.getByText(/\d+ error.* scroll up/)).toBeVisible({ timeout: 10000 });
 
-    // Fix it
-    await statusSelect.selectOption('released');
+    // Fix it — restore to the project's original status value.
+    await statusSelect.selectOption(String(originalData.status));
 
     // Error should be gone (errors clear on field change)
     await expect(page.getByText(/\d+ error.* scroll up/)).not.toBeVisible();
   });
 
   test('invalid data is never written to disk', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Break status
     await page.getByRole('combobox', { name: 'Status' }).selectOption({ index: 0 });
@@ -268,7 +329,7 @@ test.describe('Validation errors', () => {
   });
 
   test('removing all items from required array triggers validation error', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     // Remove all platform items
     const platformSection = page.getByText('Platforms').locator('..').locator('..');
@@ -291,8 +352,12 @@ test.describe('Validation errors', () => {
 // ------------------------------------------------------------------
 
 test.describe('Reset button', () => {
+  test.skip(!anyGame, 'No non-draft games project in the sample content');
+
+  const slug = anyGame?.slug ?? '';
+
   test('resets form to original data', async ({ page }) => {
-    await page.goto(`${BASE_URL}/admin/projects/games/narakan/`);
+    await page.goto(adminUrlForSlug(slug));
 
     const titleInput = page.getByRole('textbox', { name: 'Title', exact: true });
     const original = await titleInput.inputValue();

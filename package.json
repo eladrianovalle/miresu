@@ -13,7 +13,7 @@
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings=0",
     "validate:content": "tsx scripts/validate-content.ts",
     "build:staging": "npm run build:resume && cross-env NEXT_EXPORT=1 next build && tsx scripts/move-export.ts",
-    "test:e2e": "playwright test",
+    "test:e2e": "playwright test --project=desktop",
     "test:visual": "playwright test --project=visual",
     "test:a11y": "playwright test --project=accessibility",
     "playwright:install": "playwright install",

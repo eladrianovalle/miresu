@@ -1,0 +1,113 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: 20
+
+jobs:
+  validate:
+    name: Validate content
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run validate:content
+
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+
+  test:
+    name: Unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm test
+
+  e2e:
+    name: E2E + a11y (Playwright)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      # Only Chromium is needed — every project targets Desktop/Mobile Chrome.
+      - name: Install Playwright (Chromium + system deps)
+        run: npx playwright install --with-deps chromium
+      # playwright.config.ts starts `npm run dev` itself (webServer), which also
+      # serves the dev-only /admin editor the e2e suite drives.
+      - name: Functional e2e (dev-only /admin editor)
+        run: npm run test:e2e
+      - name: Accessibility (axe / WCAG AA)
+        run: npm run test:a11y
+      - name: Upload Playwright report on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  # NOTE: visual regression (`npm run test:visual`) is intentionally NOT a CI
+  # gate. Snapshots are per-OS and tied to specific content, so they belong to a
+  # local pre-merge check the maintainer runs — not a check every fork inherits.
+
+  build:
+    name: Static export build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run build:staging
+
+      - name: Verify critical assets exist in export
+        run: |
+          echo "Checking critical outputs in dist-staging/..."
+          missing=0
+          # Fixed routes + build-time resume artifacts.
+          for f in index.html resume/index.html consulting/index.html \
+                   assets/resume/resume.pdf assets/resume/resume.json; do
+            if [ ! -f "dist-staging/$f" ]; then
+              echo "MISSING: /$f"
+              missing=$((missing + 1))
+            fi
+          done
+          # At least one project page must generate (slugs are content-defined,
+          # so this stays correct after a fork swaps the sample content).
+          if ! ls dist-staging/projects/*/index.html >/dev/null 2>&1; then
+            echo "MISSING: no /projects/*/index.html generated"
+            missing=$((missing + 1))
+          fi
+          if [ "$missing" -gt 0 ]; then
+            echo "ERROR: $missing critical output(s) missing from static export"
+            exit 1
+          fi
+          echo "All critical outputs present."

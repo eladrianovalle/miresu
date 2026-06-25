@@ -5,29 +5,32 @@ const baseURL = process.env.PLAYWRIGHT_TEST_BASE_URL ?? 'http://localhost:3000';
 export default defineConfig({
   testDir: './tests/playwright',
   fullyParallel: true,
+  // CI retries absorb the occasional focus-stealing flake in the keyboard-nav
+  // a11y tests when projects run in parallel; locally a failure is a failure.
+  retries: process.env.CI ? 2 : 0,
   use: {
     baseURL,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
   },
+  // Auto-start the dev server (site + dev-only /admin) for the suite. Locally we
+  // reuse a server you already have running; in CI we always start a fresh one.
+  webServer: {
+    command: 'npm run dev',
+    url: baseURL,
+    reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
+  },
   projects: [
-    {
-      name: 'mobile',
-      use: {
-        ...devices['Pixel 7'],
-        viewport: { width: 360, height: 740 },
-      },
-    },
-    {
-      name: 'tablet',
-      use: {
-        ...devices['iPad Air'],
-        viewport: { width: 768, height: 1024 },
-      },
-    },
+    // Functional e2e: the dev-only /admin content editor, a desktop tool — so
+    // it runs at a desktop viewport only. The site's mobile behaviour is covered
+    // by the accessibility project (which drives its own mobile viewports), and
+    // visual has its own project below. Each spec maps to exactly one project so
+    // nothing runs twice.
     {
       name: 'desktop',
+      testMatch: /admin-editor/,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1440, height: 900 },
