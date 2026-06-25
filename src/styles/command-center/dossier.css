@@ -273,7 +273,7 @@ a.cc-contributor-name:hover {
 .cc-dossier-link:hover {
   border-color: var(--cc-color-accent-turquoise);
   color: var(--cc-color-accent-turquoise);
-  box-shadow: 0 0 12px rgba(5, 237, 229, 0.15);
+  box-shadow: 0 0 12px rgba(139, 163, 199, 0.15);
 }
 
 .cc-dossier-link:active {
@@ -286,13 +286,13 @@ a.cc-contributor-name:hover {
   color: var(--cc-color-primary-dark);
   border-color: var(--cc-color-accent-turquoise);
   font-weight: 700;
-  box-shadow: 0 0 16px rgba(5, 237, 229, 0.2);
+  box-shadow: 0 0 16px rgba(139, 163, 199, 0.2);
 }
 
 .cc-dossier-link.primary:hover {
   background: #1cfff6;
   border-color: #1cfff6;
-  box-shadow: 0 0 24px rgba(5, 237, 229, 0.35);
+  box-shadow: 0 0 24px rgba(139, 163, 199, 0.35);
 }
 
 /* ── DOSSIER ARTICLE (positioning context for filmstrip overlay) ── */
@@ -488,7 +488,7 @@ a.cc-contributor-name:hover {
 .cc-viewer-thumb.active {
   opacity: 1;
   border-color: var(--cc-color-accent-turquoise);
-  box-shadow: 0 0 10px rgba(5, 237, 229, 0.2);
+  box-shadow: 0 0 10px rgba(139, 163, 199, 0.2);
 }
 
 .cc-viewer-thumb.active::after {
@@ -505,7 +505,7 @@ a.cc-contributor-name:hover {
 .cc-testimonial {
   border-left: 2px solid var(--cc-color-accent-magenta);
   padding: 16px 0 16px 20px;
-  box-shadow: -4px 0 12px rgba(227, 23, 210, 0.06);
+  box-shadow: -4px 0 12px rgba(139, 163, 199, 0.06);
 }
 
 .cc-testimonial-text {

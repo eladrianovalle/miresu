@@ -18,8 +18,8 @@
 
 @keyframes cc-chromatic-drift {
   0%, 100% { text-shadow: 0 0 0 transparent; }
-  33% { text-shadow: -0.5px 0 0 rgba(227,23,210,0.2), 0.5px 0 0 rgba(5,237,229,0.2); }
-  66% { text-shadow: 0.4px 0 0 rgba(5,237,229,0.15), -0.4px 0 0 rgba(255,253,0,0.12); }
+  33% { text-shadow: -0.5px 0 0 rgba(139, 163, 199,0.2), 0.5px 0 0 rgba(139, 163, 199,0.2); }
+  66% { text-shadow: 0.4px 0 0 rgba(139, 163, 199,0.15), -0.4px 0 0 rgba(139, 163, 199,0.12); }
 }
 
 @keyframes cc-scanline-crawl {
@@ -112,14 +112,14 @@
 .cc-topbar-logo {
   height: 28px;
   width: auto;
-  filter: drop-shadow(0 0 6px rgba(5, 237, 229, 0.3));
+  filter: drop-shadow(0 0 6px rgba(139, 163, 199, 0.3));
   animation: cc-drift 6s ease-in-out infinite;
   transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cc-topbar-logo:hover {
   animation-play-state: paused;
-  filter: drop-shadow(0 0 10px rgba(5, 237, 229, 0.5));
+  filter: drop-shadow(0 0 10px rgba(139, 163, 199, 0.5));
 }
 
 .cc-topbar-divider {
@@ -244,7 +244,7 @@
   width: 100%;
   max-width: 200px;
   height: auto;
-  filter: drop-shadow(0 0 6px rgba(227, 23, 210, 0.15));
+  filter: drop-shadow(0 0 6px rgba(139, 163, 199, 0.15));
   animation: cc-breathe 5s ease-in-out infinite;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   opacity: 0.7;
@@ -253,7 +253,7 @@
 .cc-logotype-img:hover {
   animation-play-state: paused;
   opacity: 0.9;
-  filter: drop-shadow(0 0 12px rgba(227, 23, 210, 0.35));
+  filter: drop-shadow(0 0 12px rgba(139, 163, 199, 0.35));
 }
 
 .cc-identity-operator-label {
@@ -294,7 +294,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 16px;
-  text-shadow: 0 0 8px rgba(5, 237, 229, 0.25);
+  text-shadow: 0 0 8px rgba(139, 163, 199, 0.25);
 }
 
 .cc-identity-id {
@@ -348,7 +348,7 @@
 .cc-identity-cta:hover {
   animation-play-state: paused;
   color: var(--cc-color-primary-dark);
-  box-shadow: 0 0 20px rgba(255, 253, 0, 0.2);
+  box-shadow: 0 0 20px rgba(139, 163, 199, 0.2);
 }
 
 .cc-identity-cta:hover::before {
@@ -380,7 +380,7 @@
 /* Secondary CTA — turquoise ghost, legible at rest, subordinate to Hire's
    solid-yellow primary via a dimmer resting border and no idle drift. */
 .cc-identity-cta--secondary {
-  border-color: rgba(5, 237, 229, 0.45);
+  border-color: rgba(139, 163, 199, 0.45);
   color: var(--cc-color-accent-turquoise);
   /* The primary CTA gets its stacking context from the running cc-drift
      transform animation, which contains the z-index:-1 fill. This variant has
@@ -397,7 +397,7 @@
 .cc-identity-cta--secondary:hover {
   color: var(--cc-color-primary-dark);
   border-color: var(--cc-color-accent-turquoise);
-  box-shadow: 0 0 18px rgba(5, 237, 229, 0.28);
+  box-shadow: 0 0 18px rgba(139, 163, 199, 0.28);
 }
 
 /* Brand CTA (Hire) — primary yellow, kept beside the logo; never shrinks below
@@ -427,7 +427,7 @@
   color: var(--cc-color-accent-magenta);
   animation: cc-blink 1.2s step-end infinite;
   line-height: 1;
-  text-shadow: 0 0 20px rgba(227, 23, 210, 0.4);
+  text-shadow: 0 0 20px rgba(139, 163, 199, 0.4);
 }
 
 .cc-welcome-primary {

@@ -63,7 +63,7 @@ export default async function ResumePage() {
   // Inline links: turquoise at rest, snap to a neon-yellow glow on hover —
   // the command center's "power-on" pop, applied consistently across the page.
   const linkClass =
-    'text-turquoise no-underline transition-[color,text-shadow] duration-150 hover:text-yellow hover:[text-shadow:0_0_10px_rgba(255,253,0,0.55)]';
+    'text-turquoise no-underline transition-[color,text-shadow] duration-150 hover:text-yellow hover:[text-shadow:0_0_10px_rgba(139, 163, 199,0.55)]';
 
   // Contact line items — order and presence come from contactFields (shared with
   // the PDF); this surface only decides how each kind renders.
@@ -101,7 +101,7 @@ export default async function ResumePage() {
         <nav className="mb-10 flex items-center justify-between text-sm">
           <Link
             href="/"
-            className="font-space-mono text-xs uppercase tracking-wider text-text-secondary no-underline transition-[color,text-shadow] duration-150 hover:text-yellow hover:[text-shadow:0_0_10px_rgba(255,253,0,0.5)]"
+            className="font-space-mono text-xs uppercase tracking-wider text-text-secondary no-underline transition-[color,text-shadow] duration-150 hover:text-yellow hover:[text-shadow:0_0_10px_rgba(139, 163, 199,0.5)]"
           >
             ← Back to site
           </Link>

@@ -8,18 +8,21 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        magenta: '#e317d2',
-        yellow: '#fffd00',
-        turquoise: '#05ede5',
-        'midnight-blue': '#000032',
-        ivory: '#fffff2',
-        'primary-dark': '#07070d',
-        'surface-1': '#0d0d14',
-        'surface-2': '#13131e',
-        'surface-3': '#1a1a28',
-        'text-primary': '#eeeeef',
-        'text-secondary': '#9e9eb6',
-        'text-muted': '#8e8ea8',
+        // One restrained accent. The three legacy names all resolve to it so
+        // existing component classes keep working; change `accent` to re-brand.
+        accent: '#8ba3c7',
+        magenta: '#8ba3c7',
+        yellow: '#8ba3c7',
+        turquoise: '#8ba3c7',
+        'midnight-blue': '#0a0a0b',
+        ivory: '#fafafa',
+        'primary-dark': '#0a0a0b',
+        'surface-1': '#131315',
+        'surface-2': '#1a1a1d',
+        'surface-3': '#26262b',
+        'text-primary': '#ededee',
+        'text-secondary': '#a1a1aa',
+        'text-muted': '#71717a',
       },
       fontFamily: {
         syne: ['var(--font-syne)', 'sans-serif'],
@@ -27,9 +30,10 @@ const config: Config = {
         'ibm-plex': ['var(--font-ibm-plex)', 'sans-serif'],
       },
       boxShadow: {
-        'neon-magenta': '0 10px 100px rgba(227, 23, 210, 0.4)',
-        'neon-turquoise': '0 10px 100px rgba(5, 237, 229, 0.4)',
-        'neon-yellow': '0 10px 100px rgba(255, 253, 0, 0.4)',
+        // Subtle neutral elevation instead of neon bloom.
+        'neon-magenta': '0 8px 40px rgba(139, 163, 199, 0.12)',
+        'neon-turquoise': '0 8px 40px rgba(139, 163, 199, 0.12)',
+        'neon-yellow': '0 8px 40px rgba(139, 163, 199, 0.12)',
       },
     },
   },

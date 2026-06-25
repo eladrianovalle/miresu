@@ -12,11 +12,11 @@
 }
 
 .cc-cursor-toggle:hover {
-  color: var(--cc-text, #fffff2);
+  color: var(--cc-text, #fafafa);
   border-color: var(--cc-text-dim, rgba(255, 255, 242, 0.3));
 }
 
 .cc-cursor-toggle:focus-visible {
-  outline: 2px solid var(--cc-accent, #e317d2);
+  outline: 2px solid var(--cc-accent, #8ba3c7);
   outline-offset: 2px;
 }

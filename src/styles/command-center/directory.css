@@ -139,15 +139,15 @@
 }
 
 .cc-project-item[data-category="games"] {
-  --scanline-tint: rgba(227, 23, 210, 0.04);
+  --scanline-tint: rgba(139, 163, 199, 0.04);
 }
 
 .cc-project-item[data-category="client"] {
-  --scanline-tint: rgba(5, 237, 229, 0.04);
+  --scanline-tint: rgba(139, 163, 199, 0.04);
 }
 
 .cc-project-item[data-category="personal"] {
-  --scanline-tint: rgba(255, 253, 0, 0.03);
+  --scanline-tint: rgba(139, 163, 199, 0.03);
 }
 
 .cc-project-item::after {
@@ -202,15 +202,15 @@
 .cc-project-item.active::before {
   width: 3px;
   opacity: 1;
-  box-shadow: 0 0 8px rgba(5, 237, 229, 0.3);
+  box-shadow: 0 0 8px rgba(139, 163, 199, 0.3);
 }
 
 .cc-project-item[data-category="games"].active::before {
-  box-shadow: 0 0 8px rgba(227, 23, 210, 0.3);
+  box-shadow: 0 0 8px rgba(139, 163, 199, 0.3);
 }
 
 .cc-project-item[data-category="personal"].active::before {
-  box-shadow: 0 0 8px rgba(255, 253, 0, 0.3);
+  box-shadow: 0 0 8px rgba(139, 163, 199, 0.3);
 }
 
 /* ── THUMBNAIL ── */
@@ -335,13 +335,13 @@
 }
 
 .cc-status-badge.in-progress {
-  color: #f97316;
-  border-color: rgba(249, 115, 22, 0.4);
+  color: #8ba3c7;
+  border-color: rgba(139, 163, 199, 0.4);
 }
 
 .cc-status-badge.prototype {
-  color: #fffd00;
-  border-color: rgba(255, 253, 0, 0.3);
+  color: #8ba3c7;
+  border-color: rgba(139, 163, 199, 0.3);
 }
 
 .cc-status-badge.archived,
