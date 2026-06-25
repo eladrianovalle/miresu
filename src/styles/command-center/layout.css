@@ -4,29 +4,6 @@
    ============================================ */
 
 /* ── ANIMATIONS ── */
-@keyframes cc-drift {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(0.5px); }
-  50% { transform: translateX(-0.4px); }
-  75% { transform: translateX(0.3px); }
-}
-
-@keyframes cc-breathe {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.85; }
-}
-
-@keyframes cc-chromatic-drift {
-  0%, 100% { text-shadow: 0 0 0 transparent; }
-  33% { text-shadow: -0.5px 0 0 rgba(139, 163, 199,0.2), 0.5px 0 0 rgba(139, 163, 199,0.2); }
-  66% { text-shadow: 0.4px 0 0 rgba(139, 163, 199,0.15), -0.4px 0 0 rgba(139, 163, 199,0.12); }
-}
-
-@keyframes cc-scanline-crawl {
-  0% { background-position: 0 0; }
-  100% { background-position: 0 20px; }
-}
-
 @keyframes cc-blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
@@ -53,29 +30,6 @@
   font-family: var(--cc-font-body);
   -webkit-font-smoothing: antialiased;
   position: relative;
-}
-
-/* Noise overlay */
-.cc-shell::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  pointer-events: none;
-  opacity: 0.025;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat: repeat;
-  background-size: 256px 256px;
-}
-
-/* Scanlines overlay */
-.cc-shell::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  z-index: 99;
-  pointer-events: none;
-  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
 }
 
 /* ── TOP BAR ── */
@@ -112,14 +66,12 @@
 .cc-topbar-logo {
   height: 28px;
   width: auto;
-  filter: drop-shadow(0 0 6px rgba(139, 163, 199, 0.3));
-  animation: cc-drift 6s ease-in-out infinite;
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.85;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cc-topbar-logo:hover {
-  animation-play-state: paused;
-  filter: drop-shadow(0 0 10px rgba(139, 163, 199, 0.5));
+  opacity: 1;
 }
 
 .cc-topbar-divider {
@@ -130,12 +82,10 @@
 
 .cc-topbar-operator {
   color: var(--cc-color-text-muted);
-  animation: cc-chromatic-drift 10s ease-in-out infinite;
+  transition: color 0.2s;
 }
 
 .cc-topbar-operator:hover {
-  animation-play-state: paused;
-  text-shadow: none;
   color: var(--cc-color-text-secondary);
 }
 
@@ -149,17 +99,14 @@
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  animation: cc-breathe 3s ease-in-out infinite;
 }
 
 .cc-status-dot[data-status="available"] {
   background: #22c55e;
-  box-shadow: 0 0 6px #22c55e;
 }
 
 .cc-status-dot[data-status="busy"] {
   background: #ef4444;
-  box-shadow: 0 0 6px #ef4444;
 }
 
 .cc-topbar-status-label {
@@ -244,16 +191,12 @@
   width: 100%;
   max-width: 200px;
   height: auto;
-  filter: drop-shadow(0 0 6px rgba(139, 163, 199, 0.15));
-  animation: cc-breathe 5s ease-in-out infinite;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   opacity: 0.7;
 }
 
 .cc-logotype-img:hover {
-  animation-play-state: paused;
   opacity: 0.9;
-  filter: drop-shadow(0 0 12px rgba(139, 163, 199, 0.35));
 }
 
 .cc-identity-operator-label {
@@ -278,12 +221,10 @@
   letter-spacing: -0.01em;
   color: var(--cc-color-text-primary);
   margin-bottom: 6px;
-  animation: cc-chromatic-drift 12s ease-in-out infinite;
+  transition: color 0.2s;
 }
 
 .cc-identity-name:hover {
-  animation-play-state: paused;
-  text-shadow: none;
   color: #fff;
 }
 
@@ -294,7 +235,6 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 16px;
-  text-shadow: 0 0 8px rgba(139, 163, 199, 0.25);
 }
 
 .cc-identity-id {
@@ -328,8 +268,10 @@
   color: var(--cc-color-accent-tertiary);
   position: relative;
   overflow: hidden;
-  animation: cc-drift 7s ease-in-out infinite;
-  transition: color 0.2s, box-shadow 0.2s, transform 0.08s;
+  /* Establish a stacking context so the z-index:-1 fill (::before) paints
+     above the panel rather than behind it on hover. */
+  isolation: isolate;
+  transition: color 0.2s, transform 0.08s;
   text-decoration: none;
   cursor: pointer;
 }
@@ -346,9 +288,7 @@
 }
 
 .cc-identity-cta:hover {
-  animation-play-state: paused;
   color: var(--cc-color-primary-dark);
-  box-shadow: 0 0 20px rgba(139, 163, 199, 0.2);
 }
 
 .cc-identity-cta:hover::before {
@@ -378,16 +318,10 @@
 }
 
 /* Secondary CTA — accent-secondary ghost, legible at rest, subordinate to Hire's
-   solid accent-tertiary primary via a dimmer resting border and no idle drift. */
+   solid accent-tertiary primary via a dimmer resting border. */
 .cc-identity-cta--secondary {
   border-color: rgba(139, 163, 199, 0.45);
   color: var(--cc-color-accent-secondary);
-  /* The primary CTA gets its stacking context from the running cc-drift
-     transform animation, which contains the z-index:-1 fill. This variant has
-     no drift, so isolate to keep the accent-secondary fill from painting behind the
-     panel (otherwise hover text goes dark-on-dark). */
-  animation: none;
-  isolation: isolate;
 }
 
 .cc-identity-cta--secondary::before {
@@ -397,7 +331,6 @@
 .cc-identity-cta--secondary:hover {
   color: var(--cc-color-primary-dark);
   border-color: var(--cc-color-accent-secondary);
-  box-shadow: 0 0 18px rgba(139, 163, 199, 0.28);
 }
 
 /* Brand CTA (Hire) — solid accent-tertiary, kept beside the logo; never shrinks below
@@ -427,7 +360,6 @@
   color: var(--cc-color-accent);
   animation: cc-blink 1.2s step-end infinite;
   line-height: 1;
-  text-shadow: 0 0 20px rgba(139, 163, 199, 0.4);
 }
 
 .cc-welcome-primary {
@@ -658,18 +590,6 @@
 
   .cc-mobile-back:hover {
     color: var(--cc-color-accent-secondary);
-  }
-
-  /* Kill all idle animations on mobile */
-  .cc-identity-name,
-  .cc-logotype-img,
-  .cc-identity-cta,
-  .cc-topbar-logo,
-  .cc-topbar-operator,
-  .cc-project-item::after,
-  .cc-project-item-title,
-  .cc-dossier-title {
-    animation: none !important;
   }
 
   .cc-logotype-img {

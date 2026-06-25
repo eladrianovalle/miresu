@@ -79,7 +79,7 @@
   letter-spacing: -0.01em;
   color: var(--cc-color-text-primary);
   margin-bottom: 6px;
-  animation: cc-chromatic-drift 8s ease-in-out infinite;
+  transition: color 0.2s;
 }
 
 .cc-shell .cc-dossier-title:focus-visible {
@@ -87,8 +87,6 @@
 }
 
 .cc-dossier-title:hover {
-  animation-play-state: paused;
-  text-shadow: none;
   color: #fff;
 }
 
@@ -267,13 +265,12 @@ a.cc-contributor-name:hover {
   align-items: center;
   justify-content: center;
   gap: 6px;
-  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s, transform 0.08s;
+  transition: border-color 0.15s, color 0.15s, transform 0.08s;
 }
 
 .cc-dossier-link:hover {
   border-color: var(--cc-color-accent-secondary);
   color: var(--cc-color-accent-secondary);
-  box-shadow: 0 0 12px rgba(139, 163, 199, 0.15);
 }
 
 .cc-dossier-link:active {
@@ -286,13 +283,11 @@ a.cc-contributor-name:hover {
   color: var(--cc-color-primary-dark);
   border-color: var(--cc-color-accent-secondary);
   font-weight: 700;
-  box-shadow: 0 0 16px rgba(139, 163, 199, 0.2);
 }
 
 .cc-dossier-link.primary:hover {
-  background: #1cfff6;
-  border-color: #1cfff6;
-  box-shadow: 0 0 24px rgba(139, 163, 199, 0.35);
+  background: #a6bbd6;
+  border-color: #a6bbd6;
 }
 
 /* ── DOSSIER ARTICLE (positioning context for filmstrip overlay) ── */
@@ -311,30 +306,6 @@ a.cc-contributor-name:hover {
   aspect-ratio: 16 / 7;
   overflow: hidden;
   background: var(--cc-color-surface-3);
-}
-
-/* Scanline overlay on viewer */
-.cc-viewer-main::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  z-index: 2;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 2px,
-    rgba(0, 0, 0, 0.12) 2px,
-    rgba(0, 0, 0, 0.12) 4px
-  );
-  mix-blend-mode: multiply;
-  pointer-events: none;
-  animation: cc-scanline-crawl 3s linear infinite;
-  transition: opacity 0.25s;
-}
-
-.cc-viewer-main:hover::before {
-  opacity: 0;
-  animation-play-state: paused;
 }
 
 /* Gradient fade */
@@ -460,39 +431,14 @@ a.cc-contributor-name:hover {
   pointer-events: none;
 }
 
-/* Scanline on inactive thumbs */
-.cc-viewer-thumb::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 1px,
-    rgba(0, 0, 0, 0.18) 1px,
-    rgba(0, 0, 0, 0.18) 2px
-  );
-  pointer-events: none;
-  transition: opacity 0.2s;
-}
-
 .cc-viewer-thumb:hover {
   opacity: 0.85;
   transform: translateY(-2px);
 }
 
-.cc-viewer-thumb:hover::after {
-  opacity: 0;
-}
-
 .cc-viewer-thumb.active {
   opacity: 1;
   border-color: var(--cc-color-accent-secondary);
-  box-shadow: 0 0 10px rgba(139, 163, 199, 0.2);
-}
-
-.cc-viewer-thumb.active::after {
-  opacity: 0;
 }
 
 .cc-viewer-thumb:focus-visible {
@@ -505,7 +451,6 @@ a.cc-contributor-name:hover {
 .cc-testimonial {
   border-left: 2px solid var(--cc-color-accent);
   padding: 16px 0 16px 20px;
-  box-shadow: -4px 0 12px rgba(139, 163, 199, 0.06);
 }
 
 .cc-testimonial-text {
