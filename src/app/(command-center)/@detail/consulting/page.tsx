@@ -5,7 +5,7 @@ import { ConsultingDossier, MobileBack } from '@/components/command-center';
 import '@/styles/command-center/dossier.css';
 
 export const metadata: Metadata = buildMetadata({
-  title: 'Consulting | Adriano Valle Hernandez',
+  title: 'Consulting',
   description:
     'Game design & gameplay engineering consulting. Unity, systems design, prototyping, player experience.',
 });

@@ -5,6 +5,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { withBasePath } from '@/lib/paths';
 import { buildMetadata } from '@/lib/metadata';
+import { siteConfig } from '@/site.config';
 import {
   getProjects,
   getIdentity,
@@ -18,13 +19,12 @@ import { contactFields, formatDateRange, projectPath } from '@/lib/resume/format
 
 export const metadata: Metadata = buildMetadata({
   title: 'Resume',
-  description:
-    'Resume of Adriano Valle Hernandez — game designer and engineer. Experience, skills, and education.',
+  description: `Resume of ${siteConfig.authorName} — experience, skills, projects, and education.`,
 });
 
-// Command-center section marker: the magenta operator label with a hairline that
-// fades out to the right. Echoes the page header's surface-3 divider so sections
-// read as distinct blocks without adding decoration for its own sake.
+// Section marker: an accent operator label with a hairline that fades out to the
+// right. Echoes the page header's surface-3 divider so sections read as distinct
+// blocks without adding decoration for its own sake.
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
     <div className="mb-5 flex items-center gap-4">
@@ -60,10 +60,10 @@ export default async function ResumePage() {
 
   const pdfAvailable = existsSync(path.join(process.cwd(), 'public', RESUME_PDF_PUBLIC_PATH));
 
-  // Inline links: turquoise at rest, snap to a neon-yellow glow on hover —
-  // the command center's "power-on" pop, applied consistently across the page.
+  // Inline links: accent color at rest, underline on hover — a quiet, neutral
+  // affordance applied consistently across the page.
   const linkClass =
-    'text-turquoise no-underline transition-[color,text-shadow] duration-150 hover:text-yellow hover:[text-shadow:0_0_10px_rgba(139, 163, 199,0.55)]';
+    'text-accent no-underline transition-colors duration-150 hover:underline';
 
   // Contact line items — order and presence come from contactFields (shared with
   // the PDF); this surface only decides how each kind renders.
@@ -101,7 +101,7 @@ export default async function ResumePage() {
         <nav className="mb-10 flex items-center justify-between text-sm">
           <Link
             href="/"
-            className="font-space-mono text-xs uppercase tracking-wider text-text-secondary no-underline transition-[color,text-shadow] duration-150 hover:text-yellow hover:[text-shadow:0_0_10px_rgba(139, 163, 199,0.5)]"
+            className="font-space-mono text-xs uppercase tracking-wider text-text-secondary no-underline transition-colors duration-150 hover:text-text-primary"
           >
             ← Back to site
           </Link>
