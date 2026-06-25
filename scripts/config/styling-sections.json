@@ -1,0 +1,49 @@
+{
+  "sections": [
+    {
+      "id": "hero",
+      "label": "Hero (navbar + hero-block)",
+      "required": true
+    },
+    {
+      "id": "navigation",
+      "label": "Global navigation",
+      "required": true
+    },
+    {
+      "id": "home_cards",
+      "label": "Home spotlight cards",
+      "required": true
+    },
+    {
+      "id": "cta_band",
+      "label": "Homepage CTA band",
+      "required": true
+    },
+    {
+      "id": "games_detail",
+      "label": "Games detail template",
+      "required": true
+    },
+    {
+      "id": "work_detail",
+      "label": "Work detail template",
+      "required": true
+    },
+    {
+      "id": "consulting_hero",
+      "label": "Consulting hero + CTA band",
+      "required": true
+    },
+    {
+      "id": "testimonials",
+      "label": "Testimonials + social proof",
+      "required": true
+    },
+    {
+      "id": "footer",
+      "label": "Global footer",
+      "required": true
+    }
+  ]
+}

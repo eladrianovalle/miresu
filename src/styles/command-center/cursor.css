@@ -1,0 +1,22 @@
+.cc-cursor-toggle {
+  background: none;
+  border: 1px solid var(--cc-border, rgba(255, 255, 242, 0.12));
+  color: var(--cc-text-dim, rgba(255, 255, 242, 0.5));
+  font-family: var(--cc-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: lowercase;
+  padding: 0.2rem 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.cc-cursor-toggle:hover {
+  color: var(--cc-text, #fffff2);
+  border-color: var(--cc-text-dim, rgba(255, 255, 242, 0.3));
+}
+
+.cc-cursor-toggle:focus-visible {
+  outline: 2px solid var(--cc-accent, #e317d2);
+  outline-offset: 2px;
+}

@@ -1,0 +1,37 @@
+{
+  "slug": "atlas-os",
+  "title": "Atlas OS",
+  "subtitle": "An open-source dashboard toolkit.",
+  "description": "Atlas OS is an open-source toolkit for building data dashboards — a design system, a component library, and a documentation site that ships them together. I started it to scratch my own itch and grew it into a small community project, owning the design language, the React component API, accessibility, and the docs experience from the first commit.",
+  "image": "/assets/images/projects/atlas-os-hero.png",
+  "role": "Creator & Lead Maintainer",
+  "organization": "Sam Rivera",
+  "relationship": "own",
+  "status": "in-progress",
+  "year": 2021,
+  "platforms": ["Web"],
+  "draft": false,
+  "storeLinks": [
+    { "platform": "itch", "url": "https://example.com/atlas-os", "enabled": false }
+  ],
+  "stack": ["TypeScript", "React", "Next.js", "Design Systems"],
+  "resumeTitle": "Independent Designer & Developer",
+  "dateRange": { "start": "2016-01", "end": "present" },
+  "resumeBullets": [
+    "Design and build digital products end to end — from interaction design and prototyping through production front-end code — partnering directly with founders and product teams.",
+    "Create and maintain design systems and component libraries that keep design and engineering in sync and accelerate delivery across teams.",
+    "Drive accessibility (WCAG-AA) and performance as first-class requirements, not afterthoughts, across every shipped surface.",
+    "Author Atlas OS, an open-source dashboard toolkit, including its design language, React component API, and documentation site."
+  ],
+  "accentColor": "turquoise",
+  "links": [
+    { "label": "Source", "url": "https://github.com/samrivera/atlas-os", "type": "website" }
+  ],
+  "testimonial": {
+    "quote": "Atlas OS saved us weeks of dashboard groundwork.",
+    "author": "Open-source contributor"
+  },
+  "gallery": [
+    "/assets/images/projects/atlas-os-shot.png"
+  ]
+}

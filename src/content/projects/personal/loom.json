@@ -1,0 +1,29 @@
+{
+  "slug": "loom",
+  "title": "Loom",
+  "subtitle": "A collaborative generative-art experiment.",
+  "description": "Loom is a generative-art collaboration with the Driftwork collective — a browser-based canvas where multiple people weave patterns together in real time. I led the interaction design and built the front-end, focusing on a playful, low-friction multiplayer feel.",
+  "image": "/assets/images/projects/loom-hero.png",
+  "role": "Interaction Designer & Front-End Developer",
+  "contributors": [
+    { "name": "Priya Nair", "role": "Creative Technologist" },
+    { "name": "Marco Bianchi", "role": "Generative Artist" },
+    { "name": "Dani Okafor", "role": "Sound Design" }
+  ],
+  "organization": "Driftwork Collective",
+  "relationship": "collaboration",
+  "status": "released",
+  "year": 2023,
+  "featured": false,
+  "draft": false,
+  "surfaces": { "resume": false },
+  "links": [
+    { "label": "Live", "url": "https://example.com/loom", "type": "website" }
+  ],
+  "stack": ["TypeScript", "Canvas", "WebSockets"],
+  "medium": "Interactive web",
+  "collaborationType": "collective",
+  "gallery": [
+    "/assets/images/projects/loom-shot.png"
+  ]
+}

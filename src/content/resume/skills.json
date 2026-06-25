@@ -1,0 +1,45 @@
+{
+  "groups": [
+    {
+      "group": "Engineering",
+      "items": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Node.js",
+        "Design Systems",
+        "Accessibility (WCAG)",
+        "CSS Architecture",
+        "REST & GraphQL APIs",
+        "Testing (Vitest, Playwright)",
+        "CI/CD",
+        "Performance Optimization"
+      ]
+    },
+    {
+      "group": "Design",
+      "items": [
+        "Product Design",
+        "Interaction Design",
+        "Prototyping",
+        "Figma",
+        "Design Tokens",
+        "User Research",
+        "Information Architecture"
+      ]
+    },
+    {
+      "group": "Collaboration",
+      "items": [
+        "Cross-Functional Partnership",
+        "Design-Engineering Handoff",
+        "Mentorship",
+        "Agile & Scrum"
+      ]
+    },
+    {
+      "group": "Languages",
+      "items": ["English (native)", "Portuguese (conversational)"]
+    }
+  ]
+}

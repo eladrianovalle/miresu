@@ -1,0 +1,177 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`projectResume — golden (live content) > ResumeModel from live content matches snapshot 1`] = `
+{
+  "education": [
+    {
+      "credential": "B.S. in Human–Computer Interaction",
+      "institution": "University of Oregon",
+      "year": "2015",
+    },
+    {
+      "credential": "Certificate, Design Systems",
+      "institution": "Interaction Design Foundation",
+      "year": "2019",
+    },
+  ],
+  "experience": [
+    {
+      "bullets": [
+        "Design and build digital products end to end — from interaction design and prototyping through production front-end code — partnering directly with founders and product teams.",
+        "Create and maintain design systems and component libraries that keep design and engineering in sync and accelerate delivery across teams.",
+        "Drive accessibility (WCAG-AA) and performance as first-class requirements, not afterthoughts, across every shipped surface.",
+        "Author Atlas OS, an open-source dashboard toolkit, including its design language, React component API, and documentation site.",
+      ],
+      "dateRange": {
+        "end": "present",
+        "start": "2016-01",
+      },
+      "displayOrg": "Sam Rivera",
+      "org": "Sam Rivera",
+      "sourceSlugs": [
+        "atlas-os",
+      ],
+      "title": "Independent Designer & Developer",
+    },
+    {
+      "bullets": [
+        "Designed and built Northstar's analytics dashboard, including a configurable charting system used daily by enterprise customers.",
+        "Shipped a visual query builder that let non-technical users explore data without writing queries.",
+        "Architected a reusable component layer that kept the product consistent as the surface area grew.",
+      ],
+      "dateRange": {
+        "end": "2024-09",
+        "start": "2023-04",
+      },
+      "displayOrg": "Northstar Data",
+      "org": "Northstar Data",
+      "sourceSlugs": [
+        "northstar-analytics",
+      ],
+      "title": "Product Designer & Front-End Engineer",
+    },
+    {
+      "bullets": [
+        "Rebuilt Meridian's fitness app front end on a single React Native codebase, retiring two diverging native apps and cutting feature delivery time across iOS and Android.",
+        "Established a shared component library and design tokens, aligning design and engineering on one source of truth.",
+        "Led a WCAG-AA accessibility pass covering navigation, contrast, and screen-reader support across the core experience.",
+        "Redesigned and shipped the onboarding flow, improving new-user activation.",
+      ],
+      "dateRange": {
+        "end": "2023-02",
+        "start": "2021-06",
+      },
+      "displayOrg": "Meridian Health",
+      "org": "Meridian Health",
+      "sourceSlugs": [
+        "meridian-fitness",
+      ],
+      "title": "Senior Front-End Engineer",
+    },
+  ],
+  "header": {
+    "email": "hello@example.com",
+    "links": [
+      {
+        "label": "Portfolio",
+        "url": "https://example.com",
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/samrivera",
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/samrivera/",
+      },
+    ],
+    "location": "Portland, OR",
+    "name": "Sam Rivera",
+    "phone": "555-0142",
+  },
+  "projects": [
+    {
+      "slug": "northstar-analytics",
+      "stack": [
+        "React",
+        "TypeScript",
+        "GraphQL",
+        "Data Visualization",
+      ],
+      "summary": "Designed and built the analytics dashboard for Northstar — a configurable charting system and a query builder used daily by enterprise customers.",
+      "title": "Northstar Analytics Dashboard",
+      "year": 2024,
+    },
+    {
+      "slug": "meridian-fitness",
+      "stack": [
+        "React Native",
+        "TypeScript",
+        "Design Systems",
+        "Accessibility",
+      ],
+      "summary": "Led the front-end rebuild of the Meridian Fitness app, unifying iOS and Android on a shared component library and shipping a WCAG-AA accessibility pass.",
+      "title": "Meridian Fitness App",
+      "year": 2022,
+    },
+    {
+      "slug": "atlas-os",
+      "stack": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Design Systems",
+      ],
+      "summary": "Founded and built Atlas OS, an open-source dashboard toolkit — owning the design system, component library, and the docs site end to end.",
+      "title": "Atlas OS",
+      "year": 2021,
+    },
+  ],
+  "skills": [
+    {
+      "group": "Engineering",
+      "items": [
+        "TypeScript",
+        "React",
+        "Next.js",
+        "Node.js",
+        "Design Systems",
+        "Accessibility (WCAG)",
+        "CSS Architecture",
+        "REST & GraphQL APIs",
+        "Testing (Vitest, Playwright)",
+        "CI/CD",
+        "Performance Optimization",
+      ],
+    },
+    {
+      "group": "Design",
+      "items": [
+        "Product Design",
+        "Interaction Design",
+        "Prototyping",
+        "Figma",
+        "Design Tokens",
+        "User Research",
+        "Information Architecture",
+      ],
+    },
+    {
+      "group": "Collaboration",
+      "items": [
+        "Cross-Functional Partnership",
+        "Design-Engineering Handoff",
+        "Mentorship",
+        "Agile & Scrum",
+      ],
+    },
+    {
+      "group": "Languages",
+      "items": [
+        "English (native)",
+        "Portuguese (conversational)",
+      ],
+    },
+  ],
+}
+`;

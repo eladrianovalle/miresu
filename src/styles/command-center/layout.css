@@ -1,0 +1,692 @@
+/* ============================================
+   COMMAND CENTER — Layout & Component Styles
+   Matches prototype at _redesign/prototype/
+   ============================================ */
+
+/* ── ANIMATIONS ── */
+@keyframes cc-drift {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(0.5px); }
+  50% { transform: translateX(-0.4px); }
+  75% { transform: translateX(0.3px); }
+}
+
+@keyframes cc-breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes cc-chromatic-drift {
+  0%, 100% { text-shadow: 0 0 0 transparent; }
+  33% { text-shadow: -0.5px 0 0 rgba(227,23,210,0.2), 0.5px 0 0 rgba(5,237,229,0.2); }
+  66% { text-shadow: 0.4px 0 0 rgba(5,237,229,0.15), -0.4px 0 0 rgba(255,253,0,0.12); }
+}
+
+@keyframes cc-scanline-crawl {
+  0% { background-position: 0 0; }
+  100% { background-position: 0 20px; }
+}
+
+@keyframes cc-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ── REDUCED MOTION ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+/* ── APP SHELL ── */
+.cc-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--cc-color-primary-dark);
+  color: var(--cc-color-text-primary);
+  font-family: var(--cc-font-body);
+  -webkit-font-smoothing: antialiased;
+  position: relative;
+}
+
+/* Noise overlay */
+.cc-shell::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 256px 256px;
+}
+
+/* Scanlines overlay */
+.cc-shell::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 99;
+  pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 4px);
+}
+
+/* ── TOP BAR ── */
+.cc-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: var(--cc-topbar-height);
+  min-height: var(--cc-topbar-height);
+  background: rgba(13, 13, 20, 0.85);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--cc-color-border);
+  font-family: var(--cc-font-mono);
+  font-size: 0.73rem;
+  letter-spacing: 0.04em;
+  color: var(--cc-color-text-secondary);
+  gap: 16px;
+  z-index: 10;
+}
+
+.cc-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cc-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.cc-topbar-logo {
+  height: 28px;
+  width: auto;
+  filter: drop-shadow(0 0 6px rgba(5, 237, 229, 0.3));
+  animation: cc-drift 6s ease-in-out infinite;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cc-topbar-logo:hover {
+  animation-play-state: paused;
+  filter: drop-shadow(0 0 10px rgba(5, 237, 229, 0.5));
+}
+
+.cc-topbar-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--cc-color-border);
+}
+
+.cc-topbar-operator {
+  color: var(--cc-color-text-muted);
+  animation: cc-chromatic-drift 10s ease-in-out infinite;
+}
+
+.cc-topbar-operator:hover {
+  animation-play-state: paused;
+  text-shadow: none;
+  color: var(--cc-color-text-secondary);
+}
+
+.cc-topbar-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cc-status-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  animation: cc-breathe 3s ease-in-out infinite;
+}
+
+.cc-status-dot[data-status="available"] {
+  background: #22c55e;
+  box-shadow: 0 0 6px #22c55e;
+}
+
+.cc-status-dot[data-status="busy"] {
+  background: #ef4444;
+  box-shadow: 0 0 6px #ef4444;
+}
+
+.cc-topbar-status-label {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ── MAIN SPLIT ── */
+.cc-main {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+}
+
+.cc-panel-left {
+  width: var(--cc-panel-left-width);
+  min-width: var(--cc-panel-left-width);
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--cc-color-border);
+  background: rgba(13, 13, 20, 0.6);
+  overflow: hidden;
+}
+
+.cc-panel-left-scroll {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: var(--cc-color-border) transparent;
+}
+
+.cc-panel-right {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--cc-color-primary-dark);
+  scrollbar-width: thin;
+  scrollbar-color: var(--cc-color-border) transparent;
+}
+
+/* ── IDENTITY CARD ── */
+.cc-identity {
+  padding: 32px 28px 24px;
+  border-bottom: 1px solid var(--cc-color-border);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Logo watermark — screen-burned imprint */
+.cc-identity::before {
+  content: '';
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 240px;
+  height: 280px;
+  background: url('/assets/icons/logo.svg') no-repeat center;
+  background-size: contain;
+  opacity: 0.03;
+  pointer-events: none;
+}
+
+/* Brand row — company logotype (left) + company CTA (Hire, right-aligned).
+   The company's business CTA sits with its mark; the operator's resume CTA
+   lives below the bio. (See IdentityCard.tsx — fork-template split, #21.) */
+.cc-identity-brand-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.cc-identity-logotype {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+
+.cc-logotype-img {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  filter: drop-shadow(0 0 6px rgba(227, 23, 210, 0.15));
+  animation: cc-breathe 5s ease-in-out infinite;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  opacity: 0.7;
+}
+
+.cc-logotype-img:hover {
+  animation-play-state: paused;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 12px rgba(227, 23, 210, 0.35));
+}
+
+.cc-identity-operator-label {
+  font-family: var(--cc-font-mono);
+  font-size: 0.55rem;
+  color: var(--cc-color-text-muted);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 2px;
+  opacity: 0.6;
+}
+
+.cc-identity-operator-label span {
+  color: var(--cc-color-accent-turquoise);
+}
+
+.cc-identity-name {
+  font-family: var(--cc-font-display);
+  font-weight: 800;
+  font-size: 1.8rem;
+  line-height: 1.1;
+  letter-spacing: -0.01em;
+  color: var(--cc-color-text-primary);
+  margin-bottom: 6px;
+  animation: cc-chromatic-drift 12s ease-in-out infinite;
+}
+
+.cc-identity-name:hover {
+  animation-play-state: paused;
+  text-shadow: none;
+  color: #fff;
+}
+
+.cc-identity-role {
+  font-family: var(--cc-font-mono);
+  font-size: 0.73rem;
+  color: var(--cc-color-accent-turquoise);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  text-shadow: 0 0 8px rgba(5, 237, 229, 0.25);
+}
+
+.cc-identity-id {
+  font-family: var(--cc-font-mono);
+  font-size: 0.58rem;
+  color: var(--cc-color-text-muted);
+  letter-spacing: 0.06em;
+  margin-bottom: 16px;
+}
+
+.cc-identity-bio {
+  font-family: var(--cc-font-body);
+  font-size: 0.87rem;
+  color: var(--cc-color-text-primary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+/* CTA — outlined, fills on hover */
+.cc-identity-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--cc-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 10px 22px;
+  border: 1px solid var(--cc-color-accent-yellow);
+  border-radius: 2px;
+  color: var(--cc-color-accent-yellow);
+  position: relative;
+  overflow: hidden;
+  animation: cc-drift 7s ease-in-out infinite;
+  transition: color 0.2s, box-shadow 0.2s, transform 0.08s;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.cc-identity-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--cc-color-accent-yellow);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: -1;
+}
+
+.cc-identity-cta:hover {
+  animation-play-state: paused;
+  color: var(--cc-color-primary-dark);
+  box-shadow: 0 0 20px rgba(255, 253, 0, 0.2);
+}
+
+.cc-identity-cta:hover::before {
+  transform: scaleX(1);
+}
+
+.cc-identity-cta:active {
+  transform: scale(0.96);
+  transition: transform 0.06s;
+}
+
+.cc-cta-arrow {
+  display: inline-block;
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cc-identity-cta:hover .cc-cta-arrow {
+  transform: translateX(4px);
+}
+
+/* CTA row — Hire (primary) + Resume (secondary, subordinate) */
+.cc-identity-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Secondary CTA — turquoise ghost, legible at rest, subordinate to Hire's
+   solid-yellow primary via a dimmer resting border and no idle drift. */
+.cc-identity-cta--secondary {
+  border-color: rgba(5, 237, 229, 0.45);
+  color: var(--cc-color-accent-turquoise);
+  /* The primary CTA gets its stacking context from the running cc-drift
+     transform animation, which contains the z-index:-1 fill. This variant has
+     no drift, so isolate to keep the turquoise fill from painting behind the
+     panel (otherwise hover text goes dark-on-dark). */
+  animation: none;
+  isolation: isolate;
+}
+
+.cc-identity-cta--secondary::before {
+  background: var(--cc-color-accent-turquoise);
+}
+
+.cc-identity-cta--secondary:hover {
+  color: var(--cc-color-primary-dark);
+  border-color: var(--cc-color-accent-turquoise);
+  box-shadow: 0 0 18px rgba(5, 237, 229, 0.28);
+}
+
+/* Brand CTA (Hire) — primary yellow, kept beside the logo; never shrinks below
+   its label so it stays a clean tap target next to the mark. */
+.cc-identity-cta--brand {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  padding: 9px 18px;
+  font-size: 0.66rem;
+}
+
+/* ── WELCOME PANEL ── */
+.cc-welcome {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  padding: 48px;
+}
+
+.cc-welcome-cursor {
+  font-family: var(--cc-font-display);
+  font-size: 4rem;
+  font-weight: 800;
+  color: var(--cc-color-accent-magenta);
+  animation: cc-blink 1.2s step-end infinite;
+  line-height: 1;
+  text-shadow: 0 0 20px rgba(227, 23, 210, 0.4);
+}
+
+.cc-welcome-primary {
+  font-family: var(--cc-font-mono);
+  font-size: 0.8rem;
+  color: var(--cc-color-text-secondary);
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+.cc-welcome-secondary {
+  font-family: var(--cc-font-body);
+  font-size: 0.78rem;
+  color: var(--cc-color-text-muted);
+  text-align: center;
+}
+
+/* ── FOOTER / STATUS BAR ── */
+.cc-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  height: var(--cc-footer-height);
+  min-height: var(--cc-footer-height);
+  background: rgba(13, 13, 20, 0.85);
+  backdrop-filter: blur(8px);
+  border-top: 1px solid var(--cc-color-border);
+  font-family: var(--cc-font-mono);
+  font-size: 0.62rem;
+  color: var(--cc-color-text-muted);
+  letter-spacing: 0.04em;
+  z-index: 10;
+}
+
+.cc-footer a {
+  color: var(--cc-color-text-secondary);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.cc-footer a:hover {
+  color: var(--cc-color-accent-turquoise);
+}
+
+/* ── MOBILE BACK BUTTON ── */
+.cc-mobile-back {
+  display: none;
+}
+
+/* ── MOBILE FOOTER ── */
+.cc-mobile-footer {
+  display: none;
+}
+
+/* ============================================
+   MOBILE — below 768px
+   Shell stacks vertically, detail panel becomes
+   fixed overlay, idle animations killed.
+   ============================================ */
+@media (max-width: 767px) {
+
+  /* Shell → scrollable, not locked viewport */
+  .cc-shell {
+    height: auto;
+    overflow: visible;
+  }
+
+  /* Topbar → sticky, simplified */
+  .cc-topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+
+  .cc-topbar-divider:first-of-type { display: none; }
+  .cc-topbar-operator { display: none; }
+
+  /* Main → stacked column */
+  .cc-main {
+    flex-direction: column;
+    overflow: visible;
+  }
+
+  /* Left panel → full width, no border, scrollable */
+  .cc-panel-left {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    overflow: visible;
+  }
+
+  .cc-panel-left-scroll {
+    overflow: visible;
+  }
+
+  /* Right panel → hidden by default, fixed overlay when showing content */
+  .cc-panel-right {
+    display: none;
+  }
+
+  .cc-panel-right:has(> :not(.cc-welcome)) {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    background: var(--cc-color-primary-dark);
+    overflow-y: auto;
+  }
+
+  /* Identity card → expanded for mobile hero */
+  .cc-identity {
+    padding: 40px 20px 28px;
+  }
+
+  .cc-identity::before {
+    width: 320px;
+    height: 370px;
+    right: -40px;
+    opacity: 0.04;
+  }
+
+  .cc-identity-name {
+    font-size: 2.4rem;
+    line-height: 1.0;
+  }
+
+  /* Desktop footer → hidden on mobile */
+  .cc-footer {
+    display: none;
+  }
+
+  /* Mobile footer → visible */
+  .cc-mobile-footer {
+    display: block;
+    padding: 32px 20px 48px;
+    border-top: 1px solid var(--cc-color-border);
+    font-family: var(--cc-font-mono);
+    font-size: 0.7rem;
+    color: var(--cc-color-text-muted);
+    letter-spacing: 0.04em;
+    text-align: center;
+  }
+
+  .cc-mobile-footer-brand {
+    font-size: 0.62rem;
+    margin-bottom: 16px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .cc-mobile-footer-links {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .cc-mobile-footer-links a {
+    color: var(--cc-color-text-muted);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .cc-mobile-footer-links a:hover {
+    color: var(--cc-color-accent-turquoise);
+  }
+
+  .cc-mobile-footer-email {
+    display: block;
+    color: var(--cc-color-text-secondary);
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.15s;
+  }
+
+  .cc-mobile-footer-email:hover {
+    color: var(--cc-color-accent-turquoise);
+  }
+
+  .cc-mobile-footer-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--cc-font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 10px 22px;
+    border: 1px solid var(--cc-color-accent-yellow);
+    border-radius: 2px;
+    color: var(--cc-color-accent-yellow);
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .cc-mobile-footer-cta:hover {
+    background: var(--cc-color-accent-yellow);
+    color: var(--cc-color-primary-dark);
+  }
+
+  .cc-mobile-footer-cta:active {
+    transform: scale(0.96);
+    transition: transform 0.06s;
+  }
+
+  /* Mobile back button → visible in detail overlay */
+  .cc-mobile-back {
+    display: flex;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    padding: 12px 20px;
+    background: rgba(7, 7, 13, 0.95);
+    backdrop-filter: blur(12px);
+    font-family: var(--cc-font-mono);
+    font-size: 0.73rem;
+    color: var(--cc-color-text-secondary);
+    letter-spacing: 0.04em;
+    border: none;
+    border-bottom: 1px solid var(--cc-color-border);
+    cursor: pointer;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 44px;
+  }
+
+  .cc-mobile-back:hover {
+    color: var(--cc-color-accent-turquoise);
+  }
+
+  /* Kill all idle animations on mobile */
+  .cc-identity-name,
+  .cc-logotype-img,
+  .cc-identity-cta,
+  .cc-topbar-logo,
+  .cc-topbar-operator,
+  .cc-project-item::after,
+  .cc-project-item-title,
+  .cc-dossier-title {
+    animation: none !important;
+  }
+
+  .cc-logotype-img {
+    opacity: 0.8 !important;
+  }
+
+  /* Touch targets — minimum 44px */
+  .cc-filter-btn {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .cc-project-item {
+    min-height: 44px;
+  }
+
+  .cc-dossier-link {
+    min-height: 44px;
+  }
+}

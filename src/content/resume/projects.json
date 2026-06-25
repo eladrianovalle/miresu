@@ -1,0 +1,19 @@
+{
+  "entries": [
+    {
+      "slug": "atlas-os",
+      "stack": ["TypeScript", "React", "Next.js", "Design Systems"],
+      "summary": "Founded and built Atlas OS, an open-source dashboard toolkit — owning the design system, component library, and the docs site end to end."
+    },
+    {
+      "slug": "meridian-fitness",
+      "stack": ["React Native", "TypeScript", "Design Systems", "Accessibility"],
+      "summary": "Led the front-end rebuild of the Meridian Fitness app, unifying iOS and Android on a shared component library and shipping a WCAG-AA accessibility pass."
+    },
+    {
+      "slug": "northstar-analytics",
+      "stack": ["React", "TypeScript", "GraphQL", "Data Visualization"],
+      "summary": "Designed and built the analytics dashboard for Northstar — a configurable charting system and a query builder used daily by enterprise customers."
+    }
+  ]
+}

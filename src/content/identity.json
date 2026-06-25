@@ -1,0 +1,31 @@
+{
+  "name": "Sam Rivera",
+  "role": "Product Designer & Developer",
+  "tagline": "Designing thoughtful interfaces and building the systems behind them",
+  "bio": "I design and build digital products — the flows, the feel, and the code that makes them real. I work across product design and front-end engineering, partnering with teams to ship interfaces people actually enjoy using.",
+  "id": "SR-001",
+  "location": "Portland, OR",
+  "established": 2016,
+  "email": "hello@example.com",
+  "socialLinks": [
+    {
+      "platform": "github",
+      "url": "https://github.com/samrivera",
+      "label": "GitHub"
+    },
+    {
+      "platform": "linkedin",
+      "url": "https://www.linkedin.com/in/samrivera/",
+      "label": "LinkedIn"
+    },
+    {
+      "platform": "x",
+      "url": "https://x.com/samrivera",
+      "label": "X"
+    }
+  ],
+  "availability": {
+    "status": "available",
+    "message": "Open to product design and front-end engineering work"
+  }
+}

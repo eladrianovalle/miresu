@@ -1,0 +1,23 @@
+{
+  "slug": "cinder",
+  "title": "Cinder",
+  "subtitle": "A focus timer that respects your attention.",
+  "description": "Cinder is a small, opinionated focus-timer app I designed and built for myself and then released. It pairs a calm, distraction-free interface with a flexible session model, and it never nags, gamifies, or sells your data. A study in doing one thing well.",
+  "image": "/assets/images/projects/cinder-hero.png",
+  "role": "Designer & Developer",
+  "organization": "Sam Rivera",
+  "relationship": "own",
+  "status": "released",
+  "year": 2023,
+  "platforms": ["Web", "iOS"],
+  "draft": false,
+  "stack": ["TypeScript", "React", "PWA"],
+  "surfaces": { "resume": false },
+  "accentColor": "yellow",
+  "links": [
+    { "label": "Try it", "url": "https://example.com/cinder", "type": "website" }
+  ],
+  "gallery": [
+    "/assets/images/projects/cinder-shot.png"
+  ]
+}

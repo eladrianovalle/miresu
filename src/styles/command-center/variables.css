@@ -1,0 +1,35 @@
+/* Command Center Design System Variables */
+
+:root {
+  /* Surfaces */
+  --cc-color-primary-dark: #07070d;
+  --cc-color-surface-1: #0d0d14;
+  --cc-color-surface-2: #13131e;
+  --cc-color-surface-3: #1a1a28;
+  --cc-color-border: #1e1e2e;
+
+  /* Accent colors */
+  --cc-color-accent-magenta: #e317d2;
+  --cc-color-accent-turquoise: #05ede5;
+  --cc-color-accent-yellow: #fffd00;
+
+  /* Text */
+  --cc-color-text-primary: #eeeeef;
+  --cc-color-text-secondary: #9e9eb6;
+  --cc-color-text-muted: #8e8ea8;
+
+  /* Category colors */
+  --cc-color-category-games: var(--cc-color-accent-magenta);
+  --cc-color-category-client: var(--cc-color-accent-turquoise);
+  --cc-color-category-personal: var(--cc-color-accent-yellow);
+
+  /* Fonts */
+  --cc-font-display: var(--font-syne), sans-serif;
+  --cc-font-mono: var(--font-space-mono), monospace;
+  --cc-font-body: var(--font-ibm-plex), sans-serif;
+
+  /* Layout */
+  --cc-panel-left-width: clamp(320px, 30vw, 420px);
+  --cc-topbar-height: 48px;
+  --cc-footer-height: 40px;
+}

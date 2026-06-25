@@ -1,0 +1,33 @@
+{
+  "slug": "meridian-fitness",
+  "title": "Meridian Fitness App",
+  "subtitle": "Cross-platform fitness app rebuild.",
+  "description": "Led the front-end rebuild of Meridian's consumer fitness app, replacing two diverging native codebases with a single React Native architecture and a shared component library. Drove a full accessibility pass to WCAG-AA and shipped a redesigned onboarding flow that measurably improved activation.",
+  "image": "/assets/images/projects/meridian-fitness-hero.png",
+  "role": "Senior Front-End Engineer",
+  "organization": "Meridian Health",
+  "relationship": "client",
+  "status": "released",
+  "year": 2022,
+  "scope": "Front-end rebuild — design system, cross-platform unification, accessibility, and onboarding redesign.",
+  "clientLogo": "/assets/images/logos/meridian-logo.png",
+  "links": [
+    { "label": "Case study", "url": "https://example.com/meridian", "type": "website" }
+  ],
+  "stack": ["React Native", "TypeScript", "Design Systems", "Accessibility"],
+  "resumeTitle": "Senior Front-End Engineer",
+  "dateRange": { "start": "2021-06", "end": "2023-02" },
+  "resumeBullets": [
+    "Rebuilt Meridian's fitness app front end on a single React Native codebase, retiring two diverging native apps and cutting feature delivery time across iOS and Android.",
+    "Established a shared component library and design tokens, aligning design and engineering on one source of truth.",
+    "Led a WCAG-AA accessibility pass covering navigation, contrast, and screen-reader support across the core experience.",
+    "Redesigned and shipped the onboarding flow, improving new-user activation."
+  ],
+  "featured": true,
+  "draft": false,
+  "testimonial": {
+    "quote": "Sam brought clarity to a messy codebase and shipped fast.",
+    "author": "Engineering Manager",
+    "company": "Meridian Health"
+  }
+}

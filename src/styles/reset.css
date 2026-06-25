@@ -1,0 +1,248 @@
+/*
+ * reset.css
+ *
+ * Minimal CSS reset replacing webflow-normalize.css (355 lines)
+ * and the reset portions of webflow-base.css (1790 lines).
+ * Only the rules this site actually depends on are preserved.
+ */
+
+/* --------------------------------------------------------
+   Box model
+   -------------------------------------------------------- */
+
+*,
+*::before,
+*::after {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+/* --------------------------------------------------------
+   Document
+   -------------------------------------------------------- */
+
+html {
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100%;
+  background-color: #fff;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #333;
+}
+
+/* --------------------------------------------------------
+   Typography
+   -------------------------------------------------------- */
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+h1 { font-size: 38px; line-height: 44px; margin-top: 20px; }
+h2 { font-size: 32px; line-height: 36px; margin-top: 20px; }
+h3 { font-size: 24px; line-height: 30px; margin-top: 20px; }
+h4 { font-size: 18px; line-height: 24px; margin-top: 10px; }
+h5 { font-size: 14px; line-height: 20px; margin-top: 10px; }
+h6 { font-size: 12px; line-height: 18px; margin-top: 10px; }
+
+p {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+blockquote {
+  margin: 0 0 10px 0;
+  padding: 10px 20px;
+  border-left: 5px solid #E2E2E2;
+  font-size: 18px;
+  line-height: 22px;
+}
+
+b, strong {
+  font-weight: bold;
+}
+
+/* --------------------------------------------------------
+   Lists & figures
+   -------------------------------------------------------- */
+
+ul, ol {
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding-left: 40px;
+}
+
+figure {
+  margin: 0;
+  margin-bottom: 10px;
+}
+
+figcaption {
+  margin-top: 5px;
+  text-align: center;
+}
+
+/* --------------------------------------------------------
+   Images
+   -------------------------------------------------------- */
+
+img {
+  max-width: 100%;
+  vertical-align: middle;
+  display: inline-block;
+  border: 0;
+}
+
+/* --------------------------------------------------------
+   Forms
+   -------------------------------------------------------- */
+
+button, input, optgroup, select, textarea {
+  color: inherit;
+  font: inherit;
+  margin: 0;
+}
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  border: 0;
+  cursor: pointer;
+  -webkit-appearance: button;
+}
+
+button::-moz-focus-inner,
+input::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+/* --------------------------------------------------------
+   Tables
+   -------------------------------------------------------- */
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+/* --------------------------------------------------------
+   Hidden elements
+   -------------------------------------------------------- */
+
+[hidden], template {
+  display: none;
+}
+
+/* --------------------------------------------------------
+   Webflow utility classes (actively used by components)
+   -------------------------------------------------------- */
+
+.w-inline-block {
+  max-width: 100%;
+  display: inline-block;
+}
+
+.w-button {
+  display: inline-block;
+  padding: 9px 15px;
+  background-color: #3898EC;
+  color: white;
+  border: 0;
+  line-height: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0;
+}
+
+.w-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 940px;
+}
+
+.w-container::before,
+.w-container::after {
+  content: " ";
+  display: table;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-column-end: 2;
+  grid-row-end: 2;
+}
+
+.w-container::after {
+  clear: both;
+}
+
+.w-nav {
+  position: relative;
+  background: #ddd;
+  z-index: 1000;
+}
+
+.w-nav::before,
+.w-nav::after {
+  content: " ";
+  display: table;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-column-end: 2;
+  grid-row-end: 2;
+}
+
+.w-nav::after {
+  clear: both;
+}
+
+.w-nav-brand {
+  position: relative;
+  float: left;
+  text-decoration: none;
+  color: #333;
+}
+
+.w-dyn-list,
+.w-dyn-items,
+.w-dyn-item {
+  /* no visible styling */
+}
+
+.w-dyn-empty {
+  padding: 10px;
+}
+
+.w-embed::before,
+.w-embed::after {
+  content: " ";
+  display: table;
+  grid-column-start: 1;
+  grid-row-start: 1;
+  grid-column-end: 2;
+  grid-row-end: 2;
+}
+
+.w-embed::after {
+  clear: both;
+}

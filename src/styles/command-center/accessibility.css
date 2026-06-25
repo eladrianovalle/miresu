@@ -1,0 +1,52 @@
+/* Skip links — visible on focus only */
+.cc-skip-links {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+}
+
+.cc-skip-link {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  padding: 0.75rem 1.25rem;
+  background: var(--cc-color-accent-turquoise);
+  color: var(--cc-color-primary-dark);
+  font-family: var(--cc-font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+.cc-skip-link:focus {
+  position: fixed;
+  top: 4px;
+  left: 4px;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  outline: 2px solid var(--cc-color-accent-turquoise);
+  outline-offset: 2px;
+}
+
+/* Focus indicators — turquoise ring on all interactive elements */
+.cc-shell a:focus-visible,
+.cc-shell button:focus-visible,
+.cc-shell [role="tab"]:focus-visible,
+.cc-shell [role="option"]:focus-visible,
+.cc-shell [tabindex]:focus-visible {
+  outline: 2px solid var(--cc-color-accent-turquoise);
+  outline-offset: 2px;
+}
+
+/* Remove default outlines only when our custom one is applied */
+.cc-shell a:focus:not(:focus-visible),
+.cc-shell button:focus:not(:focus-visible) {
+  outline: none;
+}

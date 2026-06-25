@@ -1,0 +1,5 @@
+/* stylelint-disable at-rule-no-unknown */
+@import '../styles/reset.css';
+
+/* stylelint-disable-next-line at-rule-no-unknown */
+@tailwind utilities;

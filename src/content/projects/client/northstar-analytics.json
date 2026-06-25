@@ -1,0 +1,24 @@
+{
+  "slug": "northstar-analytics",
+  "title": "Northstar Analytics Dashboard",
+  "subtitle": "Configurable analytics for enterprise teams.",
+  "description": "Designed and built the analytics dashboard for Northstar, an enterprise data platform. Delivered a configurable charting system and a visual query builder that let non-technical users explore their data, plus a component layer that kept the product consistent as it scaled.",
+  "image": "/assets/images/projects/northstar-hero.png",
+  "role": "Product Designer & Front-End Engineer",
+  "organization": "Northstar Data",
+  "relationship": "client",
+  "status": "released",
+  "year": 2024,
+  "scope": "Dashboard design and front-end build — charting system, query builder, and component architecture.",
+  "clientLogo": "/assets/images/logos/northstar-logo.png",
+  "stack": ["React", "TypeScript", "GraphQL", "Data Visualization"],
+  "resumeTitle": "Product Designer & Front-End Engineer",
+  "dateRange": { "start": "2023-04", "end": "2024-09" },
+  "resumeBullets": [
+    "Designed and built Northstar's analytics dashboard, including a configurable charting system used daily by enterprise customers.",
+    "Shipped a visual query builder that let non-technical users explore data without writing queries.",
+    "Architected a reusable component layer that kept the product consistent as the surface area grew."
+  ],
+  "featured": false,
+  "draft": false
+}

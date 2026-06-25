@@ -1,0 +1,108 @@
+{
+  "headline": "Work With Me",
+  "subheadline": "Product design and front-end engineering for teams who want to ship something people love using.",
+  "tagline": "Product Design • Design Systems • React • Accessibility",
+  "ctaPrimary": {
+    "label": "Book an Intro Call",
+    "href": "https://example.com/book"
+  },
+  "ctaSecondary": {
+    "label": "Email Sam",
+    "href": "mailto:hello@example.com"
+  },
+  "whatIDo": {
+    "overline": "WHAT I DO",
+    "headline": "I design and build the front end.",
+    "body": "I help teams turn fuzzy product ideas into interfaces that feel obvious — clear flows, a coherent design system, and production-ready front-end code that engineers want to maintain.",
+    "skills": [
+      "Product and interaction design",
+      "Design systems and component libraries",
+      "React / Next.js front-end engineering",
+      "Accessibility (WCAG-AA)",
+      "Prototyping and rapid iteration",
+      "Design-engineering handoff",
+      "Performance and polish"
+    ]
+  },
+  "engagements": {
+    "overline": "ENGAGEMENT OPTIONS",
+    "headline": "Ways to collaborate",
+    "tiers": [
+      {
+        "id": "design-sprint",
+        "title": "Design Sprint",
+        "description": "Turn a concept into a clickable prototype you can test, pitch, or hand off.",
+        "bullets": [
+          "One–two weeks",
+          "Flows, wireframes, and a high-fidelity prototype",
+          "Ideal for validating a feature before you build it"
+        ],
+        "pricing": "Fixed-fee, scoped up front.",
+        "accentColor": "turquoise"
+      },
+      {
+        "id": "ui-audit",
+        "title": "UI & Accessibility Audit",
+        "description": "A practical review of your product's interface and accessibility, with prioritized fixes.",
+        "bullets": [
+          "Heuristic + accessibility review",
+          "Written findings with prioritized recommendations",
+          "Optional implementation support"
+        ],
+        "pricing": "Fixed-fee by surface area.",
+        "accentColor": "magenta"
+      },
+      {
+        "id": "fractional",
+        "title": "Fractional Front-End",
+        "description": "Ongoing design + front-end help for teams that need senior hands without a full-time hire.",
+        "bullets": [
+          "Weekly or monthly retainers",
+          "Feature ownership, design-system work, and code review",
+          "Embedded with your team or working in parallel"
+        ],
+        "pricing": "Scoped monthly.",
+        "accentColor": "yellow"
+      }
+    ],
+    "footnote": "Every project is different — treat these as starting points. I'll shape scope around your goals before we begin."
+  },
+  "howIWork": {
+    "overline": "HOW I WORK",
+    "headline": "Clear, fast, collaborative.",
+    "body": "I've worked solo, inside product teams, and embedded with cross-functional groups. I know how to lead a design decision, support engineers, and keep things moving without stepping on toes.",
+    "values": [
+      { "title": "User-first thinking", "description": "Every decision goes through \"does this help the person using it?\"" },
+      { "title": "Bias toward shipping", "description": "Real, testable progress beats perfect plans" },
+      { "title": "Accessible by default", "description": "Inclusive design is part of the work, not a phase at the end" },
+      { "title": "Prototype early", "description": "Show, don't tell — get something clickable fast" },
+      { "title": "Docs that get used", "description": "Clear, lightweight, and actually maintained" }
+    ]
+  },
+  "clientFit": {
+    "overline": "FIT",
+    "headline": "Teams I work with",
+    "clientTypes": [
+      { "label": "Early-stage startups finding their product shape" },
+      { "label": "Product teams scaling a design system" },
+      { "label": "Teams that need a senior design-engineering hybrid" },
+      { "label": "Anyone wrestling with UI clarity or accessibility" }
+    ],
+    "pastClients": ["Meridian Health", "Northstar Data", "Driftwork Collective"]
+  },
+  "ctaSection": {
+    "headline": "Ready to talk?",
+    "subheadline": "Quick chat, zero pressure. Tell me what you're building.",
+    "primaryButton": {
+      "label": "Book an Intro Call",
+      "href": "https://example.com/book"
+    },
+    "secondaryButton": {
+      "label": "Email Sam",
+      "href": "mailto:hello@example.com?subject=Let's%20Talk"
+    }
+  },
+  "closing": {
+    "body": "Good products feel inevitable in hindsight. My job is to help your team get there — with design that's clear and code that lasts. Let's build something people remember."
+  }
+}
