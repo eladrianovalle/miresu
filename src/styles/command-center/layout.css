@@ -3,12 +3,6 @@
    Matches prototype at _redesign/prototype/
    ============================================ */
 
-/* ── ANIMATIONS ── */
-@keyframes cc-blink {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0; }
-}
-
 /* ── REDUCED MOTION ── */
 @media (prefers-reduced-motion: reduce) {
   *,
@@ -358,7 +352,6 @@
   font-size: 4rem;
   font-weight: 800;
   color: var(--cc-color-accent);
-  animation: cc-blink 1.2s step-end infinite;
   line-height: 1;
 }
 
