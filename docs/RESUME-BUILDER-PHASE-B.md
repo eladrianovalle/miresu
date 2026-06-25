@@ -1,10 +1,15 @@
 # Resume Builder — Phase B Scoping
 
-Status: **scoping / not started.** Phase A (site → resume: on-site HTML view +
-build-time ATS PDF) shipped via PR #23 and has been refined since. This doc scopes
-Phase B (GitHub issue **#21**): turning the whole thing — portfolio site *and* its
-aligned resume — into a free-standing, fork-your-own package, with all content
-(including the resume bits) editable through the interface we already built.
+Status: **SHIPPED — historical scoping record.** Phase B (GitHub issue **#21**)
+shipped: **this repo IS the free-standing, fork-your-own package** it scoped. The
+schema collapsed the entity/client/employment trio into `organization`/
+`relationship` + `surfaces` (`metrics`/`resumeHidden` removed), the resume
+singletons are editable via the dev-only `/admin` editor, the brand is a config
+overlay (`src/theme.config.ts` + `src/app/fonts.ts`), and a JSON Resume export
+(`resume.json`) ships alongside the ATS PDF. Remaining: **4b** — a one-command
+GitHub Pages deploy for forks (see Roadmap in the README) — and the gated
+`fromJsonResume` import. The rest of this doc is the original scoping blueprint,
+kept as history.
 
 ## The product (clarified)
 
