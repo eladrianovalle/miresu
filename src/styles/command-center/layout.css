@@ -267,7 +267,7 @@
 }
 
 .cc-identity-operator-label span {
-  color: var(--cc-color-accent-turquoise);
+  color: var(--cc-color-accent-secondary);
 }
 
 .cc-identity-name {
@@ -290,7 +290,7 @@
 .cc-identity-role {
   font-family: var(--cc-font-mono);
   font-size: 0.73rem;
-  color: var(--cc-color-accent-turquoise);
+  color: var(--cc-color-accent-secondary);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   margin-bottom: 16px;
@@ -323,9 +323,9 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 10px 22px;
-  border: 1px solid var(--cc-color-accent-yellow);
+  border: 1px solid var(--cc-color-accent-tertiary);
   border-radius: 2px;
-  color: var(--cc-color-accent-yellow);
+  color: var(--cc-color-accent-tertiary);
   position: relative;
   overflow: hidden;
   animation: cc-drift 7s ease-in-out infinite;
@@ -338,7 +338,7 @@
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--cc-color-accent-yellow);
+  background: var(--cc-color-accent-tertiary);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -381,7 +381,7 @@
    solid-yellow primary via a dimmer resting border and no idle drift. */
 .cc-identity-cta--secondary {
   border-color: rgba(139, 163, 199, 0.45);
-  color: var(--cc-color-accent-turquoise);
+  color: var(--cc-color-accent-secondary);
   /* The primary CTA gets its stacking context from the running cc-drift
      transform animation, which contains the z-index:-1 fill. This variant has
      no drift, so isolate to keep the turquoise fill from painting behind the
@@ -391,12 +391,12 @@
 }
 
 .cc-identity-cta--secondary::before {
-  background: var(--cc-color-accent-turquoise);
+  background: var(--cc-color-accent-secondary);
 }
 
 .cc-identity-cta--secondary:hover {
   color: var(--cc-color-primary-dark);
-  border-color: var(--cc-color-accent-turquoise);
+  border-color: var(--cc-color-accent-secondary);
   box-shadow: 0 0 18px rgba(139, 163, 199, 0.28);
 }
 
@@ -424,7 +424,7 @@
   font-family: var(--cc-font-display);
   font-size: 4rem;
   font-weight: 800;
-  color: var(--cc-color-accent-magenta);
+  color: var(--cc-color-accent);
   animation: cc-blink 1.2s step-end infinite;
   line-height: 1;
   text-shadow: 0 0 20px rgba(139, 163, 199, 0.4);
@@ -470,7 +470,7 @@
 }
 
 .cc-footer a:hover {
-  color: var(--cc-color-accent-turquoise);
+  color: var(--cc-color-accent-secondary);
 }
 
 /* ── MOBILE BACK BUTTON ── */
@@ -593,7 +593,7 @@
   }
 
   .cc-mobile-footer-links a:hover {
-    color: var(--cc-color-accent-turquoise);
+    color: var(--cc-color-accent-secondary);
   }
 
   .cc-mobile-footer-email {
@@ -605,7 +605,7 @@
   }
 
   .cc-mobile-footer-email:hover {
-    color: var(--cc-color-accent-turquoise);
+    color: var(--cc-color-accent-secondary);
   }
 
   .cc-mobile-footer-cta {
@@ -617,15 +617,15 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     padding: 10px 22px;
-    border: 1px solid var(--cc-color-accent-yellow);
+    border: 1px solid var(--cc-color-accent-tertiary);
     border-radius: 2px;
-    color: var(--cc-color-accent-yellow);
+    color: var(--cc-color-accent-tertiary);
     text-decoration: none;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .cc-mobile-footer-cta:hover {
-    background: var(--cc-color-accent-yellow);
+    background: var(--cc-color-accent-tertiary);
     color: var(--cc-color-primary-dark);
   }
 
@@ -657,7 +657,7 @@
   }
 
   .cc-mobile-back:hover {
-    color: var(--cc-color-accent-turquoise);
+    color: var(--cc-color-accent-secondary);
   }
 
   /* Kill all idle animations on mobile */

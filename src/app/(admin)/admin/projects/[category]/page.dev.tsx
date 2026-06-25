@@ -41,7 +41,7 @@ export default async function ProjectListPage({
         <div className="flex items-center gap-4">
           <Link
             href="/admin/"
-            className="text-xs font-space-mono text-text-muted hover:text-turquoise transition-colors"
+            className="text-xs font-space-mono text-text-muted hover:text-accent-secondary transition-colors"
           >
             &larr; Dashboard
           </Link>
@@ -52,9 +52,9 @@ export default async function ProjectListPage({
         </div>
         <Link
           href="/admin/projects/new/"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-surface-3 text-xs font-space-mono text-text-muted hover:text-turquoise hover:border-turquoise/40 transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-surface-3 text-xs font-space-mono text-text-muted hover:text-accent-secondary hover:border-accent-secondary/40 transition-all"
         >
-          <span className="text-turquoise">+</span> New
+          <span className="text-accent-secondary">+</span> New
         </Link>
       </div>
       <ul className="space-y-1">
@@ -64,7 +64,7 @@ export default async function ProjectListPage({
               href={`/admin/projects/${category}/${slug}/`}
               className="group flex items-center gap-4 p-3.5 rounded-lg border border-transparent hover:border-surface-3 hover:bg-surface-1/50 transition-all"
             >
-              <span className="font-space-mono text-sm text-text-secondary group-hover:text-turquoise transition-colors min-w-[140px]">
+              <span className="font-space-mono text-sm text-text-secondary group-hover:text-accent-secondary transition-colors min-w-[140px]">
                 {slug}
               </span>
               {title && (
@@ -77,7 +77,7 @@ export default async function ProjectListPage({
                   <span className="text-[10px] font-space-mono text-text-muted/60">{year}</span>
                 )}
                 {draft && (
-                  <span className="text-[10px] font-space-mono text-yellow bg-yellow/10 px-1.5 py-0.5 rounded">
+                  <span className="text-[10px] font-space-mono text-accent-tertiary bg-accent-tertiary/10 px-1.5 py-0.5 rounded">
                     DRAFT
                   </span>
                 )}

@@ -13,7 +13,7 @@ export default async function IdentityEditPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/admin/"
-          className="text-xs font-space-mono text-text-muted hover:text-turquoise transition-colors"
+          className="text-xs font-space-mono text-text-muted hover:text-accent-secondary transition-colors"
         >
           &larr; Dashboard
         </Link>

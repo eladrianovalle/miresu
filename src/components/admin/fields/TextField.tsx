@@ -36,9 +36,9 @@ export function TextField({
     'aria-invalid': !!error,
     'aria-describedby': error ? `${id}-error` : hint ? `${id}-hint` : undefined,
     className: `w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-space-mono text-text-primary
-      ${error ? 'border-magenta/60' : 'border-surface-3'}
-      ${readOnly ? 'opacity-50 cursor-not-allowed' : 'hover:border-text-muted focus:border-turquoise/60'}
-      focus:outline-none focus:ring-1 focus:ring-turquoise/30`,
+      ${error ? 'border-accent/60' : 'border-surface-3'}
+      ${readOnly ? 'opacity-50 cursor-not-allowed' : 'hover:border-text-muted focus:border-accent-secondary/60'}
+      focus:outline-none focus:ring-1 focus:ring-accent-secondary/30`,
   };
 
   return (
@@ -55,7 +55,7 @@ export function TextField({
         <p id={`${id}-hint`} className="text-[10px] font-space-mono text-text-muted/60">{hint}</p>
       )}
       {error && (
-        <p id={`${id}-error`} className="text-[10px] font-space-mono text-magenta">{error}</p>
+        <p id={`${id}-error`} className="text-[10px] font-space-mono text-accent">{error}</p>
       )}
     </div>
   );

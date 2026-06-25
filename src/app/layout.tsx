@@ -12,9 +12,8 @@ import './globals.css';
 const c = theme.colors;
 const THEME_VARS = [
   `--cc-color-accent:${c.accent}`,
-  `--cc-color-accent-magenta:${c.accent}`,
-  `--cc-color-accent-turquoise:${c.accent}`,
-  `--cc-color-accent-yellow:${c.accent}`,
+  `--cc-color-accent-secondary:${c.accentSecondary}`,
+  `--cc-color-accent-tertiary:${c.accentTertiary}`,
   `--cc-color-primary-dark:${c.primaryDark}`,
   `--cc-color-surface-1:${c.surface1}`,
   `--cc-color-surface-2:${c.surface2}`,
@@ -24,8 +23,8 @@ const THEME_VARS = [
   `--cc-color-text-secondary:${c.textSecondary}`,
   `--cc-color-text-muted:${c.textMuted}`,
   `--cc-color-category-games:${c.accent}`,
-  `--cc-color-category-client:${c.accent}`,
-  `--cc-color-category-personal:${c.accent}`,
+  `--cc-color-category-client:${c.accentSecondary}`,
+  `--cc-color-category-personal:${c.accentTertiary}`,
 ].join(';');
 
 export const metadata: Metadata = {

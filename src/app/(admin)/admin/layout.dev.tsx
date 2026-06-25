@@ -16,7 +16,7 @@ export default function AdminLayout({
         <nav className="flex items-center gap-1 max-w-6xl mx-auto px-6 h-12">
           <Link
             href="/admin/"
-            className="font-space-mono text-sm font-bold text-turquoise tracking-wider mr-4 hover:text-white transition-colors"
+            className="font-space-mono text-sm font-bold text-accent-secondary tracking-wider mr-4 hover:text-white transition-colors"
           >
             ORC:ADMIN
           </Link>
@@ -36,7 +36,7 @@ export default function AdminLayout({
               {label}
             </Link>
           ))}
-          <span className="ml-auto px-2 py-0.5 text-[10px] font-space-mono text-yellow bg-yellow/10 rounded border border-yellow/20">
+          <span className="ml-auto px-2 py-0.5 text-[10px] font-space-mono text-accent-tertiary bg-accent-tertiary/10 rounded border border-accent-tertiary/20">
             DEV
           </span>
         </nav>

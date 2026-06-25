@@ -14,7 +14,7 @@
   height: 1px;
   overflow: hidden;
   padding: 0.75rem 1.25rem;
-  background: var(--cc-color-accent-turquoise);
+  background: var(--cc-color-accent-secondary);
   color: var(--cc-color-primary-dark);
   font-family: var(--cc-font-mono);
   font-size: 0.85rem;
@@ -31,7 +31,7 @@
   width: auto;
   height: auto;
   overflow: visible;
-  outline: 2px solid var(--cc-color-accent-turquoise);
+  outline: 2px solid var(--cc-color-accent-secondary);
   outline-offset: 2px;
 }
 
@@ -41,7 +41,7 @@
 .cc-shell [role="tab"]:focus-visible,
 .cc-shell [role="option"]:focus-visible,
 .cc-shell [tabindex]:focus-visible {
-  outline: 2px solid var(--cc-color-accent-turquoise);
+  outline: 2px solid var(--cc-color-accent-secondary);
   outline-offset: 2px;
 }
 

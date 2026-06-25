@@ -12,12 +12,10 @@ const config: Config = {
     extend: {
       colors: {
         // Palette comes from src/theme.config.ts (the per-fork overlay) — edit
-        // there, not here. The legacy accent names all resolve to the single
-        // accent so existing component classes keep working.
+        // there, not here. Three semantic accents; a fork may set them distinct.
         accent: c.accent,
-        magenta: c.accent,
-        yellow: c.accent,
-        turquoise: c.accent,
+        'accent-secondary': c.accentSecondary,
+        'accent-tertiary': c.accentTertiary,
         'midnight-blue': c.primaryDark,
         ivory: c.ivory,
         'primary-dark': c.primaryDark,

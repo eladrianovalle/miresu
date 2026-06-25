@@ -29,8 +29,8 @@ export function SelectField({ path, options, value, onChange, error, hint, readO
         disabled={readOnly}
         aria-invalid={!!error}
         className={`w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-space-mono text-text-primary
-          ${error ? 'border-magenta/60' : 'border-surface-3'}
-          focus:outline-none focus:ring-1 focus:ring-turquoise/30`}
+          ${error ? 'border-accent/60' : 'border-surface-3'}
+          focus:outline-none focus:ring-1 focus:ring-accent-secondary/30`}
       >
         <option value="">&mdash; Select &mdash;</option>
         {options.map((opt) => (
@@ -38,7 +38,7 @@ export function SelectField({ path, options, value, onChange, error, hint, readO
         ))}
       </select>
       {hint && !error && <p className="text-[10px] font-space-mono text-text-muted/60">{hint}</p>}
-      {error && <p className="text-[10px] font-space-mono text-magenta">{error}</p>}
+      {error && <p className="text-[10px] font-space-mono text-accent">{error}</p>}
     </div>
   );
 }

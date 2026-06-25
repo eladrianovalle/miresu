@@ -24,14 +24,14 @@ export function CheckboxField({ path, checked, onChange, error, hint, readOnly }
         onChange={(e) => onChange(path, e.target.checked)}
         disabled={readOnly}
         aria-invalid={!!error}
-        className="mt-0.5 h-4 w-4 rounded border-surface-3 bg-surface-1 text-turquoise/60 focus:ring-turquoise/30"
+        className="mt-0.5 h-4 w-4 rounded border-surface-3 bg-surface-1 text-accent-secondary/60 focus:ring-accent-secondary/30"
       />
       <div>
         <label htmlFor={id} className="text-sm text-text-secondary">
           {label}
         </label>
         {hint && <p className="text-[10px] font-space-mono text-text-muted/60 mt-0.5">{hint}</p>}
-        {error && <p className="text-[10px] font-space-mono text-magenta mt-0.5">{error}</p>}
+        {error && <p className="text-[10px] font-space-mono text-accent mt-0.5">{error}</p>}
       </div>
     </div>
   );

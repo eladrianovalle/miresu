@@ -5,11 +5,19 @@
 // palette, and the root layout injects it as :root CSS variables — so the
 // engine files stay identical across forks (clean `git merge upstream`).
 //
-// Default: a restrained neutral. Change `accent` to recolor the whole UI.
+// Default: a restrained neutral. The engine exposes three semantic accents —
+// `accent` (primary), `accentSecondary`, and `accentTertiary` — so a fork can
+// theme them independently (e.g. distinct per-category colors). The neutral
+// default sets all three equal, so the stock UI reads as a single accent; a
+// fork is free to give each a different value.
 export const theme = {
   colors: {
-    /** The single accent — links, section labels, key emphasis, category dots. */
+    /** Primary accent — links, section labels, key emphasis, category dots. */
     accent: '#8ba3c7',
+    /** Secondary accent — a fork may set this distinct from the primary. */
+    accentSecondary: '#8ba3c7',
+    /** Tertiary accent — a fork may set this distinct from the others. */
+    accentTertiary: '#8ba3c7',
     /** Page background. */
     primaryDark: '#0a0a0b',
     /** Raised surfaces, lightest → darkest separation. */
