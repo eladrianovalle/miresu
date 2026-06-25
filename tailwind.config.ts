@@ -1,4 +1,7 @@
 import type { Config } from 'tailwindcss';
+import { theme as siteTheme } from './src/theme.config';
+
+const c = siteTheme.colors;
 
 const config: Config = {
   content: [
@@ -8,21 +11,22 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        // One restrained accent. The three legacy names all resolve to it so
-        // existing component classes keep working; change `accent` to re-brand.
-        accent: '#8ba3c7',
-        magenta: '#8ba3c7',
-        yellow: '#8ba3c7',
-        turquoise: '#8ba3c7',
-        'midnight-blue': '#0a0a0b',
-        ivory: '#fafafa',
-        'primary-dark': '#0a0a0b',
-        'surface-1': '#131315',
-        'surface-2': '#1a1a1d',
-        'surface-3': '#26262b',
-        'text-primary': '#ededee',
-        'text-secondary': '#a1a1aa',
-        'text-muted': '#71717a',
+        // Palette comes from src/theme.config.ts (the per-fork overlay) — edit
+        // there, not here. The legacy accent names all resolve to the single
+        // accent so existing component classes keep working.
+        accent: c.accent,
+        magenta: c.accent,
+        yellow: c.accent,
+        turquoise: c.accent,
+        'midnight-blue': c.primaryDark,
+        ivory: c.ivory,
+        'primary-dark': c.primaryDark,
+        'surface-1': c.surface1,
+        'surface-2': c.surface2,
+        'surface-3': c.surface3,
+        'text-primary': c.textPrimary,
+        'text-secondary': c.textSecondary,
+        'text-muted': c.textMuted,
       },
       fontFamily: {
         syne: ['var(--font-syne)', 'sans-serif'],
@@ -30,10 +34,10 @@ const config: Config = {
         'ibm-plex': ['var(--font-ibm-plex)', 'sans-serif'],
       },
       boxShadow: {
-        // Subtle neutral elevation instead of neon bloom.
-        'neon-magenta': '0 8px 40px rgba(139, 163, 199, 0.12)',
-        'neon-turquoise': '0 8px 40px rgba(139, 163, 199, 0.12)',
-        'neon-yellow': '0 8px 40px rgba(139, 163, 199, 0.12)',
+        // Subtle, theme-agnostic elevation instead of neon bloom.
+        'neon-magenta': '0 8px 40px rgba(0, 0, 0, 0.35)',
+        'neon-turquoise': '0 8px 40px rgba(0, 0, 0, 0.35)',
+        'neon-yellow': '0 8px 40px rgba(0, 0, 0, 0.35)',
       },
     },
   },

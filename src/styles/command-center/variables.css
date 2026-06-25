@@ -1,30 +1,9 @@
 /* Command Center Design System Variables */
 
 :root {
-  /* Surfaces — neutral dark */
-  --cc-color-primary-dark: #0a0a0b;
-  --cc-color-surface-1: #131315;
-  --cc-color-surface-2: #1a1a1d;
-  --cc-color-surface-3: #26262b;
-  --cc-color-border: #2a2a30;
-
-  /* Accent — one restrained accent for the whole UI. Change this single value
-     (and `accent` in tailwind.config.ts) to re-brand. The three legacy slots
-     point at it so existing component classes keep working. */
-  --cc-color-accent: #8ba3c7;
-  --cc-color-accent-magenta: var(--cc-color-accent);
-  --cc-color-accent-turquoise: var(--cc-color-accent);
-  --cc-color-accent-yellow: var(--cc-color-accent);
-
-  /* Text — neutral */
-  --cc-color-text-primary: #ededee;
-  --cc-color-text-secondary: #a1a1aa;
-  --cc-color-text-muted: #71717a;
-
-  /* Category colors — neutral default keeps all three on the single accent */
-  --cc-color-category-games: var(--cc-color-accent);
-  --cc-color-category-client: var(--cc-color-accent);
-  --cc-color-category-personal: var(--cc-color-accent);
+  /* Color tokens (surfaces, accent, text, category) are injected as :root
+     variables by the root layout from src/theme.config.ts — edit the palette
+     there. Kept out of this file so the engine stays theme-agnostic. */
 
   /* Fonts */
   --cc-font-display: var(--font-syne), sans-serif;
