@@ -152,9 +152,9 @@ export default async function ResumePage() {
         {/* Experience */}
         <section className="mb-10">
           <SectionHeading>Experience</SectionHeading>
-          <div className="space-y-8">
+          <div className="divide-y divide-surface-3">
             {resume.experience.map((entry) => (
-              <article key={`${entry.org}-${entry.sourceSlugs.join('-')}`}>
+              <article key={`${entry.org}-${entry.sourceSlugs.join('-')}`} className="pt-6 first:pt-0">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                   <h3 className="font-syne text-lg font-semibold text-text-primary">
                     {entry.title}
@@ -183,9 +183,9 @@ export default async function ResumePage() {
         {resume.projects.length > 0 && (
           <section className="mb-10">
             <SectionHeading>Projects</SectionHeading>
-            <div className="space-y-6">
+            <div className="divide-y divide-surface-3">
               {resume.projects.map((project) => (
-                <article key={project.slug}>
+                <article key={project.slug} className="pt-6 first:pt-0">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                     <h3 className="font-syne text-lg font-semibold text-text-primary">
                       <Link href={projectPath(project.slug)} className={linkClass}>
