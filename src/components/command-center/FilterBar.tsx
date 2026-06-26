@@ -3,6 +3,7 @@
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
 import { Suspense, useCallback, useRef } from 'react';
 import type { ProjectCategory } from '@/lib/projects';
+import { categoryLabels } from '@/lib/site-labels';
 
 type FilterBarProps = {
   counts: Record<ProjectCategory, number>;
@@ -10,9 +11,9 @@ type FilterBarProps = {
 
 const FILTERS: { label: string; value: ProjectCategory | null }[] = [
   { label: 'All', value: null },
-  { label: 'Games', value: 'games' },
-  { label: 'Clients', value: 'client' },
-  { label: 'Collabs', value: 'personal' },
+  { label: categoryLabels.games, value: 'games' },
+  { label: categoryLabels.client, value: 'client' },
+  { label: categoryLabels.personal, value: 'personal' },
 ];
 
 function FilterBarInner({ counts }: FilterBarProps) {

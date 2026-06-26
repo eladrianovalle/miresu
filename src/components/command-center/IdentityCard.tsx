@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Identity } from '@/types/project-content';
 import { siteConfig } from '@/site.config';
+import { chrome } from '@/lib/site-labels';
 
 interface IdentityCardProps {
   identity: Identity;
@@ -35,10 +36,12 @@ export function IdentityCard({ identity }: IdentityCardProps) {
         </Link>
       </div>
 
-      {/* Operator label */}
-      <p className="cc-identity-operator-label">
-        operator // <span>{identity.availability.status === 'available' ? 'active' : identity.availability.status}</span>
-      </p>
+      {/* Operator label (optional stylized chrome) */}
+      {chrome.operator && (
+        <p className="cc-identity-operator-label">
+          operator // <span>{identity.availability.status === 'available' ? 'active' : identity.availability.status}</span>
+        </p>
+      )}
 
       {/* Name */}
       <h1 className="cc-identity-name">
@@ -50,10 +53,12 @@ export function IdentityCard({ identity }: IdentityCardProps) {
         {identity.role}
       </p>
 
-      {/* Operator ID */}
-      <p className="cc-identity-id">
-        ID: {identity.id}
-      </p>
+      {/* Operator ID (optional stylized chrome) */}
+      {chrome.showId && identity.id && (
+        <p className="cc-identity-id">
+          ID: {identity.id}
+        </p>
+      )}
 
       {/* Bio */}
       <p className="cc-identity-bio">

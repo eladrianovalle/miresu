@@ -135,7 +135,7 @@ test.describe('ARIA Structure', () => {
     await expect(tablist).toHaveCount(1);
 
     const tabs = page.locator('[role="tab"]');
-    await expect(tabs).toHaveCount(4); // All, Games, Clients, Collabs
+    await expect(tabs).toHaveCount(4); // All + the three category tabs (labels are config-driven)
 
     // Exactly one tab should be selected
     const selected = page.locator('[role="tab"][aria-selected="true"]');

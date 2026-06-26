@@ -207,7 +207,9 @@ export const IdentitySchema = z.object({
   role: z.string(),
   tagline: z.string(),
   bio: z.string(),
-  id: z.string(),
+  // Optional operator/badge id (e.g. "SR-001"). Stylized chrome — a fork can
+  // omit it and hide the ID line via siteConfig.chrome.showId.
+  id: z.string().optional(),
   location: z.string().optional(),
   established: z.number(),
   email: z.string().email(),
