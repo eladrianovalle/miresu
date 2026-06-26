@@ -1,6 +1,6 @@
 import { Metadata } from 'next';
 import type { Project } from '@/lib/projects';
-import { getHeroImage } from '@/lib/project-utils';
+import { getHeroImage, descriptionFor } from '@/lib/project-utils';
 import { siteConfig as baseConfig } from '@/site.config';
 
 // Metadata-shaped view over the single site config (src/site.config.ts). `name`
@@ -63,7 +63,7 @@ export function buildOrganizationJsonLd() {
 
 export function buildProjectMetadata(project: Project): Metadata {
   const description =
-    project.subtitle ?? project.description.slice(0, 160);
+    project.subtitle ?? descriptionFor(project).slice(0, 160);
   const heroImage = getHeroImage(project);
 
   return buildMetadata({
@@ -89,7 +89,7 @@ export function buildProjectJsonLd(project: Project) {
   const base = {
     '@context': 'https://schema.org',
     name: project.title,
-    description: project.subtitle ?? project.description,
+    description: project.subtitle ?? descriptionFor(project),
     image: heroImage ? `${siteConfig.url}${heroImage}` : undefined,
     url: `${siteConfig.url}/projects/${project.slug}/`,
     author: {

@@ -1,7 +1,9 @@
 'use client';
 
 import { pathToLabel } from '@/lib/admin/utils';
+import { assetKindForPath } from '@/lib/admin/asset-fields';
 import { SchemaField, type JsonSchemaNode } from '../SchemaField';
+import { UploadField } from './UploadField';
 
 interface ArrayFieldProps {
   path: string;
@@ -22,6 +24,8 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
   const label = pathToLabel(path);
   const items = Array.isArray(value) ? value : [];
   const isStringArray = itemSchema.type === 'string';
+  // A string array of assets (e.g. gallery) renders an UploadField per item.
+  const assetKind = isStringArray ? assetKindForPath(path) : null;
 
   function handleItemChange(index: number, itemPath: string, itemValue: unknown) {
     const updated = [...items];
@@ -118,7 +122,15 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
 
           {/* Item content */}
           <div className="flex-1">
-            {isStringArray ? (
+            {assetKind ? (
+              <UploadField
+                path={`${path}.${index}`}
+                kind={assetKind}
+                value={item as string}
+                onChange={(_p, v) => handleItemChange(index, '', v)}
+                hideLabel
+              />
+            ) : isStringArray ? (
               <input
                 type="text"
                 value={item as string}

@@ -6,6 +6,8 @@ import { CheckboxField } from './fields/CheckboxField';
 import { SelectField } from './fields/SelectField';
 import { ArrayField } from './fields/ArrayField';
 import { ObjectField } from './fields/ObjectField';
+import { UploadField } from './fields/UploadField';
+import { assetKindForPath } from '@/lib/admin/asset-fields';
 import type { JsonSchemaNode } from '@/lib/admin/api-types';
 
 export type { JsonSchemaNode };
@@ -90,6 +92,22 @@ export function SchemaField(props: SchemaFieldProps) {
 
   // Rule 4: String -> Text input (with format variants)
   if (schema.type === 'string') {
+    // Asset string fields (image, thumbnail, video.src/poster) get the upload widget.
+    const assetKind = assetKindForPath(path);
+    if (assetKind) {
+      return (
+        <UploadField
+          path={path}
+          kind={assetKind}
+          value={(value as string) ?? ''}
+          onChange={onChange}
+          error={errors?.get(path)}
+          hint={hint}
+          readOnly={readOnly}
+        />
+      );
+    }
+
     let inputType: 'text' | 'url' | 'email' = 'text';
     if (schema.format === 'uri') inputType = 'url';
     if (schema.format === 'email') inputType = 'email';

@@ -70,6 +70,11 @@ export async function POST(
         { status: 409 },
       );
     }
-    throw error;
+    // Surface remaining errors (e.g. invalid slug format) as a JSON 400 so the
+    // client always receives a parseable body instead of an empty 500.
+    return NextResponse.json(
+      { error: error instanceof Error ? error.message : 'Failed to create project' },
+      { status: 400 },
+    );
   }
 }

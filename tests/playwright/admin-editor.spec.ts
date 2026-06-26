@@ -370,3 +370,60 @@ test.describe('Reset button', () => {
     await expect(titleInput).toHaveValue(original);
   });
 });
+
+// ------------------------------------------------------------------
+// Asset upload (image)
+// ------------------------------------------------------------------
+//
+// One happy-path e2e. The rejection matrix (bad extension, traversal, oversize)
+// lives in src/lib/admin/asset-ops.test.ts (Vitest) — a browser file input only
+// sends the basename, so a traversal e2e would pass vacuously without ever
+// exercising the server guard. This asserts the real seam the unit tests can't:
+// a picked file is POSTed, copied into public/assets, and its returned web path
+// is written into the field.
+
+test.describe('Asset upload', () => {
+  test.skip(!anyGame, 'No non-draft games project in the sample content');
+
+  const slug = anyGame?.slug ?? '';
+  const projectFile = anyGame?.relPath ?? '';
+  const assetDir = path.resolve(process.cwd(), `public/assets/images/games/${slug}`);
+  // 1x1 transparent PNG.
+  const pngBuffer = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAMBAQDJ/1ozAAAAAElFTkSuQmCC',
+    'base64',
+  );
+  let originalData: Record<string, unknown>;
+
+  test.beforeEach(() => {
+    originalData = readContentJson(projectFile);
+  });
+
+  test.afterEach(() => {
+    // Restore content and remove every file the test wrote (sanitized name +
+    // any -N collision variants), without touching the sample project's assets.
+    writeContentJson(projectFile, originalData);
+    if (fs.existsSync(assetDir)) {
+      for (const f of fs.readdirSync(assetDir)) {
+        if (f.startsWith('e2e-upload-fixture')) fs.rmSync(path.join(assetDir, f));
+      }
+    }
+  });
+
+  test('uploading an image fills the field with its web path and writes the file', async ({ page }) => {
+    await page.goto(adminUrlForSlug(slug));
+
+    // The Image field's hidden file input (sr-only) — edit form, so uploads are enabled.
+    await page.locator('#field-image').setInputFiles({
+      name: 'e2e-upload-fixture.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    const expectedPath = `/assets/images/games/${slug}/e2e-upload-fixture.png`;
+    // The field's value preview shows the returned path…
+    await expect(page.getByText(expectedPath, { exact: true })).toBeVisible();
+    // …and the file actually landed under public/.
+    expect(fs.existsSync(path.join(assetDir, 'e2e-upload-fixture.png'))).toBe(true);
+  });
+});
