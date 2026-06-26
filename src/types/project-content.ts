@@ -131,7 +131,10 @@ export const ProjectBaseSchema = z.object({
   slug: z.string(),
   title: z.string(),
   subtitle: z.string().optional(),
-  description: z.string(),
+  // Optional: when blank/omitted, the display description falls back to the
+  // project's `resumeBullets` strung into prose (see `descriptionFor`). Lets an
+  // economical entry (just bullets) avoid a second source of truth.
+  description: z.string().optional(),
   image: z.string().optional(),
   thumbnail: z.string().optional(),
   role: z.string(),

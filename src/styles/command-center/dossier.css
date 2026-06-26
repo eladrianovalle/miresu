@@ -336,6 +336,30 @@ a.cc-contributor-name:hover {
   to   { opacity: 1; transform: scale(1); }
 }
 
+/* No-image placeholder (e.g. a draft with no hero image yet) */
+.cc-viewer-empty {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--cc-color-surface-2),
+    var(--cc-color-surface-2) 12px,
+    var(--cc-color-surface-3) 12px,
+    var(--cc-color-surface-3) 24px
+  );
+}
+
+.cc-viewer-empty::after {
+  content: 'NO PREVIEW';
+  font-family: var(--cc-font-mono, monospace);
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  color: var(--cc-color-text-muted);
+}
+
 /* ── GALLERY FILMSTRIP (mobile-first: horizontal strip) ── */
 .cc-viewer-filmstrip {
   display: flex;

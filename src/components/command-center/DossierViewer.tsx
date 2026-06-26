@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import { useState, useCallback, useMemo, memo, useRef } from 'react';
 import type { Project } from '@/lib/projects';
-import { getHeroImage } from '@/lib/project-utils';
+import { getHeroImage, descriptionFor } from '@/lib/project-utils';
 import { DossierFocusTitle } from './DossierFocusTitle';
 import { DossierMeta } from './DossierMeta';
 import { DossierContributors } from './DossierContributors';
@@ -13,7 +13,7 @@ import { DossierTestimonial } from './DossierTestimonial';
 export function DossierViewer({ project }: { project: Project }) {
   const heroImage = getHeroImage(project);
   const allImages = useMemo(() => {
-    const gallery = project.gallery ?? [];
+    const gallery = (project.gallery ?? []).filter((img) => img?.trim());
     if (!heroImage) return gallery;
     return [heroImage, ...gallery.filter((img) => img !== heroImage)];
   }, [heroImage, project.gallery]);
@@ -40,6 +40,7 @@ export function DossierViewer({ project }: { project: Project }) {
     );
   }
 
+  const activeImage = allImages[activeIndex];
   const showVideo = heroVideo && activeIndex === 0;
 
   return (
@@ -56,13 +57,15 @@ export function DossierViewer({ project }: { project: Project }) {
               loop
               playsInline
             />
-          ) : (
+          ) : activeImage ? (
             <Image
-              src={allImages[activeIndex]}
+              src={activeImage}
               alt={`${project.title}${activeIndex > 0 ? ` — image ${activeIndex}` : ''}`}
               fill
               sizes="(max-width: 1024px) 100vw, 60vw"
             />
+          ) : (
+            <div className="cc-viewer-empty" aria-hidden="true" />
           )}
         </div>
       </div>
@@ -84,6 +87,7 @@ export function DossierViewer({ project }: { project: Project }) {
 }
 
 const DossierContent = memo(function DossierContent({ project }: { project: Project }) {
+  const description = descriptionFor(project);
   return (
     <div className="cc-dossier-content">
       <div className="cc-dossier-header">
@@ -93,10 +97,12 @@ const DossierContent = memo(function DossierContent({ project }: { project: Proj
         )}
       </div>
       <DossierMeta project={project} />
-      <div className="cc-dossier-section">
-        <div className="cc-section-label">Description</div>
-        <p className="cc-dossier-description">{project.description}</p>
-      </div>
+      {description && (
+        <div className="cc-dossier-section">
+          <div className="cc-section-label">Description</div>
+          <p className="cc-dossier-description">{description}</p>
+        </div>
+      )}
       {project.contributors && (
         <DossierContributors contributors={project.contributors} />
       )}

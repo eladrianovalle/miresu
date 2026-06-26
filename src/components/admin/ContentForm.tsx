@@ -3,6 +3,7 @@
 import { useReducer, useCallback, useState, useEffect, useRef } from 'react';
 import { SchemaField, type JsonSchemaNode } from './SchemaField';
 import { ObjectField } from './fields/ObjectField';
+import { AssetContextProvider, type AssetContextValue } from './AssetContext';
 
 interface SaveSuccessResponse {
   ok?: boolean;
@@ -103,6 +104,15 @@ function setDeep(
   };
 }
 
+/** Derive a URL/filename-safe slug from a title (lowercase, hyphenated). */
+function slugify(title: string): string {
+  return title
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 // --- Component ---
 
 export function ContentForm({
@@ -166,6 +176,11 @@ export function ContentForm({
 
   const handleChange = useCallback((path: string, value: unknown) => {
     dispatch({ type: 'SET_FIELD', path, value });
+    // On the create form the slug is read-only and auto-derived from the title
+    // (slug == filename, so we own it). On edit it's frozen entirely.
+    if (saveMethod === 'POST' && path === 'title' && typeof value === 'string') {
+      dispatch({ type: 'SET_FIELD', path: 'slug', value: slugify(value) });
+    }
     // Clear field error on change
     setFieldErrors((prev) => {
       if (!prev.has(path)) return prev;
@@ -174,7 +189,7 @@ export function ContentForm({
       return next;
     });
     setSaveResult(null);
-  }, []);
+  }, [saveMethod]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -188,7 +203,19 @@ export function ContentForm({
         body: JSON.stringify(formData),
       });
 
-      const result: SaveResponse = await response.json() as SaveResponse;
+      // Tolerate empty / non-JSON bodies so a bodiless error response surfaces
+      // a clean message instead of an "Unexpected end of JSON input" crash.
+      const raw = await response.text();
+      let result: SaveResponse = {};
+      if (raw) {
+        try {
+          result = JSON.parse(raw) as SaveResponse;
+        } catch {
+          result = { error: raw };
+        }
+      } else if (!response.ok) {
+        result = { error: `Request failed (${response.status})` };
+      }
 
       if (!response.ok) {
         if (result.issues) {
@@ -227,7 +254,20 @@ export function ContentForm({
 
   const requiredSet = new Set(schema.required ?? []);
 
+  // Asset-upload target. Category comes from the project endpoint; slug from the
+  // form. Uploads are edit-only (saveMethod === 'PUT') for iteration 1 — the
+  // create form's slug is title-derived and mutates per keystroke.
+  const category = (saveEndpoint.match(/\/api\/admin\/projects\/(games|client|personal)\//)?.[1] ??
+    null) as AssetContextValue['category'];
+  const currentSlug = typeof formData.slug === 'string' ? formData.slug : '';
+  const assetContext: AssetContextValue = {
+    category,
+    slug: currentSlug,
+    canUpload: saveMethod === 'PUT' && category !== null && currentSlug.length > 0,
+  };
+
   return (
+    <AssetContextProvider value={assetContext}>
     <div className="space-y-6">
       {/* Form fields */}
       <div className="space-y-4">
@@ -258,7 +298,11 @@ export function ContentForm({
               value={formData[key]}
               onChange={handleChange}
               errors={fieldErrors}
-              hint={annotations.hints[key]}
+              hint={
+                key === 'slug' && saveMethod === 'POST'
+                  ? 'Auto-generated from the title'
+                  : annotations.hints[key]
+              }
               isTextarea={textareaSet.has(key)}
               readOnly={key === 'slug'}
             />
@@ -327,5 +371,6 @@ export function ContentForm({
         </span>
       </div>
     </div>
+    </AssetContextProvider>
   );
 }
