@@ -45,6 +45,13 @@ tagline, social handles, and logo/favicon paths. Everything that needs your
 identity (page titles, social cards, the resume PDF/JSON links, the chrome)
 reads from there.
 
+The same file also holds two optional knobs: **`labels`** renames the project
+taxonomy for display (the `Projects` / `Clients` / `Personal` filter tabs and the
+dossier relationship labels — the underlying category keys stay the same), and
+**`chrome`** toggles the stylized identity flourishes (`operator` eyebrow +
+handle, `showId` line), both off in the neutral default. Omit either to keep the
+defaults.
+
 Replace the placeholder brand assets in `public/assets/icons/` (`logo.svg`,
 `logotype.svg`) and `public/assets/images/` (`favicon.png`, `og-default.svg`)
 with your own.
