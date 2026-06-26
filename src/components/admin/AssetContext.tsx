@@ -10,13 +10,20 @@ import { createContext, useContext } from 'react';
 export interface AssetContextValue {
   /** Project category, or null for non-project (singleton) forms. */
   category: 'games' | 'client' | 'personal' | null;
-  /** Current slug (filename). Empty until known. */
+  /** Current slug (filename). Empty until known (always empty on the create form). */
   slug: string;
+  /** 'create' (new entry, no slug yet) or 'edit' (existing entry). */
+  mode: 'create' | 'edit';
   /**
-   * Whether uploads are allowed right now. Iteration 1 is edit-only: the
-   * create form's slug is live-derived from the title and mutates per keystroke,
-   * so uploading there would orphan files under a stale slug. Create-time
-   * uploads are a planned fast-follow.
+   * Create-form draft id. Staged uploads are namespaced by this (the slug is
+   * title-derived and mutates per keystroke, so it can't key the upload dir);
+   * `createProject` moves the staged files into the real slug dir on save.
+   * Present only when `mode === 'create'`.
+   */
+  draftId?: string;
+  /**
+   * Whether uploads are allowed right now. Edit needs a real slug; create needs
+   * a category (uploads stage under the draft id and relocate on save).
    */
   canUpload: boolean;
 }

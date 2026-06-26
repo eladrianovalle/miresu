@@ -132,6 +132,15 @@ export function ContentForm({
   // "Ctrl"; on a Mac the effect upgrades it to ⌘, with no hydration mismatch.
   const [isMac, setIsMac] = useState(false);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Stable per-mount draft id for create-form staged uploads (the slug is
+  // title-derived and mutates, so it can't namespace the upload dir).
+  const draftIdRef = useRef<string>('');
+  if (!draftIdRef.current) {
+    draftIdRef.current =
+      typeof crypto !== 'undefined' && crypto.randomUUID
+        ? crypto.randomUUID()
+        : `draft-${Math.random().toString(36).slice(2, 14)}`;
+  }
 
   useEffect(() => {
     setIsMac(navigator.platform?.includes('Mac') ?? false);
@@ -255,15 +264,18 @@ export function ContentForm({
   const requiredSet = new Set(schema.required ?? []);
 
   // Asset-upload target. Category comes from the project endpoint; slug from the
-  // form. Uploads are edit-only (saveMethod === 'PUT') for iteration 1 — the
-  // create form's slug is title-derived and mutates per keystroke.
+  // form. Edit (PUT) writes straight into <slug>/; create (POST) stages under a
+  // draft id and relocates on save, so it only needs a category.
   const category = (saveEndpoint.match(/\/api\/admin\/projects\/(games|client|personal)\//)?.[1] ??
     null) as AssetContextValue['category'];
   const currentSlug = typeof formData.slug === 'string' ? formData.slug : '';
+  const isCreate = saveMethod === 'POST';
   const assetContext: AssetContextValue = {
     category,
     slug: currentSlug,
-    canUpload: saveMethod === 'PUT' && category !== null && currentSlug.length > 0,
+    mode: isCreate ? 'create' : 'edit',
+    draftId: isCreate ? draftIdRef.current : undefined,
+    canUpload: category !== null && (isCreate || currentSlug.length > 0),
   };
 
   return (

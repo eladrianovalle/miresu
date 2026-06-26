@@ -427,3 +427,55 @@ test.describe('Asset upload', () => {
     expect(fs.existsSync(path.join(assetDir, 'e2e-upload-fixture.png'))).toBe(true);
   });
 });
+
+// ------------------------------------------------------------------
+// Asset upload — create form (staging)
+// ------------------------------------------------------------------
+//
+// On the create form the slug is title-derived and mutates per keystroke, so
+// uploads stage under a client draft id and are relocated into the real <slug>
+// dir on save (relocate-on-save is covered by Vitest + verified at the API). This
+// e2e asserts the create-form enablement: after picking a category, an upload
+// stages and fills the field with a /assets/_staging/… path. Content-agnostic —
+// it creates no fixture dependency.
+
+test.describe('Asset upload — create form (staging)', () => {
+  const stagingRoot = path.resolve(process.cwd(), 'public/assets/_staging');
+  const pngBuffer = Buffer.from(
+    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+M8AAAMBAQDJ/1ozAAAAAElFTkSuQmCC',
+    'base64',
+  );
+
+  test.afterEach(() => {
+    // Staging is transient + gitignored; clear it wholesale.
+    fs.rmSync(stagingRoot, { recursive: true, force: true });
+  });
+
+  test('uploading on the new-project form stages the file and fills a _staging path', async ({ page }) => {
+    await page.goto(`${BASE_URL}/admin/projects/new/`);
+
+    // Pick a category — this loads the form and enables create-time uploads.
+    await page.getByRole('button', { name: 'Game Projects' }).click();
+
+    await page.locator('#field-image').setInputFiles({
+      name: 'e2e-staged-fixture.png',
+      mimeType: 'image/png',
+      buffer: pngBuffer,
+    });
+
+    // The field value is a staging path (draft id is random, so match the shape).
+    await expect(page.getByText(/\/assets\/_staging\/[a-z0-9-]+\/images\/e2e-staged-fixture\.png/)).toBeVisible();
+
+    // A staged file exists somewhere under public/assets/_staging/.
+    const stagedFiles: string[] = [];
+    const walk = (dir: string) => {
+      for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+        const full = path.join(dir, e.name);
+        if (e.isDirectory()) walk(full);
+        else stagedFiles.push(e.name);
+      }
+    };
+    walk(stagingRoot);
+    expect(stagedFiles).toContain('e2e-staged-fixture.png');
+  });
+});
