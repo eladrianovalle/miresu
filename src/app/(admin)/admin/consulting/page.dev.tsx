@@ -13,11 +13,11 @@ export default async function ConsultingEditPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/admin/"
-          className="text-xs font-space-mono text-text-muted hover:text-accent-secondary transition-colors"
+          className="text-xs font-mono text-text-muted hover:text-accent-secondary transition-colors"
         >
           &larr; Dashboard
         </Link>
-        <h1 className="text-xl font-syne font-bold text-text-primary">Consulting</h1>
+        <h1 className="text-xl font-display font-bold text-text-primary">Consulting</h1>
       </div>
       <ContentForm
         initialData={data}

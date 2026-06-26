@@ -137,7 +137,7 @@ export function SchemaField(props: SchemaFieldProps) {
 
   // Rule 7: Fallback
   return (
-    <div className="text-accent-tertiary text-xs font-space-mono p-2 border border-surface-3 rounded">
+    <div className="text-accent-tertiary text-xs font-mono p-2 border border-surface-3 rounded">
       Unknown field type at {path}: {JSON.stringify(schema.type)}
     </div>
   );

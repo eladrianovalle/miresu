@@ -269,10 +269,10 @@ export function ContentForm({
       {/* JSON preview toggle */}
       {showJson && (
         <details open className="border border-surface-3 rounded-lg bg-surface-1/50">
-          <summary className="px-4 py-2 text-[10px] font-space-mono text-text-muted uppercase tracking-wider cursor-pointer hover:text-text-secondary select-none">
+          <summary className="px-4 py-2 text-[10px] font-mono text-text-muted uppercase tracking-wider cursor-pointer hover:text-text-secondary select-none">
             JSON Preview
           </summary>
-          <pre className="px-4 pb-4 text-xs font-space-mono text-text-muted overflow-x-auto max-h-96 overflow-y-auto">
+          <pre className="px-4 pb-4 text-xs font-mono text-text-muted overflow-x-auto max-h-96 overflow-y-auto">
             {JSON.stringify(formData, null, 2)}
           </pre>
         </details>
@@ -284,7 +284,7 @@ export function ContentForm({
           type="button"
           onClick={() => void handleSave()}
           disabled={saving}
-          className="px-4 py-2 rounded-md bg-accent-secondary/90 text-primary-dark font-space-mono font-bold text-xs tracking-wide hover:bg-accent-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+          className="px-4 py-2 rounded-md bg-accent-secondary/90 text-primary-dark font-mono font-bold text-xs tracking-wide hover:bg-accent-secondary disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         >
           {saving ? 'SAVING...' : 'SAVE'}
         </button>
@@ -292,14 +292,14 @@ export function ContentForm({
           type="button"
           onClick={() => dispatch({ type: 'RESET', data: initialData })}
           disabled={saving}
-          className="px-3 py-2 rounded-md border border-surface-3 text-text-muted text-xs font-space-mono hover:text-text-primary hover:border-text-muted transition-colors"
+          className="px-3 py-2 rounded-md border border-surface-3 text-text-muted text-xs font-mono hover:text-text-primary hover:border-text-muted transition-colors"
         >
           Reset
         </button>
         <button
           type="button"
           onClick={() => setShowJson((v) => !v)}
-          className={`px-2.5 py-2 rounded-md border text-xs font-space-mono transition-colors ${
+          className={`px-2.5 py-2 rounded-md border text-xs font-mono transition-colors ${
             showJson
               ? 'border-accent-secondary/50 text-accent-secondary bg-accent-secondary/5'
               : 'border-surface-3 text-text-muted hover:text-text-secondary hover:border-text-muted'
@@ -308,21 +308,21 @@ export function ContentForm({
           {'{ }'}
         </button>
         {isDirty && !saveResult && (
-          <span className="text-[10px] font-space-mono text-accent-tertiary tracking-wide">UNSAVED</span>
+          <span className="text-[10px] font-mono text-accent-tertiary tracking-wide">UNSAVED</span>
         )}
         {saveResult && (
           <span
-            className={`text-xs font-space-mono transition-opacity ${saveResult.ok ? 'text-accent-secondary' : 'text-accent'}`}
+            className={`text-xs font-mono transition-opacity ${saveResult.ok ? 'text-accent-secondary' : 'text-accent'}`}
           >
             {saveResult.message}
           </span>
         )}
         {fieldErrors.size > 0 && (
-          <span className="text-[10px] font-space-mono text-accent">
+          <span className="text-[10px] font-mono text-accent">
             {fieldErrors.size} error{fieldErrors.size !== 1 ? 's' : ''} &mdash; scroll up
           </span>
         )}
-        <span className="ml-auto text-[10px] text-text-muted/40 font-space-mono">
+        <span className="ml-auto text-[10px] text-text-muted/40 font-mono">
           {isMac ? '\u2318' : 'Ctrl'}+S
         </span>
       </div>

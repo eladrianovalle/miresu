@@ -26,10 +26,10 @@ export default async function AdminDashboard() {
   return (
     <div>
       <div className="mb-10">
-        <p className="text-[10px] font-space-mono text-text-muted uppercase tracking-[0.2em] mb-1">
+        <p className="text-[10px] font-mono text-text-muted uppercase tracking-[0.2em] mb-1">
           Content Management
         </p>
-        <h1 className="text-xl font-syne font-bold text-text-primary">
+        <h1 className="text-xl font-display font-bold text-text-primary">
           Dashboard
         </h1>
       </div>
@@ -48,7 +48,7 @@ export default async function AdminDashboard() {
               className={`group block p-5 rounded-lg border bg-surface-1/50 transition-all duration-200 ${ACCENT_MAP[key] ?? 'border-surface-3 hover:border-text-muted'}`}
             >
               <div>
-                <span className="text-[10px] font-space-mono text-text-muted uppercase">
+                <span className="text-[10px] font-mono text-text-muted uppercase">
                   {entry.kind === 'project' ? 'Collection' : 'Singleton'}
                 </span>
                 <h2 className="text-sm font-semibold text-text-primary mt-0.5 group-hover:text-white transition-colors">
@@ -56,7 +56,7 @@ export default async function AdminDashboard() {
                 </h2>
               </div>
               {entry.kind === 'project' && (
-                <p className="text-xs font-space-mono text-text-muted mt-3">
+                <p className="text-xs font-mono text-text-muted mt-3">
                   {projectCounts[key] ?? 0} {(projectCounts[key] ?? 0) === 1 ? 'project' : 'projects'}
                 </p>
               )}
@@ -68,7 +68,7 @@ export default async function AdminDashboard() {
       <div className="mt-10">
         <Link
           href="/admin/projects/new/"
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-surface-2 border border-surface-3 text-sm font-space-mono text-text-secondary hover:text-accent-secondary hover:border-accent-secondary/40 transition-all duration-200"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-md bg-surface-2 border border-surface-3 text-sm font-mono text-text-secondary hover:text-accent-secondary hover:border-accent-secondary/40 transition-all duration-200"
         >
           <span className="text-accent-secondary">+</span>
           New Project

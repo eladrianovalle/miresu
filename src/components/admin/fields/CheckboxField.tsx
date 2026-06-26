@@ -30,8 +30,8 @@ export function CheckboxField({ path, checked, onChange, error, hint, readOnly }
         <label htmlFor={id} className="text-sm text-text-secondary">
           {label}
         </label>
-        {hint && <p className="text-[10px] font-space-mono text-text-muted/60 mt-0.5">{hint}</p>}
-        {error && <p className="text-[10px] font-space-mono text-accent mt-0.5">{error}</p>}
+        {hint && <p className="text-[10px] font-mono text-text-muted/60 mt-0.5">{hint}</p>}
+        {error && <p className="text-[10px] font-mono text-accent mt-0.5">{error}</p>}
       </div>
     </div>
   );

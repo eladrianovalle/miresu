@@ -17,7 +17,7 @@ export function NumberField({ path, value, onChange, error, hint, readOnly }: Nu
 
   return (
     <div className="space-y-1">
-      <label htmlFor={id} className="block text-[10px] font-space-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
+      <label htmlFor={id} className="block text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
         {label}
       </label>
       <input
@@ -28,13 +28,13 @@ export function NumberField({ path, value, onChange, error, hint, readOnly }: Nu
         onChange={(e) => onChange(path, e.target.value === '' ? '' : Number(e.target.value))}
         readOnly={readOnly}
         aria-invalid={!!error}
-        className={`w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-space-mono text-text-primary
+        className={`w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-mono text-text-primary
           ${error ? 'border-accent/60' : 'border-surface-3'}
           ${readOnly ? 'opacity-60 cursor-not-allowed' : 'hover:border-text-muted focus:border-accent-secondary/60'}
           focus:outline-none focus:ring-1 focus:ring-accent-secondary/30`}
       />
-      {hint && !error && <p className="text-[10px] font-space-mono text-text-muted/60">{hint}</p>}
-      {error && <p className="text-[10px] font-space-mono text-accent">{error}</p>}
+      {hint && !error && <p className="text-[10px] font-mono text-text-muted/60">{hint}</p>}
+      {error && <p className="text-[10px] font-mono text-accent">{error}</p>}
     </div>
   );
 }

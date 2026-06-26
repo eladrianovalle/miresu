@@ -70,15 +70,15 @@ export default function NewProjectPage() {
       <div className="flex items-center gap-4 mb-8">
         <Link
           href="/admin/"
-          className="text-xs font-space-mono text-text-muted hover:text-accent-secondary transition-colors"
+          className="text-xs font-mono text-text-muted hover:text-accent-secondary transition-colors"
         >
           &larr; Dashboard
         </Link>
-        <h1 className="text-xl font-syne font-bold text-text-primary">New Project</h1>
+        <h1 className="text-xl font-display font-bold text-text-primary">New Project</h1>
       </div>
 
       <div className="mb-8">
-        <label className="block text-[10px] font-space-mono text-text-muted uppercase tracking-[0.15em] mb-3">
+        <label className="block text-[10px] font-mono text-text-muted uppercase tracking-[0.15em] mb-3">
           Category
         </label>
         <div className="flex gap-2">
@@ -87,7 +87,7 @@ export default function NewProjectPage() {
               key={opt.key}
               type="button"
               onClick={() => void handleCategorySelect(opt.key)}
-              className={`px-4 py-2 rounded-md border text-sm font-space-mono transition-all duration-200 ${
+              className={`px-4 py-2 rounded-md border text-sm font-mono transition-all duration-200 ${
                 category === opt.key
                   ? opt.accent
                   : 'border-surface-3 text-text-muted hover:text-text-primary hover:border-text-muted'
@@ -100,11 +100,11 @@ export default function NewProjectPage() {
       </div>
 
       {loading && (
-        <p className="text-text-muted text-sm font-space-mono animate-pulse">Loading schema...</p>
+        <p className="text-text-muted text-sm font-mono animate-pulse">Loading schema...</p>
       )}
 
       {error && (
-        <p className="text-red-400 text-sm font-space-mono">{error}</p>
+        <p className="text-red-400 text-sm font-mono">{error}</p>
       )}
 
       {category && schemaInfo && defaults && (

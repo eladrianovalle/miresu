@@ -18,7 +18,7 @@ export function SelectField({ path, options, value, onChange, error, hint, readO
 
   return (
     <div className="space-y-1">
-      <label htmlFor={id} className="block text-[10px] font-space-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
+      <label htmlFor={id} className="block text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
         {label}
       </label>
       <select
@@ -28,7 +28,7 @@ export function SelectField({ path, options, value, onChange, error, hint, readO
         onChange={(e) => onChange(path, e.target.value)}
         disabled={readOnly}
         aria-invalid={!!error}
-        className={`w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-space-mono text-text-primary
+        className={`w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-mono text-text-primary
           ${error ? 'border-accent/60' : 'border-surface-3'}
           focus:outline-none focus:ring-1 focus:ring-accent-secondary/30`}
       >
@@ -37,8 +37,8 @@ export function SelectField({ path, options, value, onChange, error, hint, readO
           <option key={opt} value={opt}>{opt}</option>
         ))}
       </select>
-      {hint && !error && <p className="text-[10px] font-space-mono text-text-muted/60">{hint}</p>}
-      {error && <p className="text-[10px] font-space-mono text-accent">{error}</p>}
+      {hint && !error && <p className="text-[10px] font-mono text-text-muted/60">{hint}</p>}
+      {error && <p className="text-[10px] font-mono text-accent">{error}</p>}
     </div>
   );
 }

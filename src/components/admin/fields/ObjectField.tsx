@@ -26,7 +26,7 @@ export function ObjectField({ schema, path, value, onChange, errors, optional }:
     return (
       <div className="border border-dashed border-surface-3/60 rounded p-3">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-space-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
+          <span className="text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
             {label}
           </span>
           <button
@@ -56,7 +56,7 @@ export function ObjectField({ schema, path, value, onChange, errors, optional }:
 
   return (
     <fieldset className="border border-surface-3 rounded p-3 space-y-3">
-      <legend className="text-[10px] font-space-mono font-semibold text-text-muted uppercase tracking-[0.12em] px-1">
+      <legend className="text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em] px-1">
         {label}
         {optional && (
           <button
