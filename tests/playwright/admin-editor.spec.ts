@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import AxeBuilder from '@axe-core/playwright';
 import * as fs from 'fs';
 import * as path from 'path';
 import { firstGameWith } from './helpers/content';
@@ -477,5 +478,29 @@ test.describe('Asset upload — create form (staging)', () => {
     };
     walk(stagingRoot);
     expect(stagedFiles).toContain('e2e-staged-fixture.png');
+  });
+});
+
+// ------------------------------------------------------------------
+// Asset upload — accessibility (axe)
+// ------------------------------------------------------------------
+
+test.describe('Asset upload — accessibility', () => {
+  test('upload field has no WCAG A/AA violations', async ({ page }) => {
+    await page.goto(`${BASE_URL}/admin/projects/new/`);
+    await page.getByRole('button', { name: 'Game Projects' }).click();
+    await expect(page.locator('[data-testid="upload-field"]').first()).toBeVisible();
+    // Expand a manual-path input so it's included in the scan.
+    await page.getByRole('button', { name: '+ Enter path manually' }).first().click();
+
+    // color-contrast is excluded: the admin's de-emphasized micro-text is a
+    // pre-existing admin-wide design choice, not specific to this field. This
+    // gate covers structural rules — labels, names, roles, aria.
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .include('[data-testid="upload-field"]')
+      .disableRules(['color-contrast'])
+      .analyze();
+    expect(results.violations).toEqual([]);
   });
 });

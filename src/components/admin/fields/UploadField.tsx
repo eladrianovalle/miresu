@@ -102,7 +102,7 @@ export function UploadField({
   const shownError = error ?? localError;
 
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1.5" data-testid="upload-field">
       {!hideLabel && (
         <label htmlFor={id} className="block text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
           {label}
@@ -164,7 +164,9 @@ export function UploadField({
         </button>
         <p className="mt-1 text-[10px] font-mono text-text-muted/60">
           {canUpload
-            ? `${ASSET_LIMITS[kind].extensions.join(', ')} · max ${formatCap(kind)}`
+            ? kind === 'video'
+              ? `${ASSET_LIMITS.video.extensions.join(', ')} · max ${formatCap('video')} · prefer webm (smaller)`
+              : `${ASSET_LIMITS.image.extensions.join(', ')} · max ${formatCap('image')}`
             : ctx?.category == null
               ? 'Pick a category first.'
               : 'Save the entry first, then upload here.'}
@@ -186,6 +188,7 @@ export function UploadField({
             value={value}
             readOnly={readOnly}
             onChange={(e) => onChange(path, e.target.value)}
+            aria-label={`${label} — path`}
             placeholder="/assets/images/… or https://…"
             className="mt-1 w-full bg-surface-1 border border-surface-3 rounded-md px-3 py-2 text-sm font-mono text-text-primary hover:border-text-muted focus:border-accent-secondary/60 focus:outline-none focus:ring-1 focus:ring-accent-secondary/30"
           />

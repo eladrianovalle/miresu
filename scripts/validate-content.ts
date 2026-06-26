@@ -1,5 +1,6 @@
-import { promises as fs, existsSync } from 'fs';
+import { promises as fs, existsSync, statSync } from 'fs';
 import path from 'path';
+import { ASSET_LIMITS } from '@/lib/admin/asset-fields';
 import { z } from 'zod';
 import {
   GameProjectSchema,
@@ -49,12 +50,35 @@ function collectAssetRefs(value: unknown, acc: string[]): void {
   }
 }
 
+/** Per-type byte cap for a referenced asset, inferred from its path. Mirrors the
+ * admin upload caps. Returns null for refs we don't size-gate (icons, resume…). */
+function capForRef(ref: string): number | null {
+  if (ref.startsWith('/assets/videos/')) return ASSET_LIMITS.video.maxBytes;
+  if (ref.startsWith('/assets/images/')) return ASSET_LIMITS.image.maxBytes;
+  return null;
+}
+
 function checkAssetRefs(file: string, data: unknown): void {
   const refs: string[] = [];
   collectAssetRefs(data, refs);
-  const missing = refs.filter(
-    (ref) => !existsSync(path.join(PUBLIC_DIR, ref.replace(/^\//, ''))),
-  );
+
+  const missing: string[] = [];
+  const oversize: string[] = [];
+  for (const ref of refs) {
+    const abs = path.join(PUBLIC_DIR, ref.replace(/^\//, ''));
+    if (!existsSync(abs)) {
+      missing.push(ref);
+      continue;
+    }
+    // Backstop against committing an over-cap binary (no Git LFS → permanent
+    // history bloat). Mirrors the admin upload caps by path-inferred type.
+    const cap = capForRef(ref);
+    if (cap !== null && statSync(abs).size > cap) {
+      const mb = (statSync(abs).size / (1024 * 1024)).toFixed(1);
+      oversize.push(`${ref} (${mb} MB > ${Math.round(cap / (1024 * 1024))} MB cap)`);
+    }
+  }
+
   if (missing.length > 0) {
     logInvalid(
       'Assets',
@@ -62,6 +86,16 @@ function checkAssetRefs(file: string, data: unknown): void {
       new Error(
         `References ${missing.length} missing asset file(s):\n` +
           missing.map((m) => `  - ${m} (expected public${m})`).join('\n'),
+      ),
+    );
+  }
+  if (oversize.length > 0) {
+    logInvalid(
+      'Assets',
+      path.relative(process.cwd(), file),
+      new Error(
+        `References ${oversize.length} over-cap asset file(s):\n` +
+          oversize.map((m) => `  - ${m}`).join('\n'),
       ),
     );
   }
