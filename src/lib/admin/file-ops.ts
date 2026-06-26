@@ -8,6 +8,7 @@ import {
   type ProjectCategoryKey,
   type SingletonKey,
 } from './schemas';
+import { relocateStagedAssets } from './asset-ops';
 
 // --- Path resolution ---
 
@@ -175,10 +176,16 @@ export async function createProject(
     throw new SlugConflictError(msg, slug, conflictCategory);
   }
 
-  const filePath = resolveProjectFile(category, slug);
-  await writeContentFile(filePath, validated, entry.schema);
+  // Move any create-time staged assets into the real <slug> dir and rewrite the
+  // JSON paths. Runs AFTER validation + collision check (so a doomed create
+  // never strands files) and BEFORE the write (so committed content never
+  // references `_staging`).
+  const relocated = await relocateStagedAssets({ category, slug, data: validated });
 
-  return { validated, filePath };
+  const filePath = resolveProjectFile(category, slug);
+  await writeContentFile(filePath, relocated, entry.schema);
+
+  return { validated: relocated, filePath };
 }
 
 // --- Custom error types ---

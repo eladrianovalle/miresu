@@ -49,7 +49,11 @@ export function UploadField({
       : ASSET_LIMITS.video.extensions.map((e) => `.${e}`).join(',');
 
   async function upload(file: File) {
-    if (!ctx || ctx.category === null || !ctx.slug) {
+    if (!ctx || ctx.category === null) {
+      setLocalError('Pick a category first.');
+      return;
+    }
+    if (ctx.mode === 'edit' && !ctx.slug) {
       setLocalError('No upload target — save the entry first.');
       return;
     }
@@ -64,8 +68,13 @@ export function UploadField({
       const body = new FormData();
       body.set('file', file);
       body.set('kind', kind);
-      body.set('category', ctx.category);
-      body.set('slug', ctx.slug);
+      if (ctx.mode === 'create' && ctx.draftId) {
+        // Stage under the draft id; createProject relocates on save.
+        body.set('draftId', ctx.draftId);
+      } else {
+        body.set('category', ctx.category);
+        body.set('slug', ctx.slug);
+      }
 
       const res = await fetch('/api/admin/upload', { method: 'POST', body });
       const raw = await res.text();
@@ -156,7 +165,9 @@ export function UploadField({
         <p className="mt-1 text-[10px] font-mono text-text-muted/60">
           {canUpload
             ? `${ASSET_LIMITS[kind].extensions.join(', ')} · max ${formatCap(kind)}`
-            : 'Save the entry first, then upload here.'}
+            : ctx?.category == null
+              ? 'Pick a category first.'
+              : 'Save the entry first, then upload here.'}
         </p>
       </div>
 
