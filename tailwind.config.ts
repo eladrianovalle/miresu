@@ -27,9 +27,9 @@ const config: Config = {
         'text-muted': c.textMuted,
       },
       fontFamily: {
-        syne: ['var(--font-syne)', 'sans-serif'],
-        'space-mono': ['var(--font-space-mono)', 'monospace'],
-        'ibm-plex': ['var(--font-ibm-plex)', 'sans-serif'],
+        display: ['var(--font-display)', 'sans-serif'],
+        mono: ['var(--font-mono)', 'monospace'],
+        body: ['var(--font-body)', 'sans-serif'],
       },
       boxShadow: {
         // Subtle, theme-agnostic elevation instead of neon bloom.

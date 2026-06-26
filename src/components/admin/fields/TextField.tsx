@@ -35,7 +35,7 @@ export function TextField({
     readOnly,
     'aria-invalid': !!error,
     'aria-describedby': error ? `${id}-error` : hint ? `${id}-hint` : undefined,
-    className: `w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-space-mono text-text-primary
+    className: `w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-mono text-text-primary
       ${error ? 'border-accent/60' : 'border-surface-3'}
       ${readOnly ? 'opacity-50 cursor-not-allowed' : 'hover:border-text-muted focus:border-accent-secondary/60'}
       focus:outline-none focus:ring-1 focus:ring-accent-secondary/30`,
@@ -43,7 +43,7 @@ export function TextField({
 
   return (
     <div className="space-y-1">
-      <label htmlFor={id} className="block text-[10px] font-space-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
+      <label htmlFor={id} className="block text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
         {label}
       </label>
       {multiline ? (
@@ -52,10 +52,10 @@ export function TextField({
         <input {...sharedProps} type={inputType} />
       )}
       {hint && !error && (
-        <p id={`${id}-hint`} className="text-[10px] font-space-mono text-text-muted/60">{hint}</p>
+        <p id={`${id}-hint`} className="text-[10px] font-mono text-text-muted/60">{hint}</p>
       )}
       {error && (
-        <p id={`${id}-error`} className="text-[10px] font-space-mono text-accent">{error}</p>
+        <p id={`${id}-error`} className="text-[10px] font-mono text-accent">{error}</p>
       )}
     </div>
   );

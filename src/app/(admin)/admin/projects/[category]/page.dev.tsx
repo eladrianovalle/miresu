@@ -41,18 +41,18 @@ export default async function ProjectListPage({
         <div className="flex items-center gap-4">
           <Link
             href="/admin/"
-            className="text-xs font-space-mono text-text-muted hover:text-accent-secondary transition-colors"
+            className="text-xs font-mono text-text-muted hover:text-accent-secondary transition-colors"
           >
             &larr; Dashboard
           </Link>
-          <h1 className="text-xl font-syne font-bold text-text-primary">{entry.label}</h1>
-          <span className="text-xs font-space-mono text-text-muted bg-surface-2 px-2 py-0.5 rounded">
+          <h1 className="text-xl font-display font-bold text-text-primary">{entry.label}</h1>
+          <span className="text-xs font-mono text-text-muted bg-surface-2 px-2 py-0.5 rounded">
             {slugs.length}
           </span>
         </div>
         <Link
           href="/admin/projects/new/"
-          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-surface-3 text-xs font-space-mono text-text-muted hover:text-accent-secondary hover:border-accent-secondary/40 transition-all"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md border border-surface-3 text-xs font-mono text-text-muted hover:text-accent-secondary hover:border-accent-secondary/40 transition-all"
         >
           <span className="text-accent-secondary">+</span> New
         </Link>
@@ -64,7 +64,7 @@ export default async function ProjectListPage({
               href={`/admin/projects/${category}/${slug}/`}
               className="group flex items-center gap-4 p-3.5 rounded-lg border border-transparent hover:border-surface-3 hover:bg-surface-1/50 transition-all"
             >
-              <span className="font-space-mono text-sm text-text-secondary group-hover:text-accent-secondary transition-colors min-w-[140px]">
+              <span className="font-mono text-sm text-text-secondary group-hover:text-accent-secondary transition-colors min-w-[140px]">
                 {slug}
               </span>
               {title && (
@@ -74,10 +74,10 @@ export default async function ProjectListPage({
               )}
               <span className="ml-auto flex items-center gap-2">
                 {year && (
-                  <span className="text-[10px] font-space-mono text-text-muted/60">{year}</span>
+                  <span className="text-[10px] font-mono text-text-muted/60">{year}</span>
                 )}
                 {draft && (
-                  <span className="text-[10px] font-space-mono text-accent-tertiary bg-accent-tertiary/10 px-1.5 py-0.5 rounded">
+                  <span className="text-[10px] font-mono text-accent-tertiary bg-accent-tertiary/10 px-1.5 py-0.5 rounded">
                     DRAFT
                   </span>
                 )}
@@ -86,7 +86,7 @@ export default async function ProjectListPage({
           </li>
         ))}
         {items.length === 0 && (
-          <li className="text-text-muted text-sm p-4 font-space-mono">No projects in this category.</li>
+          <li className="text-text-muted text-sm p-4 font-mono">No projects in this category.</li>
         )}
       </ul>
     </div>

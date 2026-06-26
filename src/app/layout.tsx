@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { syne, spaceMono, ibmPlexSans } from './fonts';
+import { display, mono, body } from './fonts';
 
 import { buildMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/site.config';
@@ -40,7 +40,7 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const htmlClassName = `${syne.variable} ${spaceMono.variable} ${ibmPlexSans.variable}`;
+  const htmlClassName = `${display.variable} ${mono.variable} ${body.variable}`;
 
   return (
     <html lang="en" className={htmlClassName}>

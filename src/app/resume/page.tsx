@@ -28,7 +28,7 @@ export const metadata: Metadata = buildMetadata({
 function SectionHeading({ children }: { children: ReactNode }) {
   return (
     <div className="mb-5 flex items-center gap-4">
-      <h2 className="whitespace-nowrap font-space-mono text-xs uppercase tracking-widest text-accent">
+      <h2 className="whitespace-nowrap font-mono text-xs uppercase tracking-widest text-accent">
         {children}
       </h2>
       <span aria-hidden className="h-px flex-1 bg-gradient-to-r from-accent/60 via-accent/20 to-transparent" />
@@ -101,7 +101,7 @@ export default async function ResumePage() {
         <nav className="mb-10 flex items-center justify-between text-sm">
           <Link
             href="/"
-            className="font-space-mono text-xs uppercase tracking-wider text-text-secondary no-underline transition-colors duration-150 hover:text-text-primary"
+            className="font-mono text-xs uppercase tracking-wider text-text-secondary no-underline transition-colors duration-150 hover:text-text-primary"
           >
             ← Back to site
           </Link>
@@ -109,7 +109,7 @@ export default async function ResumePage() {
             <a
               href={withBasePath(RESUME_PDF_PUBLIC_PATH)}
               download
-              className="group inline-flex items-center gap-2 rounded-sm border border-accent-secondary/50 px-4 py-1.5 font-space-mono text-xs uppercase tracking-widest text-accent-secondary no-underline transition-colors hover:bg-accent-secondary hover:text-primary-dark"
+              className="group inline-flex items-center gap-2 rounded-sm border border-accent-secondary/50 px-4 py-1.5 font-mono text-xs uppercase tracking-widest text-accent-secondary no-underline transition-colors hover:bg-accent-secondary hover:text-primary-dark"
             >
               Download PDF
               <span className="transition-transform group-hover:translate-y-0.5">↓</span>
@@ -119,8 +119,8 @@ export default async function ResumePage() {
 
         {/* Header */}
         <header>
-          <h1 className="font-syne text-3xl font-bold text-text-primary">{resume.header.name}</h1>
-          <div className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-space-mono text-xs text-text-secondary">
+          <h1 className="font-display text-3xl font-bold text-text-primary">{resume.header.name}</h1>
+          <div className="mt-4 flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-xs text-text-secondary">
             {contactItems.map((node, i) => (
               <Fragment key={i}>
                 {i > 0 && (
@@ -156,14 +156,14 @@ export default async function ResumePage() {
             {resume.experience.map((entry) => (
               <article key={`${entry.org}-${entry.sourceSlugs.join('-')}`} className="pt-6 first:pt-0">
                 <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                  <h3 className="font-syne text-lg font-semibold text-text-primary">
+                  <h3 className="font-display text-lg font-semibold text-text-primary">
                     {entry.title}
                     <span className="text-text-secondary">
                       {' · '}
                       {entry.displayOrg}
                     </span>
                   </h3>
-                  <span className="font-space-mono text-sm text-text-secondary">
+                  <span className="font-mono text-sm text-text-secondary">
                     {formatDateRange(entry.dateRange)}
                   </span>
                 </div>
@@ -187,16 +187,16 @@ export default async function ResumePage() {
               {resume.projects.map((project) => (
                 <article key={project.slug} className="pt-6 first:pt-0">
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4">
-                    <h3 className="font-syne text-lg font-semibold text-text-primary">
+                    <h3 className="font-display text-lg font-semibold text-text-primary">
                       <Link href={projectPath(project.slug)} className={linkClass}>
                         {project.title}
                       </Link>
                     </h3>
-                    <span className="font-space-mono text-sm text-text-secondary">
+                    <span className="font-mono text-sm text-text-secondary">
                       {project.year}
                     </span>
                   </div>
-                  <p className="mt-0.5 font-space-mono text-xs text-text-muted">
+                  <p className="mt-0.5 font-mono text-xs text-text-muted">
                     {project.stack.join(' · ')}
                   </p>
                   <p className="mt-2 leading-relaxed text-text-primary">{project.summary}</p>
@@ -216,7 +216,7 @@ export default async function ResumePage() {
                   <div className="flex flex-wrap items-baseline justify-between gap-x-4">
                     <h3 className="font-semibold text-text-primary">{entry.institution}</h3>
                     {entry.year && (
-                      <span className="font-space-mono text-sm text-text-secondary">
+                      <span className="font-mono text-sm text-text-secondary">
                         {entry.year}
                       </span>
                     )}

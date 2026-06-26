@@ -78,7 +78,7 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <label className="block text-[10px] font-space-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
+        <label className="block text-[10px] font-mono font-semibold text-text-muted uppercase tracking-[0.12em]">
           {label}
           <span className="ml-2 text-text-muted/60 normal-case font-normal">({items.length})</span>
         </label>
@@ -90,7 +90,7 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
           + Add
         </button>
       </div>
-      {hint && <p className="text-[10px] font-space-mono text-text-muted/60">{hint}</p>}
+      {hint && <p className="text-[10px] font-mono text-text-muted/60">{hint}</p>}
 
       {items.map((item, index) => (
         <div key={index} className="flex gap-2 items-start group">
@@ -123,7 +123,7 @@ export function ArrayField({ path, itemSchema, value, onChange, errors, hint }: 
                 type="text"
                 value={item as string}
                 onChange={(e) => handleItemChange(index, '', e.target.value)}
-                className="w-full bg-surface-1 border border-surface-3 rounded-md px-3 py-2 text-sm font-space-mono text-text-primary hover:border-text-muted focus:border-accent-secondary/60 focus:outline-none focus:ring-1 focus:ring-accent-secondary/30"
+                className="w-full bg-surface-1 border border-surface-3 rounded-md px-3 py-2 text-sm font-mono text-text-primary hover:border-text-muted focus:border-accent-secondary/60 focus:outline-none focus:ring-1 focus:ring-accent-secondary/30"
               />
             ) : (
               <div className="border border-surface-3 rounded p-3 space-y-3">

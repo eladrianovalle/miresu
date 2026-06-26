@@ -6,9 +6,9 @@
      there. Kept out of this file so the engine stays theme-agnostic. */
 
   /* Fonts */
-  --cc-font-display: var(--font-syne), sans-serif;
-  --cc-font-mono: var(--font-space-mono), monospace;
-  --cc-font-body: var(--font-ibm-plex), sans-serif;
+  --cc-font-display: var(--font-display), sans-serif;
+  --cc-font-mono: var(--font-mono), monospace;
+  --cc-font-body: var(--font-body), sans-serif;
 
   /* Layout */
   --cc-panel-left-width: clamp(320px, 30vw, 420px);
