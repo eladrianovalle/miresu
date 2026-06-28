@@ -50,8 +50,9 @@ reads from there.
 The same file also holds two optional knobs: **`labels`** renames the project
 taxonomy for display (the `Projects` / `Clients` / `Personal` filter tabs and the
 dossier relationship labels — the underlying category keys stay the same), and
-**`chrome`** toggles the stylized identity flourishes (`operator` eyebrow +
-handle, `showId` line), both off in the neutral default. Omit either to keep the
+**`chrome`** toggles the stylized identity flourishes (`operator` — the topbar
+`operator: <handle> //` readout prefix; `showId` — the `ID:` line in the
+identity card), both off in the neutral default. Omit either to keep the
 defaults.
 
 Replace the placeholder brand assets in `public/assets/icons/` (`logo.svg`,
