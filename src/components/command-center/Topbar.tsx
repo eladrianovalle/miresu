@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { Identity } from '@/types/project-content';
 import { siteConfig } from '@/site.config';
 import { chrome } from '@/lib/site-labels';
@@ -19,25 +20,42 @@ export function Topbar({ identity }: TopbarProps) {
           alt={siteConfig.brandName}
           className="cc-topbar-logo"
         />
+        {/* Brand wordmark sits with the mark; alt="" — the icon already
+            announces the brand, so this avoids a duplicate announcement. */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={siteConfig.logotype}
+          alt=""
+          className="cc-topbar-logotype"
+        />
+      </div>
+
+      {/* Center readout: operator handle (optional chrome) + live availability
+          LED. The availability word + light always show; the "operator: //"
+          prefix is gated by chrome.operator and drops on mobile. */}
+      <div className="cc-topbar-center">
         {chrome.operator && (
-          <>
-            <span className="cc-topbar-divider" />
-            <span className="cc-topbar-operator">
-              operator: {operatorHandle}
-            </span>
-          </>
+          <span className="cc-topbar-operator">
+            {`operator: ${operatorHandle} //`}
+          </span>
         )}
+        <span className="cc-topbar-availability">{availabilityStatus}</span>
+        <span
+          className="cc-status-dot"
+          data-status={availabilityStatus}
+          title={identity.availability.message ?? availabilityStatus}
+        />
       </div>
 
       <div className="cc-topbar-right">
-        <div className="cc-topbar-status">
-          <span className="cc-topbar-status-label">{availabilityStatus}</span>
-          <span
-            className="cc-status-dot"
-            data-status={availabilityStatus}
-            title={identity.availability.message ?? availabilityStatus}
-          />
-        </div>
+        {/* Brand CTA (Hire) anchors the far right of the global chrome. */}
+        <Link
+          href="/consulting/"
+          prefetch={true}
+          className="cc-identity-cta cc-topbar-cta"
+        >
+          Hire
+        </Link>
       </div>
     </header>
   );

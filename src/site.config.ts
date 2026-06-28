@@ -21,7 +21,7 @@ export interface SiteConfig {
   ogImage: string;
   /** Brand mark shown in the topbar + as the faint decorative watermark. */
   logo: string;
-  /** Brand logotype shown in the identity card. */
+  /** Brand logotype (wordmark) shown in the topbar. */
   logotype: string;
   /** Favicon (under public/). */
   favicon: string;
