@@ -311,18 +311,13 @@
   border-color: var(--cc-color-accent-secondary);
 }
 
-/* Brand CTA (Hire) — solid accent-tertiary, kept beside the logo; never shrinks below
-   its label so it stays a clean tap target next to the mark. */
-.cc-identity-cta--brand {
+/* Brand CTA (Hire) in the 48px topbar — solid accent-tertiary from
+   .cc-identity-cta, compacted for the bar, no idle drift (the bar's logo
+   already carries the motion), and never shrinks below its label so it stays a
+   clean tap target. */
+.cc-topbar-cta {
   flex: 0 0 auto;
   white-space: nowrap;
-  padding: 9px 18px;
-  font-size: 0.66rem;
-}
-
-/* Compact Hire CTA for the 48px topbar — tighter box, no idle drift (the bar's
-   logo already carries the motion). */
-.cc-topbar-cta {
   padding: 6px 14px;
   font-size: 0.6rem;
   animation: none;

@@ -52,7 +52,7 @@ export function Topbar({ identity }: TopbarProps) {
         <Link
           href="/consulting/"
           prefetch={true}
-          className="cc-identity-cta cc-identity-cta--brand cc-topbar-cta"
+          className="cc-identity-cta cc-topbar-cta"
         >
           Hire
         </Link>
