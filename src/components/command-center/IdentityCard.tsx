@@ -1,6 +1,5 @@
 import Link from 'next/link';
 import type { Identity } from '@/types/project-content';
-import { siteConfig } from '@/site.config';
 import { chrome } from '@/lib/site-labels';
 
 interface IdentityCardProps {
@@ -11,37 +10,12 @@ export function IdentityCard({ identity }: IdentityCardProps) {
   return (
     <div className="cc-identity">
       {/*
-        Structural split for the fork-your-own template: the company/brand owns
-        the top row — logo + its business CTA (Hire → consulting) — while the
-        operator/individual owns a CTA below their bio (Resume → resume). Kept
-        generic and config-driven so a fork reuses the brand-vs-operator split.
+        Structural split for the fork-your-own template: the company/brand chrome
+        — logo, wordmark, and the business CTA (Hire → consulting) — lives in the
+        global topbar. This card is the operator/individual: name, role, bio, and
+        their own CTA below the bio (Resume → resume). Kept generic and
+        config-driven so a fork reuses the brand-vs-operator split.
       */}
-
-      {/* Brand row: company logotype + company CTA (Hire) */}
-      <div className="cc-identity-brand-row">
-        <div className="cc-identity-logotype">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={siteConfig.logotype}
-            alt={siteConfig.brandName}
-            className="cc-logotype-img"
-          />
-        </div>
-        <Link
-          href="/consulting/"
-          prefetch={true}
-          className="cc-identity-cta cc-identity-cta--brand"
-        >
-          Hire <span className="cc-cta-arrow">&rarr;</span>
-        </Link>
-      </div>
-
-      {/* Operator label (optional stylized chrome) */}
-      {chrome.operator && (
-        <p className="cc-identity-operator-label">
-          operator // <span>{identity.availability.status === 'available' ? 'active' : identity.availability.status}</span>
-        </p>
-      )}
 
       {/* Name */}
       <h1 className="cc-identity-name">

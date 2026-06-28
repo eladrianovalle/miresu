@@ -28,9 +28,9 @@
 
 /* ── TOP BAR ── */
 .cc-topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
   padding: 0 24px;
   height: var(--cc-topbar-height);
   min-height: var(--cc-topbar-height);
@@ -49,12 +49,21 @@
   display: flex;
   align-items: center;
   gap: 12px;
+  justify-self: start;
+}
+
+.cc-topbar-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-self: center;
 }
 
 .cc-topbar-right {
   display: flex;
   align-items: center;
   gap: 16px;
+  justify-self: end;
 }
 
 .cc-topbar-logo {
@@ -68,10 +77,16 @@
   opacity: 1;
 }
 
-.cc-topbar-divider {
-  width: 1px;
-  height: 20px;
-  background: var(--cc-color-border);
+/* Brand wordmark in the topbar — sits with the orc-head mark. */
+.cc-topbar-logotype {
+  height: 24px;
+  width: auto;
+  opacity: 0.75;
+  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cc-topbar-logotype:hover {
+  opacity: 0.95;
 }
 
 .cc-topbar-operator {
@@ -83,12 +98,16 @@
   color: var(--cc-color-text-secondary);
 }
 
-.cc-topbar-status {
-  display: flex;
-  align-items: center;
-  gap: 6px;
+/* Availability word — the neutral label beside the colored status LED. The LED
+   carries the state color; the word stays quiet so the signal reads once. */
+.cc-topbar-availability {
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cc-color-text-secondary);
 }
 
+/* Status LED — a three-state traffic light keyed off the availability enum. */
 .cc-status-dot {
   width: 6px;
   height: 6px;
@@ -99,14 +118,12 @@
   background: #22c55e;
 }
 
-.cc-status-dot[data-status="busy"] {
-  background: #ef4444;
+.cc-status-dot[data-status="limited"] {
+  background: #facc15;
 }
 
-.cc-topbar-status-label {
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+.cc-status-dot[data-status="unavailable"] {
+  background: #ef4444;
 }
 
 /* ── MAIN SPLIT ── */
@@ -132,6 +149,11 @@
   overflow-x: hidden;
   scrollbar-width: thin;
   scrollbar-color: var(--cc-color-border) transparent;
+  /* Always reserve the scrollbar gutter so the panel width — and thus the
+     identity bio's line wrapping — stays constant whether or not the filtered
+     list overflows. Without this the scrollbar appears/disappears between
+     filters and the bio reflows. */
+  scrollbar-gutter: stable;
 }
 
 .cc-panel-right {
@@ -144,7 +166,7 @@
 
 /* ── IDENTITY CARD ── */
 .cc-identity {
-  padding: 32px 28px 24px;
+  padding: 22px 28px 24px;
   border-bottom: 1px solid var(--cc-color-border);
   position: relative;
   overflow: hidden;
@@ -165,47 +187,6 @@
   pointer-events: none;
 }
 
-/* Brand row — company logotype (left) + company CTA (Hire, right-aligned).
-   The company's business CTA sits with its mark; the operator's resume CTA
-   lives below the bio. (See IdentityCard.tsx — fork-template split, #21.) */
-.cc-identity-brand-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 16px;
-}
-
-.cc-identity-logotype {
-  flex: 0 1 auto;
-  min-width: 0;
-}
-
-.cc-logotype-img {
-  width: 100%;
-  max-width: 200px;
-  height: auto;
-  transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 0.7;
-}
-
-.cc-logotype-img:hover {
-  opacity: 0.9;
-}
-
-.cc-identity-operator-label {
-  font-family: var(--cc-font-mono);
-  font-size: 0.55rem;
-  color: var(--cc-color-text-muted);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 2px;
-  opacity: 0.6;
-}
-
-.cc-identity-operator-label span {
-  color: var(--cc-color-accent-secondary);
-}
 
 .cc-identity-name {
   font-family: var(--cc-font-display);
@@ -214,6 +195,9 @@
   line-height: 1.1;
   letter-spacing: -0.01em;
   color: var(--cc-color-text-primary);
+  /* Name is now the card's first child — zero the default h1 top margin
+     (preflight is off) so the gap is just the card's padding. */
+  margin-top: 0;
   margin-bottom: 6px;
   transition: color 0.2s;
 }
@@ -336,6 +320,14 @@
   font-size: 0.66rem;
 }
 
+/* Compact Hire CTA for the 48px topbar — tighter box, no idle drift (the bar's
+   logo already carries the motion). */
+.cc-topbar-cta {
+  padding: 6px 14px;
+  font-size: 0.6rem;
+  animation: none;
+}
+
 /* ── WELCOME PANEL ── */
 .cc-welcome {
   display: flex;
@@ -428,8 +420,8 @@
     z-index: 100;
   }
 
-  .cc-topbar-divider:first-of-type { display: none; }
   .cc-topbar-operator { display: none; }
+  .cc-topbar-logotype { display: none; }
 
   /* Main → stacked column */
   .cc-main {
@@ -583,10 +575,6 @@
 
   .cc-mobile-back:hover {
     color: var(--cc-color-accent-secondary);
-  }
-
-  .cc-logotype-img {
-    opacity: 0.8 !important;
   }
 
   /* Touch targets — minimum 44px */
