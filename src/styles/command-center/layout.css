@@ -152,7 +152,8 @@
   /* Always reserve the scrollbar gutter so the panel width — and thus the
      identity bio's line wrapping — stays constant whether or not the filtered
      list overflows. Without this the scrollbar appears/disappears between
-     filters and the bio reflows. */
+     filters and the bio reflows. Note: Safari < 18.2 ignores scrollbar-gutter,
+     so the reflow can still occur there. */
   scrollbar-gutter: stable;
 }
 
