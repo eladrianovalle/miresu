@@ -41,7 +41,7 @@ export function hexToRgbChannels(hex: string): string {
   return `${r} ${g} ${b}`;
 }
 
-// The 11 palette tokens in injection order, paired with their `--cc-color-*`
+// The 12 palette tokens in injection order, paired with their `--cc-color-*`
 // var basename. Single source of truth for the dual-var builder + its gate.
 export const PALETTE_TOKENS: ReadonlyArray<readonly [keyof Palette, string]> = [
   ['accent', 'accent'],
@@ -59,7 +59,7 @@ export const PALETTE_TOKENS: ReadonlyArray<readonly [keyof Palette, string]> = [
 ];
 
 /**
- * Build the `:root` CSS variable declarations for a palette. Each of the 11
+ * Build the `:root` CSS variable declarations for a palette. Each of the 12
  * colors emits BOTH `--cc-color-*` (hex — consumed by the bare skin-CSS var()
  * usages) and `--cc-color-*-rgb` (channels — referenced by Tailwind tokens so
  * opacity utilities keep working). Category-dot vars are plain hex (no opacity
@@ -80,7 +80,7 @@ export function buildThemeVars(palette: Palette): string[] {
 
 /**
  * The durable token-contract guard. Given a list of `--cc-color-*` declarations
- * (as produced by buildThemeVars), assert every one of the 11 palette tokens
+ * (as produced by buildThemeVars), assert every one of the 12 palette tokens
  * carries BOTH `--cc-color-<name>` (hex) and `--cc-color-<name>-rgb`, and that
  * the `-rgb` channels are grounded in the hex SOURCE (not self-referential).
  * Returns an error string per offending token (named), empty when the contract

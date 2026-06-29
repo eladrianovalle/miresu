@@ -274,21 +274,21 @@ export type ResumeHeaderData = z.infer<typeof ResumeHeaderSchema>;
 // here and read by src/theme.config.ts. M0 models light + dark palettes but only
 // injects the default mode; the toggle/fonts pipeline land in later milestones.
 
-// The 11 semantic color tokens. Each is a hex string — channels are DERIVED in
+// The 12 semantic color tokens. Each is a hex string — channels are DERIVED in
 // code (hexToRgbChannels) at injection time, never authored in the JSON.
 export const PaletteSchema = z.object({
-  accent: z.string().regex(/^#/),
-  accentSecondary: z.string().regex(/^#/),
-  accentTertiary: z.string().regex(/^#/),
-  primaryDark: z.string().regex(/^#/),
-  surface1: z.string().regex(/^#/),
-  surface2: z.string().regex(/^#/),
-  surface3: z.string().regex(/^#/),
-  border: z.string().regex(/^#/),
-  ivory: z.string().regex(/^#/),
-  textPrimary: z.string().regex(/^#/),
-  textSecondary: z.string().regex(/^#/),
-  textMuted: z.string().regex(/^#/),
+  accent: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  accentSecondary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  accentTertiary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  primaryDark: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  surface1: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  surface2: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  surface3: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  border: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  ivory: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  textPrimary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  textSecondary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  textMuted: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
 });
 
 // Font family descriptors. Modeled (mirrors src/app/fonts.ts) but NOT consumed
@@ -317,7 +317,7 @@ export const ThemeSchema = z.object({
 
 export type Palette = z.infer<typeof PaletteSchema>;
 export type ThemeFonts = z.infer<typeof ThemeFontsSchema>;
-export type Theme = z.infer<typeof ThemeSchema>;
+export type ThemeContent = z.infer<typeof ThemeSchema>;
 
 // --- Inferred TypeScript types ---
 

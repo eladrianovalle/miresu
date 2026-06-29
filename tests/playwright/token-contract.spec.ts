@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { theme, hexToRgbChannels } from '../../src/theme.config';
 
 /**
  * Theme M0 token-contract gate — Tier 2 (the irreducible browser fact).
@@ -30,9 +31,12 @@ test('an opacity utility composites accent at 0.5 alpha end-to-end', async ({ pa
 
   expect(channels.length).toBeGreaterThanOrEqual(4);
   const [r, g, b, a] = channels;
-  // accent #e317d2 → 227 23 210, with the /50 opacity utility → alpha 0.5
-  expect(r).toBe(227);
-  expect(g).toBe(23);
-  expect(b).toBe(210);
+  // Expected channels are DERIVED from the active (default-mode) palette, so the
+  // gate tracks whatever theme.json ships — not a hardcoded brand color. The /50
+  // opacity utility must composite those channels at alpha 0.5.
+  const [er, eg, eb] = hexToRgbChannels(theme.colors.accent).split(' ').map(Number);
+  expect(r).toBe(er);
+  expect(g).toBe(eg);
+  expect(b).toBe(eb);
   expect(a).toBeCloseTo(0.5, 2);
 });
