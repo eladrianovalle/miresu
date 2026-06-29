@@ -111,3 +111,18 @@ jobs:
             exit 1
           fi
           echo "All critical outputs present."
+
+      # Theme M0 Tier 2 token-contract gate: one browser assertion that the
+      # static export paints rgb(var(--cc-color-*-rgb) / <alpha>) end-to-end.
+      # Runs here because this job already produced dist-staging.
+      - name: Install Playwright (Chromium + system deps)
+        run: npx playwright install --with-deps chromium
+      - name: Serve static export
+        run: npx serve dist-staging -l 3000 &
+      - name: Wait for static server
+        run: npx wait-on http://localhost:3000 --timeout 60000
+      - name: Token-contract gate (Tier 2, against dist-staging)
+        env:
+          PLAYWRIGHT_NO_WEBSERVER: '1'
+          PLAYWRIGHT_TEST_BASE_URL: http://localhost:3000
+        run: npx playwright test --project=token-contract

@@ -269,6 +269,56 @@ export const ResumeHeaderSchema = z.object({
 });
 export type ResumeHeaderData = z.infer<typeof ResumeHeaderSchema>;
 
+// --- Theme singleton schema (Theme M0) ---
+// The site palette is git-managed content (src/content/theme.json), validated
+// here and read by src/theme.config.ts. M0 models light + dark palettes but only
+// injects the default mode; the toggle/fonts pipeline land in later milestones.
+
+// The 12 semantic color tokens. Each is a hex string — channels are DERIVED in
+// code (hexToRgbChannels) at injection time, never authored in the JSON.
+export const PaletteSchema = z.object({
+  accent: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  accentSecondary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  accentTertiary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  primaryDark: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  surface1: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  surface2: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  surface3: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  border: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  ivory: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  textPrimary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  textSecondary: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+  textMuted: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
+});
+
+// Font family descriptors. Modeled (mirrors src/app/fonts.ts) but NOT consumed
+// in M0 — the next/font pipeline rewiring is M2 (#21). Permissive so the schema
+// can absorb provider-specific knobs without churn.
+const FontDescriptorSchema = z
+  .object({
+    family: z.string(),
+    weights: z.array(z.string()).optional(),
+    variable: z.string().optional(),
+  })
+  .passthrough();
+
+export const ThemeFontsSchema = z.object({
+  display: FontDescriptorSchema,
+  mono: FontDescriptorSchema,
+  body: FontDescriptorSchema,
+});
+
+export const ThemeSchema = z.object({
+  colors: z.object({ light: PaletteSchema, dark: PaletteSchema }),
+  defaultMode: z.enum(['light', 'dark']),
+  enableToggle: z.boolean(),
+  fonts: ThemeFontsSchema,
+});
+
+export type Palette = z.infer<typeof PaletteSchema>;
+export type ThemeFonts = z.infer<typeof ThemeFontsSchema>;
+export type ThemeContent = z.infer<typeof ThemeSchema>;
+
 // --- Inferred TypeScript types ---
 
 export type ProjectBase = z.infer<typeof ProjectBaseSchema>;
