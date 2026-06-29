@@ -3,29 +3,15 @@ import { display, mono, body } from './fonts';
 
 import { buildMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/site.config';
-import { theme } from '@/theme.config';
+import { theme, buildThemeVars } from '@/theme.config';
 import './globals.css';
 
-// Inject the palette from theme.config as :root CSS variables, so the
+// Inject the active palette from theme.config as :root CSS variables, so the
 // command-center stylesheets stay theme-agnostic and a fork recolors via
-// config only (no engine-file edits → clean upstream merges).
-const c = theme.colors;
-const THEME_VARS = [
-  `--cc-color-accent:${c.accent}`,
-  `--cc-color-accent-secondary:${c.accentSecondary}`,
-  `--cc-color-accent-tertiary:${c.accentTertiary}`,
-  `--cc-color-primary-dark:${c.primaryDark}`,
-  `--cc-color-surface-1:${c.surface1}`,
-  `--cc-color-surface-2:${c.surface2}`,
-  `--cc-color-surface-3:${c.surface3}`,
-  `--cc-color-border:${c.border}`,
-  `--cc-color-text-primary:${c.textPrimary}`,
-  `--cc-color-text-secondary:${c.textSecondary}`,
-  `--cc-color-text-muted:${c.textMuted}`,
-  `--cc-color-category-games:${c.accent}`,
-  `--cc-color-category-client:${c.accentSecondary}`,
-  `--cc-color-category-personal:${c.accentTertiary}`,
-].join(';');
+// content (theme.json) only. Each color emits both a hex var (consumed by the
+// bare skin-CSS var() usages) and an `-rgb` channel var (referenced by the
+// Tailwind tokens so opacity utilities keep working). See buildThemeVars.
+const THEME_VARS = buildThemeVars(theme.colors).join(';');
 
 export const metadata: Metadata = {
   ...buildMetadata(),

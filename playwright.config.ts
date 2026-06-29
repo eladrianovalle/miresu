@@ -16,12 +16,16 @@ export default defineConfig({
   },
   // Auto-start the dev server (site + dev-only /admin) for the suite. Locally we
   // reuse a server you already have running; in CI we always start a fresh one.
-  webServer: {
-    command: 'npm run dev',
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  // The token-contract (Tier 2) gate runs against a pre-served static export, so
+  // its CI step sets PLAYWRIGHT_NO_WEBSERVER=1 to skip the dev server entirely.
+  webServer: process.env.PLAYWRIGHT_NO_WEBSERVER
+    ? undefined
+    : {
+        command: 'npm run dev',
+        url: baseURL,
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
   projects: [
     // Functional e2e: the dev-only /admin content editor, a desktop tool — so
     // it runs at a desktop viewport only. The site's mobile behaviour is covered
@@ -52,6 +56,16 @@ export default defineConfig({
         viewport: { width: 1440, height: 900 },
         screenshot: 'off',
         video: 'off',
+      },
+    },
+    // Theme M0 Tier 2 gate. Runs against the served static export (dist-staging)
+    // in CI's build job, not the dev server — see PLAYWRIGHT_NO_WEBSERVER above.
+    {
+      name: 'token-contract',
+      testMatch: /token-contract/,
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: { width: 1440, height: 900 },
       },
     },
   ],

@@ -12,6 +12,7 @@ import {
   ResumeProjectsSchema,
   EducationListSchema,
   ResumeHeaderSchema,
+  ThemeSchema,
 } from '@/types/project-content';
 
 function logValid(scope: string, file: string) {
@@ -156,6 +157,7 @@ async function main() {
     validateProjectDir(contentDir, 'projects/personal', PersonalCategorySchema, 'Project/Personal'),
     validateSingleton(contentDir, 'identity.json', IdentitySchema, 'Identity'),
     validateSingleton(contentDir, 'consulting.json', ConsultingContentSchema, 'Consulting'),
+    validateSingleton(contentDir, 'theme.json', ThemeSchema, 'Theme'),
     validateSingleton(contentDir, 'resume/skills.json', SkillsTaxonomySchema, 'Resume/Skills'),
     validateSingleton(contentDir, 'resume/projects.json', ResumeProjectsSchema, 'Resume/Projects'),
     validateSingleton(contentDir, 'resume/education.json', EducationListSchema, 'Resume/Education'),
