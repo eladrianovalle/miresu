@@ -34,7 +34,7 @@ export default defineConfig({
     // nothing runs twice.
     {
       name: 'desktop',
-      testMatch: /admin-editor/,
+      testMatch: /admin-editor|theme-toggle|theme-system-pref/,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1440, height: 900 },
@@ -62,7 +62,7 @@ export default defineConfig({
     // in CI's build job, not the dev server — see PLAYWRIGHT_NO_WEBSERVER above.
     {
       name: 'token-contract',
-      testMatch: /token-contract/,
+      testMatch: /token-contract|theme-no-fouc/,
       use: {
         ...devices['Desktop Chrome'],
         viewport: { width: 1440, height: 900 },

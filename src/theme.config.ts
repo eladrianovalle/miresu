@@ -13,11 +13,51 @@
 import type { Palette } from './types/project-content';
 import themeContent from './content/theme.json';
 
-// Active palette = the default mode. M0 ships dark only (no toggle until M1).
-// defaultMode widens to `string` through the JSON import, so narrow it to the
-// two palette keys (validated at build by ThemeSchema's z.enum).
-const mode = themeContent.defaultMode as 'light' | 'dark';
-const activeColors: Palette = themeContent.colors[mode];
+// Both palettes, for the dual-`[data-theme]` injection in the root layout. The
+// no-FOUC script + the toggle pick which one paints at runtime via `data-theme`.
+export const palettes = themeContent.colors;
+
+// The mode knobs the engine honors. `defaultMode` is the first-visit/no-JS
+// palette; `enableToggle` gates whether the toggle renders + localStorage wins.
+export const themeMode = {
+  defaultMode: themeContent.defaultMode as 'light' | 'dark' | 'system',
+  enableToggle: themeContent.enableToggle,
+};
+
+// Pure, dependency-free no-FOUC resolution logic. Single source of truth for
+// BOTH the inline <head> script and the ThemeToggle/tests, so they can never
+// drift. Given the stored choice, the OS preference, and the two knobs, returns
+// the concrete palette to paint.
+//
+// `prefersDark` is tri-state: `true` → OS prefers dark, `false` → OS prefers
+// light, `undefined` → no preference OR no `matchMedia` at all. ONLY an explicit
+// `false` resolves 'system' to light; the no-preference/absent case → 'dark'.
+//
+// When toggling is OFF, the stored choice is ignored and `defaultMode` is forced
+// (resolving 'system' via `prefersDark`). When toggling is ON, a valid stored
+// 'light'|'dark' wins; otherwise 'system' follows `prefersDark` and a concrete
+// `defaultMode` is used as-is.
+export function resolveMode(
+  stored: string | null | undefined,
+  prefersDark: boolean | undefined,
+  defaultMode: 'light' | 'dark' | 'system',
+  enableToggle: boolean,
+): 'light' | 'dark' {
+  const sys = (): 'light' | 'dark' => (prefersDark === false ? 'light' : 'dark');
+  if (!enableToggle) {
+    return defaultMode === 'system' ? sys() : defaultMode;
+  }
+  if (stored === 'light' || stored === 'dark') return stored;
+  return defaultMode === 'system' ? sys() : defaultMode;
+}
+
+// Test-only back-compat: the active palette for the resolved default mode, with
+// 'system' → 'dark' (a deterministic build-time fallback; runtime `data-theme`
+// governs actual display). Nothing shipped bakes these literals — Tailwind reads
+// the `--cc-color-*` vars — so this only feeds the Tier-1 token-contract test.
+const activeMode: 'light' | 'dark' =
+  themeMode.defaultMode === 'system' ? 'dark' : themeMode.defaultMode;
+const activeColors: Palette = palettes[activeMode];
 
 export const theme = {
   colors: activeColors,

@@ -29,8 +29,8 @@
       "textMuted": "#5e5e66"
     }
   },
-  "defaultMode": "dark",
-  "enableToggle": false,
+  "defaultMode": "system",
+  "enableToggle": true,
   "fonts": {
     "display": { "family": "Hanken Grotesk", "weights": ["400", "500", "600", "700", "800"], "variable": "--font-display" },
     "mono": { "family": "IBM Plex Mono", "weights": ["400", "500", "600"], "variable": "--font-mono" },

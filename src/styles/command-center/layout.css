@@ -587,3 +587,37 @@
     min-height: 44px;
   }
 }
+
+/* Light/dark toggle in the topbar. Fixed dims so the inert first-paint
+   placeholder footprint equals the live glyph (no CLS). NO transition on the
+   glyph swap — the theme change is instant by design. */
+.cc-theme-toggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--cc-color-border);
+  border-radius: 4px;
+  color: var(--cc-color-text-secondary);
+  cursor: pointer;
+}
+
+.cc-theme-toggle:hover {
+  color: var(--cc-color-text-primary);
+  border-color: var(--cc-color-accent-secondary);
+}
+
+.cc-theme-toggle-glyph {
+  display: block;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  font-size: 0.8rem;
+  text-align: center;
+  transition: none;
+}
+

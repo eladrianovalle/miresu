@@ -310,7 +310,7 @@ export const ThemeFontsSchema = z.object({
 
 export const ThemeSchema = z.object({
   colors: z.object({ light: PaletteSchema, dark: PaletteSchema }),
-  defaultMode: z.enum(['light', 'dark']),
+  defaultMode: z.enum(['light', 'dark', 'system']),
   enableToggle: z.boolean(),
   fonts: ThemeFontsSchema,
 });
