@@ -2,8 +2,8 @@
   "colors": {
     "dark": {
       "accent": "#8ba3c7",
-      "accentSecondary": "#8ba3c7",
-      "accentTertiary": "#8ba3c7",
+      "accentSecondary": "#6cc2a8",
+      "accentTertiary": "#d6a35c",
       "primaryDark": "#0a0a0b",
       "surface1": "#131315",
       "surface2": "#1a1a1d",
@@ -16,8 +16,8 @@
     },
     "light": {
       "accent": "#36578a",
-      "accentSecondary": "#36578a",
-      "accentTertiary": "#36578a",
+      "accentSecondary": "#2f6f5d",
+      "accentTertiary": "#9a5b1e",
       "primaryDark": "#f3f4f7",
       "surface1": "#ffffff",
       "surface2": "#ebedf1",
