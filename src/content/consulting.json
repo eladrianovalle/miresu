@@ -2,6 +2,28 @@
   "headline": "Work With Me",
   "subheadline": "Product design and front-end engineering for teams who want to ship something people love using.",
   "tagline": "Product Design • Design Systems • React • Accessibility",
+  "skillsTicker": [
+    "Product Design",
+    "Design Systems",
+    "Component Libraries",
+    "Design Tokens",
+    "React",
+    "Next.js",
+    "TypeScript",
+    "Accessibility (WCAG)",
+    "Interaction Design",
+    "Prototyping",
+    "User Research",
+    "Usability Testing",
+    "Information Architecture",
+    "Wireframing",
+    "Figma",
+    "Motion Design",
+    "CSS Architecture",
+    "Front-End Engineering",
+    "Design Ops",
+    "Cross-Functional Collaboration"
+  ],
   "ctaPrimary": {
     "label": "Book an Intro Call",
     "href": "https://example.com/book"

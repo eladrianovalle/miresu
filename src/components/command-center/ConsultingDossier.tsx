@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import type { ConsultingContent } from '@/types/project-content';
-import { ConsultingTitleGroup } from './ConsultingTitleGroup';
+import { SkillsTicker } from './SkillsTicker';
 
 // Map a tier's data-authored accent name to a semantic accent class. Content
 // keeps human-readable color names; the engine renders them as the three theme
@@ -30,10 +30,13 @@ export function ConsultingDossier({ data }: { data: ConsultingContent }) {
         )}
       </div>
 
+      {/* Skills ticker — full-bleed crawl in its own slot under the hero feed. */}
+      <SkillsTicker items={data.skillsTicker ?? []} />
+
       <div className="cc-dossier-content">
         {/* Header */}
         <div className="cc-dossier-header">
-          <ConsultingTitleGroup tagline={data.tagline} headline={data.headline} />
+          <h2 className="cc-dossier-title">{data.headline}</h2>
           <p className="cc-dossier-subtitle">{data.subheadline}</p>
         </div>
 
