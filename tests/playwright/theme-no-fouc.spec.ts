@@ -50,7 +50,13 @@ test.describe('no-FOUC — storage-honored (enableToggle:true)', () => {
     });
     await page.goto('/');
     await expect(page.locator('html')).toHaveAttribute('data-theme', 'light');
-    // Painting light → the toggle's TARGET is dark → moon glyph after mount.
-    await expect(page.locator('.cc-theme-toggle-glyph')).toHaveText('☾');
+    // Painting light → the toggle's TARGET is dark. The glyph is a drawn SVG (no
+    // text node), so we assert the equivalent accessible sentinel the button
+    // exposes: an "aria-label" of "Switch to dark theme" + aria-pressed=true.
+    // Both only hold once the pre-paint effect syncs `current` to the live light
+    // mode, so they prove the no-FOUC inline script ran before the bundle.
+    const toggle = page.locator('.cc-theme-toggle');
+    await expect(toggle).toHaveAttribute('aria-label', 'Switch to dark theme');
+    await expect(toggle).toHaveAttribute('aria-pressed', 'true');
   });
 });

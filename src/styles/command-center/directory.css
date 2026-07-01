@@ -11,7 +11,7 @@
   gap: 2px;
   padding: 8px 28px;
   border-bottom: 1px solid var(--cc-color-border);
-  background: rgba(13, 13, 20, 0.6);
+  background: rgb(var(--cc-color-surface-1-rgb) / 0.6);
 }
 
 .cc-filter-btn {
@@ -49,11 +49,51 @@
   margin-left: 4px;
 }
 
+/* Category filter tabs (ALL stays neutral): the tab wears its category ink as a
+   label at rest, and a solid colour-wipe sweeps in on hover / for the selected
+   tab — the same ::before fill the CTAs use. Token-driven off the per-category
+   colours, so each theme paints it with its own palette. The label flips to the
+   void colour over the fill (forks that need a different on-fill colour, like the
+   light cream field, override just that). */
+.cc-filter-btn[data-cat] {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  transition: color 0.2s;
+}
+.cc-filter-btn[data-cat]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 2px;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cc-filter-btn[data-cat="games"] { color: var(--cc-color-category-games); }
+.cc-filter-btn[data-cat="client"] { color: var(--cc-color-category-client); }
+.cc-filter-btn[data-cat="personal"] { color: var(--cc-color-category-personal); }
+.cc-filter-btn[data-cat="games"]::before { background: var(--cc-color-category-games); }
+.cc-filter-btn[data-cat="client"]::before { background: var(--cc-color-category-client); }
+.cc-filter-btn[data-cat="personal"]::before { background: var(--cc-color-category-personal); }
+/* ALL isn't a category — its wipe uses the ink colour, which inverts per theme
+   (near-black on the light field, near-white on the dark void). */
+.cc-filter-btn[data-cat="all"]::before { background: var(--cc-color-text-primary); }
+.cc-filter-btn[data-cat]:hover::before,
+.cc-filter-btn[data-cat].active::before {
+  transform: scaleX(1);
+}
+.cc-filter-btn[data-cat]:hover,
+.cc-filter-btn[data-cat].active {
+  color: var(--cc-color-primary-dark);
+}
+
 /* ── PROJECT LIST ITEMS ── */
 .cc-project-item {
   display: flex;
   flex-direction: row;
-  border-bottom: 1px solid rgba(30, 30, 46, 0.8);
+  border-bottom: 1px solid rgb(var(--cc-color-border-rgb) / 0.8);
   box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.4);
   cursor: pointer;
   position: relative;
@@ -153,7 +193,7 @@
   bottom: 4px;
   left: 4px;
   z-index: 2;
-  background: rgba(7, 7, 13, 0.82);
+  background: rgb(var(--cc-color-primary-dark-rgb) / 0.82);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
   padding: 1px 6px;

@@ -1,0 +1,48 @@
+/* ============================================
+   COMMAND CENTER — Light mode fixes (neutral engine)
+   ============================================
+   miresu's light mode is a clean, professional inversion — not a brand cut.
+   This file only repairs what the dark-built skin breaks on paper: the
+   near-white wordmark and the white-on-white hover text. Every rule is scoped
+   to `:root[data-theme="light"]` so dark mode is untouched and source order
+   never matters (the attribute selector outranks the base `.cc-*` rules).
+   Forks that want a distinct light identity layer their own treatment on top.
+   ============================================ */
+
+/* The wordmark SVG is filled near-white for dark mode; invert it to dark ink
+   so it reads on the light topbar instead of vanishing. */
+:root[data-theme="light"] .cc-topbar-logotype,
+:root[data-theme="light"] .cc-topbar-logotype:hover {
+  filter: invert(1);
+  opacity: 0.9;
+}
+
+/* The dark skin hard-codes #fff on the project-title hover — invisible on paper. */
+:root[data-theme="light"] .cc-project-item:hover .cc-project-item-title {
+  color: var(--cc-color-text-primary);
+}
+
+/* The identity watermark is the brand logo, which carries an accent fill; on
+   paper that reads as a colored stain. Desaturate it to a neutral imprint. */
+:root[data-theme="light"] .cc-identity::before {
+  filter: grayscale(1);
+}
+
+/* Drop the baked-dark inset underline; the border already separates rows. */
+:root[data-theme="light"] .cc-project-item {
+  box-shadow: none;
+}
+
+/* Status badge inks darkened to clear AA on the near-white surfaces. */
+:root[data-theme="light"] .cc-status-badge.released {
+  color: #15803d;
+  border-color: #15803d;
+}
+:root[data-theme="light"] .cc-status-badge.in-progress {
+  color: #b45309;
+  border-color: rgb(180 83 9 / 0.5);
+}
+:root[data-theme="light"] .cc-status-badge.prototype {
+  color: #475569;
+  border-color: rgb(71 85 105 / 0.5);
+}

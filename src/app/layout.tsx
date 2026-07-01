@@ -3,7 +3,7 @@ import { display, mono, body } from './fonts';
 
 import { buildMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/site.config';
-import { palettes, themeMode, buildThemeVars } from '@/theme.config';
+import { palettes, themeMode, resolvedDefaultMode, buildThemeVars } from '@/theme.config';
 import './globals.css';
 
 // Inject BOTH palettes as `:root[data-theme="dark|light"]` CSS variables, so the
@@ -19,12 +19,11 @@ const THEME_STYLE =
   `:root[data-theme="dark"]{${DARK_VARS};color-scheme:dark}` +
   `:root[data-theme="light"]{${LIGHT_VARS};color-scheme:light}`;
 
-// Baked SSR default `data-theme` — the resolved `defaultMode` ('system'→'dark').
+// Baked SSR default `data-theme` (= resolvedDefaultMode, 'system'→'dark').
 // LOAD-BEARING: it is the palette no-JS / pre-script paint uses, so it must never
 // be dropped or the first paint is unstyled. The no-FOUC script rewrites it
 // before body paint, so it does NOT flash for JS users. See plan decision 3.
-const SSR_THEME: 'light' | 'dark' =
-  themeMode.defaultMode === 'system' ? 'dark' : themeMode.defaultMode;
+const SSR_THEME: 'light' | 'dark' = resolvedDefaultMode;
 
 // No-FOUC inline script — runs in <head> BEFORE paint. Mirrors resolveMode()
 // from theme.config with the build-time knobs baked in (kept byte-stable for a

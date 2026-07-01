@@ -44,20 +44,20 @@ export function resolveMode(
   enableToggle: boolean,
 ): 'light' | 'dark' {
   const sys = (): 'light' | 'dark' => (prefersDark === false ? 'light' : 'dark');
-  if (!enableToggle) {
-    return defaultMode === 'system' ? sys() : defaultMode;
-  }
-  if (stored === 'light' || stored === 'dark') return stored;
+  // A valid stored choice wins only when toggling is on; otherwise (toggle off,
+  // or no/invalid stored value) the default is forced, resolving 'system' via OS.
+  if (enableToggle && (stored === 'light' || stored === 'dark')) return stored;
   return defaultMode === 'system' ? sys() : defaultMode;
 }
 
-// Test-only back-compat: the active palette for the resolved default mode, with
-// 'system' → 'dark' (a deterministic build-time fallback; runtime `data-theme`
-// governs actual display). Nothing shipped bakes these literals — Tailwind reads
-// the `--cc-color-*` vars — so this only feeds the Tier-1 token-contract test.
-const activeMode: 'light' | 'dark' =
+// The build-time default mode with 'system' resolved to 'dark' — the SINGLE
+// source of truth shared by the SSR-baked `data-theme` (root layout), the
+// ThemeToggle's first-render glyph, and the Tier-1 token-contract test's active
+// palette. They must all agree, so it lives here, not re-derived per file.
+// (A deterministic build fallback; runtime `data-theme` governs actual display.)
+export const resolvedDefaultMode: 'light' | 'dark' =
   themeMode.defaultMode === 'system' ? 'dark' : themeMode.defaultMode;
-const activeColors: Palette = palettes[activeMode];
+const activeColors: Palette = palettes[resolvedDefaultMode];
 
 export const theme = {
   colors: activeColors,

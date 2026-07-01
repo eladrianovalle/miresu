@@ -80,6 +80,7 @@ function FilterBarInner({ counts }: FilterBarProps) {
           <button
             key={label}
             className={`cc-filter-btn${isActive ? ' active' : ''}`}
+            data-cat={value ?? 'all'}
             onClick={() => handleFilter(value)}
             type="button"
             role="tab"
