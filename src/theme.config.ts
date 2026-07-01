@@ -81,6 +81,26 @@ export function hexToRgbChannels(hex: string): string {
   return `${r} ${g} ${b}`;
 }
 
+/**
+ * The readable ink to place ON a solid fill of `hex` — white or black, whichever
+ * has more WCAG contrast. Lets category-coded fills (filter tabs, spines) stay
+ * AA-legible for ANY palette, so a fork can choose any accent trio without
+ * hand-tuning the on-fill colour. Pure hex (no opacity utility targets it); the
+ * #fff/#000 crossover stays ≥ 4.58:1 (AA for small text) for every colour.
+ */
+export function onFillInk(hex: string): string {
+  const [r, g, b] = hexToRgbChannels(hex)
+    .split(' ')
+    .map((v) => {
+      const s = Number(v) / 255;
+      return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+    });
+  const luminance = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  const contrastWhite = 1.05 / (luminance + 0.05);
+  const contrastBlack = (luminance + 0.05) / 0.05;
+  return contrastWhite >= contrastBlack ? '#ffffff' : '#000000';
+}
+
 // The 12 palette tokens in injection order, paired with their `--cc-color-*`
 // var basename. Single source of truth for the dual-var builder + its gate.
 export const PALETTE_TOKENS: ReadonlyArray<readonly [keyof Palette, string]> = [
@@ -115,6 +135,11 @@ export function buildThemeVars(palette: Palette): string[] {
   decls.push(`--cc-color-category-games:${palette.accent}`);
   decls.push(`--cc-color-category-client:${palette.accentSecondary}`);
   decls.push(`--cc-color-category-personal:${palette.accentTertiary}`);
+  // Readable ink for a label sitting ON each category fill (auto-picked by
+  // luminance), so category-coded fills stay AA-legible for any accent trio.
+  decls.push(`--cc-color-on-category-games:${onFillInk(palette.accent)}`);
+  decls.push(`--cc-color-on-category-client:${onFillInk(palette.accentSecondary)}`);
+  decls.push(`--cc-color-on-category-personal:${onFillInk(palette.accentTertiary)}`);
   return decls;
 }
 

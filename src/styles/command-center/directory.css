@@ -71,14 +71,19 @@
   transform-origin: left;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
-.cc-filter-btn[data-cat="games"] { color: var(--cc-color-category-games); }
-.cc-filter-btn[data-cat="client"] { color: var(--cc-color-category-client); }
-.cc-filter-btn[data-cat="personal"] { color: var(--cc-color-category-personal); }
+/* Each tab wears its category ink as a label at rest and sets --tab-ink to the
+   engine-derived, luminance-safe colour to use for the label OVER its fill (see
+   --cc-color-on-category-* in buildThemeVars) — so any accent trio stays AA. */
+.cc-filter-btn[data-cat="games"] { color: var(--cc-color-category-games); --tab-ink: var(--cc-color-on-category-games); }
+.cc-filter-btn[data-cat="client"] { color: var(--cc-color-category-client); --tab-ink: var(--cc-color-on-category-client); }
+.cc-filter-btn[data-cat="personal"] { color: var(--cc-color-category-personal); --tab-ink: var(--cc-color-on-category-personal); }
 .cc-filter-btn[data-cat="games"]::before { background: var(--cc-color-category-games); }
 .cc-filter-btn[data-cat="client"]::before { background: var(--cc-color-category-client); }
 .cc-filter-btn[data-cat="personal"]::before { background: var(--cc-color-category-personal); }
 /* ALL isn't a category — its wipe uses the ink colour, which inverts per theme
-   (near-black on the light field, near-white on the dark void). */
+   (near-black on the light field, near-white on the dark void); its on-fill label
+   is the opposite (primary-dark), the theme's inverse-of-ink. */
+.cc-filter-btn[data-cat="all"] { --tab-ink: var(--cc-color-primary-dark); }
 .cc-filter-btn[data-cat="all"]::before { background: var(--cc-color-text-primary); }
 .cc-filter-btn[data-cat]:hover::before,
 .cc-filter-btn[data-cat].active::before {
@@ -86,7 +91,7 @@
 }
 .cc-filter-btn[data-cat]:hover,
 .cc-filter-btn[data-cat].active {
-  color: var(--cc-color-primary-dark);
+  color: var(--tab-ink, var(--cc-color-primary-dark));
 }
 
 /* ── PROJECT LIST ITEMS ── */

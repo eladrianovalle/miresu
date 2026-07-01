@@ -5,6 +5,7 @@ import tailwindConfig from '../../tailwind.config';
 import {
   theme,
   hexToRgbChannels,
+  onFillInk,
   buildThemeVars,
   checkTokenContract,
   PALETTE_TOKENS,
@@ -55,6 +56,47 @@ describe('buildThemeVars (completeness + hex-grounded -rgb)', () => {
 
   test('checkTokenContract passes for the shipped palette', () => {
     expect(checkTokenContract(decls)).toEqual([]);
+  });
+});
+
+describe('onFillInk (luminance-aware, AA-safe category on-fill label)', () => {
+  const lum = (hex: string) =>
+    hexToRgbChannels(hex)
+      .split(' ')
+      .map((v) => {
+        const s = Number(v) / 255;
+        return s <= 0.03928 ? s / 12.92 : Math.pow((s + 0.055) / 1.055, 2.4);
+      })
+      .reduce((acc, c, i) => acc + [0.2126, 0.7152, 0.0722][i] * c, 0);
+  const contrast = (a: string, b: string) => {
+    const [hi, lo] = [lum(a), lum(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+
+  test('picks black on bright colours, white on dark colours', () => {
+    expect(onFillInk('#ffffff')).toBe('#000000');
+    expect(onFillInk('#000000')).toBe('#ffffff');
+    expect(onFillInk('#fffd00')).toBe('#000000'); // bright yellow
+    expect(onFillInk('#1b25d2')).toBe('#ffffff'); // deep blue
+  });
+
+  test('the chosen ink always clears WCAG AA (4.5:1) — the whole point', () => {
+    for (const hex of [
+      '#8ba3c7', '#6cc2a8', '#d6a35c', '#36578a', '#2f6f5d', '#9a5b1e', // miresu trio
+      '#e317d2', '#05ede5', '#fffd00', '#f15a30', // orcpunk neon + orange
+      '#767676', '#7f7f7f', '#808080', // mid-grey crossover
+    ]) {
+      expect(contrast(hex, onFillInk(hex))).toBeGreaterThanOrEqual(4.5);
+    }
+  });
+
+  test('buildThemeVars emits an AA on-fill ink per category', () => {
+    const decls = buildThemeVars(theme.colors);
+    const map = new Map(decls.map((d) => [d.slice(0, d.indexOf(':')), d.slice(d.indexOf(':') + 1)]));
+    for (const cat of ['games', 'client', 'personal'] as const) {
+      const ink = map.get(`--cc-color-on-category-${cat}`);
+      expect(ink === '#ffffff' || ink === '#000000').toBe(true);
+    }
   });
 });
 
