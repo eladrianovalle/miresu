@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import type { ConsultingContent } from '@/types/project-content';
 import { ConsultingTitleGroup } from './ConsultingTitleGroup';
 
@@ -13,8 +14,21 @@ const TIER_ACCENT_CLASS: Record<string, string> = {
 export function ConsultingDossier({ data }: { data: ConsultingContent }) {
   return (
     <div>
-      {/* Hero — gradient treatment (no image for consulting) */}
-      <div className="cc-consulting-hero" />
+      {/* Hero — image (cover) when provided, else the gradient treatment.
+          alt="" — the hero is a decorative mood band; the page's text identifies
+          the subject. Forks with a meaningful portrait can add an alt later. */}
+      <div className="cc-consulting-hero">
+        {data.heroImage && (
+          <Image
+            className="cc-consulting-hero-img"
+            src={data.heroImage}
+            alt=""
+            fill
+            sizes="(max-width: 1023px) 100vw, 60vw"
+            priority
+          />
+        )}
+      </div>
 
       <div className="cc-dossier-content">
         {/* Header */}
