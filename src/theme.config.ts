@@ -10,7 +10,7 @@
 // Default: a restrained neutral. The engine exposes three semantic accents —
 // `accent` (primary), `accentSecondary`, `accentTertiary` — equal in the
 // stock palette so the UI reads as a single accent; a fork themes them apart.
-import type { Palette } from './types/project-content';
+import type { Palette, ThemeFonts } from './types/project-content';
 import themeContent from './content/theme.json';
 
 // Both palettes, for the dual-`[data-theme]` injection in the root layout. The
@@ -23,6 +23,15 @@ export const themeMode = {
   defaultMode: themeContent.defaultMode as 'light' | 'dark' | 'system',
   enableToggle: themeContent.enableToggle,
 };
+
+// The font descriptors + hosting mode the engine honors (M2). `family` is the
+// source of truth for both modes; `fontsHost` picks the delivery path in the
+// root layout — `google` injects a runtime <link>, `self` keeps next/font.
+export const themeFonts = themeContent.fonts as ThemeFonts;
+// Schema default applied here at the reader: the raw JSON import bypasses Zod's
+// `.default`, and a fork's theme.json may predate the `host` field.
+export const fontsHost: 'google' | 'self' =
+  (themeContent.fonts as { host?: 'google' | 'self' }).host ?? 'google';
 
 // Pure, dependency-free no-FOUC resolution logic. Single source of truth for
 // BOTH the inline <head> script and the ThemeToggle/tests, so they can never
@@ -177,4 +186,61 @@ export function checkTokenContract(decls: string[]): string[] {
     }
   }
   return errors;
+}
+
+// --- M2: font delivery ----------------------------------------------------
+
+// Role-appropriate local fallback stacks, appended after the chosen family so a
+// swap degrades to a sane system face while the web font loads (display=swap).
+// mono MUST fall back to a monospace stack; display/body to a humanist sans.
+const FALLBACK_STACK: Record<'display' | 'mono' | 'body', string> = {
+  display: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+  body: "system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+  mono: "ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace",
+};
+
+/**
+ * The CSS `font-family` value for a role: the chosen family (quoted) followed by
+ * the role's tested fallback stack. Used to set `--font-*` on the Google path so
+ * the command-center vars resolve to a real face immediately.
+ */
+export function fontStack(family: string, role: 'display' | 'mono' | 'body'): string {
+  return `'${family}', ${FALLBACK_STACK[role]}`;
+}
+
+/**
+ * Build the `--font-display/mono/body` declarations from the theme fonts, for
+ * the Google-host path (the self-host path gets these from next/font instead).
+ * variables.css maps `--cc-font-*` → `var(--font-*)`, so these three are all the
+ * skin needs.
+ */
+export function buildFontVars(fonts: ThemeFonts): string[] {
+  return [
+    `--font-display:${fontStack(fonts.display.family, 'display')}`,
+    `--font-mono:${fontStack(fonts.mono.family, 'mono')}`,
+    `--font-body:${fontStack(fonts.body.family, 'body')}`,
+  ];
+}
+
+/**
+ * The Google Fonts CSS2 stylesheet URL for the theme's families. Families are
+ * de-duplicated (a preset may reuse one face across roles) with their weights
+ * unioned + numerically sorted, so the request stays minimal and valid.
+ * `display=swap` keeps text visible during load.
+ */
+export function googleFontsHref(fonts: ThemeFonts): string {
+  const weightsByFamily = new Map<string, Set<string>>();
+  for (const role of ['display', 'mono', 'body'] as const) {
+    const { family, weights } = fonts[role];
+    const set = weightsByFamily.get(family) ?? new Set<string>();
+    for (const weight of weights ?? []) set.add(weight);
+    weightsByFamily.set(family, set);
+  }
+  const familyParams = [...weightsByFamily.entries()].map(([family, weights]) => {
+    const name = family.trim().replace(/\s+/g, '+');
+    if (weights.size === 0) return `family=${name}`;
+    const wght = [...weights].sort((a, b) => Number(a) - Number(b)).join(';');
+    return `family=${name}:wght@${wght}`;
+  });
+  return `https://fonts.googleapis.com/css2?${familyParams.join('&')}&display=swap`;
 }
