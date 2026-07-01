@@ -527,6 +527,23 @@ a.cc-contributor-name:hover {
   align-items: flex-end;
   justify-content: flex-start;
   padding: 32px 48px;
+  /* Viewport treatment: the image is a self-contained "feed"; the bezel rule
+     marks its bottom edge where it meets the panel. The title/eyebrow readout
+     sits on the panel BELOW (sibling rule) — never over the image — so copy
+     stays legible against any image (bright, busy, light). No scrim needed. */
+  border-bottom: 1px solid var(--cc-color-border);
+}
+
+.cc-consulting-hero-img {
+  object-fit: cover;
+  /* Bias the crop slightly up: the wide 16:5 band would otherwise cut a
+     portrait/subject that usually sits in the upper half. */
+  object-position: center 25%;
+}
+
+/* Keep the consulting copy on the panel below the image, never over it. */
+.cc-consulting-hero + .cc-dossier-content {
+  margin-top: 0;
 }
 
 .cc-consulting-hero-tagline {

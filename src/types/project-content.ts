@@ -44,6 +44,9 @@ export const ConsultingContentSchema = z.object({
   headline: z.string(),
   subheadline: z.string(),
   tagline: z.string(),
+  // Optional hero image for the consulting dossier. When present it fills the
+  // hero band (cover); when omitted the band keeps its gradient treatment.
+  heroImage: z.string().optional(),
   ctaPrimary: z.object({ label: z.string(), href: z.string() }),
   ctaSecondary: z.object({ label: z.string(), href: z.string() }),
   whatIDo: z.object({
