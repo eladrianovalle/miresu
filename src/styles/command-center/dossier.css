@@ -541,21 +541,76 @@ a.cc-contributor-name:hover {
   object-position: center 25%;
 }
 
-/* Keep the consulting copy on the panel below the image, never over it. */
-.cc-consulting-hero + .cc-dossier-content {
+/* Keep the consulting copy on the panel below the hero, never over it. Covers
+   both layouts: hero→content (no ticker) and ticker→content (ticker present). */
+.cc-consulting-hero + .cc-dossier-content,
+.cc-ticker + .cc-dossier-content {
   margin-top: 0;
 }
 
-.cc-consulting-hero-tagline {
-  display: block;
+/* ── SKILLS TICKER (broadcast chyron under the hero feed) ──
+   Full-bleed marquee slot between the hero image and the copy. The hero's
+   border-bottom is this strip's top edge; the ticker's own border-bottom closes
+   the chyron. overflow + a horizontal mask fade let items enter/exit softly at
+   the panel edges instead of hard-clipping. */
+.cc-ticker {
+  overflow: hidden;
+  border-bottom: 1px solid var(--cc-color-border);
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Two identical sequences scroll as one; translateX(-50%) == exactly one
+   sequence width, so the wrap is seamless. Duration is set by the component
+   (count-proportional) so the crawl speed stays roughly constant as it grows. */
+.cc-ticker-track {
+  display: flex;
+  width: max-content;
+  animation: cc-ticker-crawl var(--ticker-duration, 60s) linear infinite;
+  will-change: transform;
+}
+
+/* Idle = alive, hover = freeze (house rule). */
+.cc-ticker:hover .cc-ticker-track {
+  animation-play-state: paused;
+}
+
+.cc-ticker-seq {
+  display: flex;
+  flex: 0 0 auto;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* Match the readout look of the old eyebrow: mono, uppercase, tracked, muted. */
+.cc-ticker-item {
   font-family: var(--cc-font-mono);
   font-size: 0.7rem;
-  color: var(--cc-color-text-muted);
-  letter-spacing: 0.08em;
   text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cc-color-text-muted);
+  padding: 8px 0;
   white-space: nowrap;
-  transform-origin: left center;
-  margin-bottom: 6px;
+}
+
+.cc-ticker-item::after {
+  content: '•';
+  margin: 0 16px;
+  opacity: 0.4;
+}
+
+@keyframes cc-ticker-crawl {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* Reduced motion: rest at the start (static, legible). The global reduced-motion
+   rule also collapses the duration; this makes the intent explicit. */
+@media (prefers-reduced-motion: reduce) {
+  .cc-ticker-track {
+    animation: none;
+  }
 }
 
 /* ── CONSULTING SKILLS ── */
