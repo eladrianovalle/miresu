@@ -14,6 +14,12 @@ import { theme, hexToRgbChannels } from '../../src/theme.config';
  * assertion can't pass vacuously off some incidental live selector. Computed
  * style is parsed NUMERICALLY, not string-compared.
  */
+// miresu's defaultMode is 'system', so pin the color scheme to dark — the build
+// default ('system' → 'dark', = resolvedDefaultMode) — otherwise the CI runner's
+// OS preference decides which palette paints and this gate is non-deterministic.
+// The gate verifies the opacity-compositing pipeline against the default palette.
+test.use({ colorScheme: 'dark' });
+
 test('an opacity utility composites accent at 0.5 alpha end-to-end', async ({ page }) => {
   await page.goto('/');
 

@@ -34,7 +34,7 @@
   padding: 0 24px;
   height: var(--cc-topbar-height);
   min-height: var(--cc-topbar-height);
-  background: rgba(13, 13, 20, 0.85);
+  background: rgb(var(--cc-color-surface-1-rgb) / 0.85);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--cc-color-border);
   font-family: var(--cc-font-mono);
@@ -139,7 +139,7 @@
   display: flex;
   flex-direction: column;
   border-right: 1px solid var(--cc-color-border);
-  background: rgba(13, 13, 20, 0.6);
+  background: rgb(var(--cc-color-surface-1-rgb) / 0.6);
   overflow: hidden;
 }
 
@@ -200,11 +200,6 @@
      (preflight is off) so the gap is just the card's padding. */
   margin-top: 0;
   margin-bottom: 6px;
-  transition: color 0.2s;
-}
-
-.cc-identity-name:hover {
-  color: #fff;
 }
 
 .cc-identity-role {
@@ -366,7 +361,7 @@
   padding: 0 24px;
   height: var(--cc-footer-height);
   min-height: var(--cc-footer-height);
-  background: rgba(13, 13, 20, 0.85);
+  background: rgb(var(--cc-color-surface-1-rgb) / 0.85);
   backdrop-filter: blur(8px);
   border-top: 1px solid var(--cc-color-border);
   font-family: var(--cc-font-mono);
@@ -554,7 +549,7 @@
     top: 0;
     z-index: 10;
     padding: 12px 20px;
-    background: rgba(7, 7, 13, 0.95);
+    background: rgb(var(--cc-color-primary-dark-rgb) / 0.95);
     backdrop-filter: blur(12px);
     font-family: var(--cc-font-mono);
     font-size: 0.73rem;
@@ -587,3 +582,38 @@
     min-height: 44px;
   }
 }
+
+/* Light/dark toggle in the topbar. Fixed dims so the inert first-paint
+   placeholder footprint equals the live glyph (no CLS). NO transition on the
+   glyph swap — the theme change is instant by design. */
+.cc-theme-toggle {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  background: transparent;
+  border: 1px solid var(--cc-color-border);
+  border-radius: 4px;
+  color: var(--cc-color-text-secondary);
+  cursor: pointer;
+}
+
+.cc-theme-toggle:hover {
+  color: var(--cc-color-text-primary);
+  border-color: var(--cc-color-accent-secondary);
+}
+
+.cc-theme-toggle-glyph {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 1em;
+  height: 1em;
+  line-height: 1;
+  font-size: 0.85rem;
+  transition: none;
+}
+

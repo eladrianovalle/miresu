@@ -207,7 +207,7 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(30, 30, 46, 0.5);
+  border-bottom: 1px solid rgb(var(--cc-color-border-rgb) / 0.5);
   font-size: 0.85rem;
   transition: padding-left 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -316,8 +316,8 @@ a.cc-contributor-name:hover {
   z-index: 3;
   background: linear-gradient(
     to bottom,
-    transparent 65%,
-    var(--cc-color-primary-dark)
+    transparent 84%,
+    var(--cc-color-primary-dark) 98%
   );
   pointer-events: none;
 }
@@ -400,9 +400,9 @@ a.cc-contributor-name:hover {
     padding: 8px;
     overflow-x: hidden;
     overflow-y: auto;
-    background: rgba(7, 7, 13, 0.75);
+    background: rgb(var(--cc-color-primary-dark-rgb) / 0.75);
     backdrop-filter: blur(8px);
-    border: 1px solid rgba(30, 30, 46, 0.6);
+    border: 1px solid rgb(var(--cc-color-border-rgb) / 0.6);
     border-radius: 4px;
   }
 
@@ -667,7 +667,7 @@ a.cc-contributor-name:hover {
   align-items: baseline;
   gap: 12px;
   padding: 10px 0;
-  border-bottom: 1px solid rgba(30, 30, 46, 0.5);
+  border-bottom: 1px solid rgb(var(--cc-color-border-rgb) / 0.5);
 }
 
 .cc-value-item:last-child {

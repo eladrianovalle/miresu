@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Identity } from '@/types/project-content';
 import { siteConfig } from '@/site.config';
 import { chrome } from '@/lib/site-labels';
+import { ThemeToggle } from './ThemeToggle';
 
 interface TopbarProps {
   identity: Identity;
@@ -48,6 +49,9 @@ export function Topbar({ identity }: TopbarProps) {
       </div>
 
       <div className="cc-topbar-right">
+        {/* Theme toggle sits before Hire; renders null when the fork disables
+            the toggle (ORC PUNK is dark-locked). Visible on mobile. */}
+        <ThemeToggle />
         {/* Brand CTA (Hire) anchors the far right of the global chrome. */}
         <Link
           href="/consulting/"
