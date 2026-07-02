@@ -157,6 +157,40 @@ Two pipeline changes make values runtime-swappable per mode:
 - Rewrite README **§ Theme**, update `CLAUDE.md` + `docs/UPSTREAM-SYNC.md`.
 - **Deliverable:** presets + a pixel-identical migrated orcpunk + accurate docs.
 
+#### Shipped: `skin.*` knobs (glow / radius / labelTreatment)
+
+An optional `skin` object in `theme.json` lets a fork change its visual
+*character* — accent glow, corner radius, and section-label treatment — without
+code edits. It follows the same values-in-content / pipeline-in-engine pattern as
+the palette: `buildSkinVars` (in `theme.config.ts`) maps each knob to `--cc-skin-*`
+CSS vars, the root layout injects them once in a `:root` block, and the skin CSS
+reads them.
+
+```jsonc
+"skin": {
+  "glow": "neon",          // "neon" (accent halo) | "warm" (soft lamplight) | "none" (matte)
+  "radius": "md",          // 0 (hard edges) | "sm" (4px) | "md" (8px) — cards, tabs, thumbnails
+  "labelTreatment": "block" // "plain" (flat) | "impressed" (letterpress) | "block" (accent block)
+}
+```
+
+Where each knob shows up in stock miresu:
+- **`radius`** — corner radius on filter tabs, thumbnails, stack/status chips, and
+  dossier buttons (`directory.css` / `dossier.css`).
+- **`labelTreatment`** — the dossier section labels (`.cc-section-label`) and meta
+  labels (`.cc-meta-label`).
+- **`glow`** — the dossier hero media card (`.cc-viewer-main`) gets an accent halo;
+  the knob is also bridged into the Tailwind `neon-*` box-shadow tokens, so a fork
+  that adds `shadow-neon-*` surfaces responds to the same knob.
+
+**Default-preserving contract:** every knob is optional, and an absent `skin` key
+(or any omitted knob) renders exactly as before. Each CSS consumer reads its var
+with a fallback equal to today's value — `border-radius: var(--cc-skin-radius, 2px)`,
+`box-shadow: var(--cc-skin-glow, none)` (stock miresu ships matte, so absent glow is
+no shadow) — and `buildSkinVars` emits those same defaults, so absence is
+pixel-identical to the pre-knob site. The bundled presets consume these knobs to
+vary their skin.
+
 ## Critical files
 
 - **New:** `src/types/` (ThemeSchema), `src/content/theme.json`,

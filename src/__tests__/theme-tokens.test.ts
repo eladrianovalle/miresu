@@ -12,6 +12,7 @@ import {
   fontStack,
   buildFontVars,
   googleFontsHref,
+  buildSkinVars,
 } from '@/theme.config';
 import type { Palette, ThemeFonts } from '@/types/project-content';
 
@@ -148,6 +149,78 @@ describe('M2 fonts — delivery helpers', () => {
     // a family with no weights emits a bare family= (no :wght@)
     expect(href).toContain('family=IBM+Plex+Sans&');
     expect(href.endsWith('&display=swap')).toBe(true);
+  });
+});
+
+// M4 skin knobs (glow / radius / labelTreatment). These own the additive-knob
+// contract: an omitted knob resolves to the value miresu renders TODAY (the
+// byte-identity anchor), and each enum maps to its expected `--cc-skin-*`
+// output. buildSkinVars is pure, so this is a Tier-1 gate.
+describe('M4 skin knobs — buildSkinVars (glow / radius / labelTreatment)', () => {
+  const toMap = (decls: string[]) =>
+    new Map(decls.map((d) => [d.slice(0, d.indexOf(':')), d.slice(d.indexOf(':') + 1)]));
+
+  test("an omitted skin key produces today's default values (byte-identity anchor)", () => {
+    const map = toMap(buildSkinVars(undefined));
+    // Stock miresu ships matte (no accent glow), so absent glow == `none`, which
+    // makes the hero card's `box-shadow: var(--cc-skin-glow, none)` render nothing.
+    expect(map.get('--cc-skin-glow')).toBe('none');
+    expect(map.get('--cc-skin-radius')).toBe('2px');
+    expect(map.get('--cc-skin-label-bg')).toBe('transparent');
+    expect(map.get('--cc-skin-label-fg')).toBe('var(--cc-color-text-muted)');
+    expect(map.get('--cc-skin-label-pad')).toBe('0');
+    expect(map.get('--cc-skin-label-shadow')).toBe('none');
+  });
+
+  test('an empty skin object is identical to an absent one (each knob defaults)', () => {
+    expect(buildSkinVars({})).toEqual(buildSkinVars(undefined));
+  });
+
+  test('glow enum maps to its expected box-shadow value (none == matte default)', () => {
+    // `none` disappears the hero card's accent shadow, and equals the absent
+    // default — so opting into `none` is the same matte look stock miresu ships.
+    expect(toMap(buildSkinVars({ glow: 'none' })).get('--cc-skin-glow')).toBe('none');
+    expect(toMap(buildSkinVars({ glow: 'none' })).get('--cc-skin-glow')).toBe(
+      toMap(buildSkinVars(undefined)).get('--cc-skin-glow'),
+    );
+    // `neon` / `warm` are real, distinct accent halos (visibly live on the hero).
+    expect(toMap(buildSkinVars({ glow: 'neon' })).get('--cc-skin-glow')).toBe(
+      '0 0 24px rgb(var(--cc-color-accent-rgb) / 0.5)',
+    );
+    expect(toMap(buildSkinVars({ glow: 'warm' })).get('--cc-skin-glow')).toBe(
+      '0 6px 28px rgb(var(--cc-color-accent-rgb) / 0.22)',
+    );
+  });
+
+  test('radius enum maps to its expected length (0 is honored, not treated as absent)', () => {
+    expect(toMap(buildSkinVars({ radius: 0 })).get('--cc-skin-radius')).toBe('0');
+    expect(toMap(buildSkinVars({ radius: 'sm' })).get('--cc-skin-radius')).toBe('4px');
+    expect(toMap(buildSkinVars({ radius: 'md' })).get('--cc-skin-radius')).toBe('8px');
+  });
+
+  test('labelTreatment enum maps its four label vars', () => {
+    const plain = toMap(buildSkinVars({ labelTreatment: 'plain' }));
+    expect(plain.get('--cc-skin-label-bg')).toBe('transparent');
+    expect(plain.get('--cc-skin-label-shadow')).toBe('none');
+    // `plain` IS the default, so it equals the absent case.
+    expect(buildSkinVars({ labelTreatment: 'plain' })).toEqual(buildSkinVars(undefined));
+
+    const impressed = toMap(buildSkinVars({ labelTreatment: 'impressed' }));
+    expect(impressed.get('--cc-skin-label-bg')).toBe('transparent');
+    expect(impressed.get('--cc-skin-label-shadow')).not.toBe('none');
+
+    const block = toMap(buildSkinVars({ labelTreatment: 'block' }));
+    expect(block.get('--cc-skin-label-bg')).toBe('var(--cc-color-accent)');
+    expect(block.get('--cc-skin-label-pad')).toBe('2px 8px');
+    // block ink reuses the luminance-safe on-accent ink so labels stay AA-legible.
+    expect(block.get('--cc-skin-label-fg')).toBe('var(--cc-color-on-category-games)');
+  });
+
+  test('setting one knob leaves the other two at their defaults', () => {
+    const map = toMap(buildSkinVars({ radius: 'md' }));
+    expect(map.get('--cc-skin-radius')).toBe('8px');
+    expect(map.get('--cc-skin-glow')).toBe('none');
+    expect(map.get('--cc-skin-label-fg')).toBe('var(--cc-color-text-muted)');
   });
 });
 

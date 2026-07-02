@@ -41,10 +41,13 @@ const config: Config = {
         body: ['var(--font-body)', 'sans-serif'],
       },
       boxShadow: {
-        // Subtle, theme-agnostic elevation instead of neon bloom.
-        'neon-magenta': '0 8px 40px rgba(0, 0, 0, 0.35)',
-        'neon-turquoise': '0 8px 40px rgba(0, 0, 0, 0.35)',
-        'neon-yellow': '0 8px 40px rgba(0, 0, 0, 0.35)',
+        // Accent glow family, driven by the `skin.glow` theme knob via
+        // --cc-skin-glow (fallback `none` = stock miresu's matte default). Bridged
+        // here so a fork that applies shadow-neon-* responds to the knob without
+        // duplicating shadow values. See buildSkinVars in theme.config.ts.
+        'neon-magenta': 'var(--cc-skin-glow, none)',
+        'neon-turquoise': 'var(--cc-skin-glow, none)',
+        'neon-yellow': 'var(--cc-skin-glow, none)',
       },
     },
   },
