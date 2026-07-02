@@ -312,6 +312,11 @@ a.cc-contributor-name:hover {
   aspect-ratio: 16 / 7;
   overflow: hidden;
   background: var(--cc-color-surface-3);
+  /* Accent glow driven by the theme's `skin.glow` knob. Default `none` = stock
+     miresu's matte hero (byte-identical); the overflow:hidden above clips the
+     inner media/scanline, not this outer shadow, so `neon`/`warm` bloom a halo
+     around the card. */
+  box-shadow: var(--cc-skin-glow, none);
 }
 
 /* Gradient fade */

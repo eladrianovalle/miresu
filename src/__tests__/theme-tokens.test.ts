@@ -162,7 +162,9 @@ describe('M4 skin knobs — buildSkinVars (glow / radius / labelTreatment)', () 
 
   test("an omitted skin key produces today's default values (byte-identity anchor)", () => {
     const map = toMap(buildSkinVars(undefined));
-    expect(map.get('--cc-skin-glow')).toBe('0 8px 40px rgba(0, 0, 0, 0.35)');
+    // Stock miresu ships matte (no accent glow), so absent glow == `none`, which
+    // makes the hero card's `box-shadow: var(--cc-skin-glow, none)` render nothing.
+    expect(map.get('--cc-skin-glow')).toBe('none');
     expect(map.get('--cc-skin-radius')).toBe('2px');
     expect(map.get('--cc-skin-label-bg')).toBe('transparent');
     expect(map.get('--cc-skin-label-fg')).toBe('var(--cc-color-text-muted)');
@@ -174,8 +176,14 @@ describe('M4 skin knobs — buildSkinVars (glow / radius / labelTreatment)', () 
     expect(buildSkinVars({})).toEqual(buildSkinVars(undefined));
   });
 
-  test('glow enum maps to its expected box-shadow value', () => {
+  test('glow enum maps to its expected box-shadow value (none == matte default)', () => {
+    // `none` disappears the hero card's accent shadow, and equals the absent
+    // default — so opting into `none` is the same matte look stock miresu ships.
     expect(toMap(buildSkinVars({ glow: 'none' })).get('--cc-skin-glow')).toBe('none');
+    expect(toMap(buildSkinVars({ glow: 'none' })).get('--cc-skin-glow')).toBe(
+      toMap(buildSkinVars(undefined)).get('--cc-skin-glow'),
+    );
+    // `neon` / `warm` are real, distinct accent halos (visibly live on the hero).
     expect(toMap(buildSkinVars({ glow: 'neon' })).get('--cc-skin-glow')).toBe(
       '0 0 24px rgb(var(--cc-color-accent-rgb) / 0.5)',
     );
@@ -211,7 +219,7 @@ describe('M4 skin knobs — buildSkinVars (glow / radius / labelTreatment)', () 
   test('setting one knob leaves the other two at their defaults', () => {
     const map = toMap(buildSkinVars({ radius: 'md' }));
     expect(map.get('--cc-skin-radius')).toBe('8px');
-    expect(map.get('--cc-skin-glow')).toBe('0 8px 40px rgba(0, 0, 0, 0.35)');
+    expect(map.get('--cc-skin-glow')).toBe('none');
     expect(map.get('--cc-skin-label-fg')).toBe('var(--cc-color-text-muted)');
   });
 });

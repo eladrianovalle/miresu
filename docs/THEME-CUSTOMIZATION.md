@@ -174,11 +174,22 @@ reads them.
 }
 ```
 
+Where each knob shows up in stock miresu:
+- **`radius`** — corner radius on filter tabs, thumbnails, stack/status chips, and
+  dossier buttons (`directory.css` / `dossier.css`).
+- **`labelTreatment`** — the dossier section labels (`.cc-section-label`) and meta
+  labels (`.cc-meta-label`).
+- **`glow`** — the dossier hero media card (`.cc-viewer-main`) gets an accent halo;
+  the knob is also bridged into the Tailwind `neon-*` box-shadow tokens, so a fork
+  that adds `shadow-neon-*` surfaces responds to the same knob.
+
 **Default-preserving contract:** every knob is optional, and an absent `skin` key
 (or any omitted knob) renders exactly as before. Each CSS consumer reads its var
-with a fallback equal to today's value (e.g. `border-radius: var(--cc-skin-radius,
-2px)`), and `buildSkinVars` emits those same defaults, so absence is pixel-identical
-to the pre-knob site. The bundled presets consume these knobs to vary their skin.
+with a fallback equal to today's value — `border-radius: var(--cc-skin-radius, 2px)`,
+`box-shadow: var(--cc-skin-glow, none)` (stock miresu ships matte, so absent glow is
+no shadow) — and `buildSkinVars` emits those same defaults, so absence is
+pixel-identical to the pre-knob site. The bundled presets consume these knobs to
+vary their skin.
 
 ## Critical files
 

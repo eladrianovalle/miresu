@@ -42,12 +42,12 @@ const config: Config = {
       },
       boxShadow: {
         // Accent glow family, driven by the `skin.glow` theme knob via
-        // --cc-skin-glow (fallback = today's subtle, theme-agnostic elevation).
-        // Bridged here so a fork that applies shadow-neon-* responds to the knob
-        // without duplicating shadow values. See buildSkinVars in theme.config.ts.
-        'neon-magenta': 'var(--cc-skin-glow, 0 8px 40px rgba(0, 0, 0, 0.35))',
-        'neon-turquoise': 'var(--cc-skin-glow, 0 8px 40px rgba(0, 0, 0, 0.35))',
-        'neon-yellow': 'var(--cc-skin-glow, 0 8px 40px rgba(0, 0, 0, 0.35))',
+        // --cc-skin-glow (fallback `none` = stock miresu's matte default). Bridged
+        // here so a fork that applies shadow-neon-* responds to the knob without
+        // duplicating shadow values. See buildSkinVars in theme.config.ts.
+        'neon-magenta': 'var(--cc-skin-glow, none)',
+        'neon-turquoise': 'var(--cc-skin-glow, none)',
+        'neon-yellow': 'var(--cc-skin-glow, none)',
       },
     },
   },

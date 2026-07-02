@@ -260,14 +260,16 @@ export function googleFontsHref(fonts: ThemeFonts): string {
 // bridged into the Tailwind neon box-shadow tokens) — no markup change.
 
 // Today's rendered values — the byte-identity anchor. An absent knob resolves
-// here, so a theme.json with no `skin` key paints exactly as it does now. The
-// glow default is the shipped neon-* box-shadow (a neutral elevation); the radius
-// default is the pervasive 2px chip/tab/thumbnail corner.
-const SKIN_GLOW_DEFAULT = '0 8px 40px rgba(0, 0, 0, 0.35)';
+// here, so a theme.json with no `skin` key paints exactly as it does now. Stock
+// miresu ships matte — no accent glow on any surface — so the glow default is
+// `none`; the radius default is the pervasive 2px chip/tab/thumbnail corner.
+const SKIN_GLOW_DEFAULT = 'none';
 const SKIN_RADIUS_DEFAULT = '2px';
 
-// glow enum → accent box-shadow. `neon` = bright accent halo, `warm` = soft
-// accent lamplight, `none` = matte (no shadow).
+// glow enum → accent box-shadow, applied to the dossier hero card (and bridged
+// into the Tailwind neon-* tokens for forks that add shadow-neon-* surfaces).
+// `neon` = bright accent halo, `warm` = soft accent lamplight, `none` = matte
+// (no shadow) — which is also the default, so absent glow == today's matte look.
 const SKIN_GLOW: Record<'neon' | 'warm' | 'none', string> = {
   neon: '0 0 24px rgb(var(--cc-color-accent-rgb) / 0.5)',
   warm: '0 6px 28px rgb(var(--cc-color-accent-rgb) / 0.22)',
