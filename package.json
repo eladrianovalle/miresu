@@ -23,7 +23,7 @@
   },
   "keywords": ["portfolio", "resume", "nextjs", "static-export", "json-resume"],
   "author": "Adriano Valle Hernandez",
-  "license": "MIT",
+  "license": "0BSD",
   "devDependencies": {
     "@axe-core/playwright": "^4.11.1",
     "@playwright/test": "^1.57.0",

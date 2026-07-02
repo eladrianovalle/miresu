@@ -149,4 +149,6 @@ The template milestones are complete, including **4b — GitHub Pages deploy**
 
 ## License
 
-[MIT](./LICENSE).
+[0BSD](./LICENSE) — the BSD Zero-Clause License. Public-domain-equivalent: use,
+copy, modify, and distribute (including in a proprietary fork) with **no
+conditions** — no attribution or notice retention required.
