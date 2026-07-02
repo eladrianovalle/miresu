@@ -1,9 +1,17 @@
 import type { Metadata } from 'next';
-import { display, mono, body } from './fonts';
 
 import { buildMetadata } from '@/lib/metadata';
 import { siteConfig } from '@/site.config';
-import { palettes, themeMode, resolvedDefaultMode, buildThemeVars } from '@/theme.config';
+import {
+  palettes,
+  themeMode,
+  resolvedDefaultMode,
+  buildThemeVars,
+  fontsHost,
+  themeFonts,
+  buildFontVars,
+  googleFontsHref,
+} from '@/theme.config';
 import './globals.css';
 
 // Inject BOTH palettes as `:root[data-theme="dark|light"]` CSS variables, so the
@@ -25,6 +33,15 @@ const THEME_STYLE =
 // before body paint, so it does NOT flash for JS users. See plan decision 3.
 const SSR_THEME: 'light' | 'dark' = resolvedDefaultMode;
 
+// M2 fonts. On the `google` host we inject a runtime Google Fonts <link> and set
+// `--font-*` straight from theme.json — a fork swaps typefaces by editing content
+// alone. On the `self` host next/font supplies those vars via the <html>
+// className below (byte-identical to pre-M2; zero external request). `family` is
+// the source of truth for both — self-host still uses it for the fallback vars.
+const IS_GOOGLE_FONTS = fontsHost === 'google';
+const GOOGLE_FONTS_HREF = googleFontsHref(themeFonts);
+const FONT_VARS_STYLE = `:root{${buildFontVars(themeFonts).join(';')}}`;
+
 // No-FOUC inline script — runs in <head> BEFORE paint. Mirrors resolveMode()
 // from theme.config with the build-time knobs baked in (kept byte-stable for a
 // future CSP hash/nonce). Read-once (no 'change' listener); double try/catch'd
@@ -41,12 +58,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const htmlClassName = `${display.variable} ${mono.variable} ${body.variable}`;
+  // Self-host: next/font's generated var-classes on <html>. Google-host: no
+  // next/font classes (the vars come from FONT_VARS_STYLE + the <link> below).
+  // The import is gated on the BUILD-TIME NEXT_PUBLIC_FONTS_HOST literal (mirrored
+  // from theme.json in next.config.js): Next inlines it and eliminates this whole
+  // branch on `google` builds, so next/font never runs and no self-hosted woff2
+  // <link rel=preload> ships for a Google-fonts site. A plain runtime check
+  // (fontsHost) would NOT be eliminated, so the preloads would leak.
+  let htmlClassName: string | undefined;
+  if (process.env.NEXT_PUBLIC_FONTS_HOST === 'self') {
+    const { display, mono, body } = await import('./fonts');
+    htmlClassName = `${display.variable} ${mono.variable} ${body.variable}`;
+  }
 
   return (
     // suppressHydrationWarning: the no-FOUC script mutates data-theme pre-
@@ -61,6 +89,14 @@ export default function RootLayout({
       <head>
         <script dangerouslySetInnerHTML={{ __html: NO_FOUC_SCRIPT }} />
         <style dangerouslySetInnerHTML={{ __html: THEME_STYLE }} />
+        {IS_GOOGLE_FONTS && (
+          <>
+            <link rel="preconnect" href="https://fonts.googleapis.com" />
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+            <link rel="stylesheet" href={GOOGLE_FONTS_HREF} />
+            <style dangerouslySetInnerHTML={{ __html: FONT_VARS_STYLE }} />
+          </>
+        )}
       </head>
       <body>{children}</body>
     </html>

@@ -32,6 +32,7 @@
   "defaultMode": "system",
   "enableToggle": true,
   "fonts": {
+    "host": "google",
     "display": { "family": "Hanken Grotesk", "weights": ["400", "500", "600", "700", "800"], "variable": "--font-display" },
     "mono": { "family": "IBM Plex Mono", "weights": ["400", "500", "600"], "variable": "--font-mono" },
     "body": { "family": "IBM Plex Sans", "weights": ["300", "400", "500", "600", "700"], "variable": "--font-body" }

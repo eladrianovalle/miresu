@@ -297,9 +297,10 @@ export const PaletteSchema = z.object({
   textMuted: z.string().regex(/^#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$/, 'Expected a hex color, e.g. #abc or #aabbcc'),
 });
 
-// Font family descriptors. Modeled (mirrors src/app/fonts.ts) but NOT consumed
-// in M0 — the next/font pipeline rewiring is M2 (#21). Permissive so the schema
-// can absorb provider-specific knobs without churn.
+// Font family descriptors. Permissive so the schema can absorb provider-specific
+// knobs without churn. Consumed in M2 (#21): `family` is the source of truth for
+// BOTH hosting modes (drives the Google `<link>` and the fallback CSS vars);
+// `weights` scopes the Google request.
 const FontDescriptorSchema = z
   .object({
     family: z.string(),
@@ -309,6 +310,12 @@ const FontDescriptorSchema = z
   .passthrough();
 
 export const ThemeFontsSchema = z.object({
+  // How the families are served (M2). `google` (default) injects a runtime
+  // Google Fonts <link> straight from `family` — a fork swaps typefaces by
+  // editing theme.json alone. `self` keeps the static next/font import in
+  // src/app/fonts.ts (self-hosted, zero external request) for forks that need a
+  // privacy-clean profile; there `family` still drives the fallback CSS vars.
+  host: z.enum(['google', 'self']).default('google'),
   display: FontDescriptorSchema,
   mono: FontDescriptorSchema,
   body: FontDescriptorSchema,

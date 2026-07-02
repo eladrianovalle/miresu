@@ -9,8 +9,11 @@ import {
   buildThemeVars,
   checkTokenContract,
   PALETTE_TOKENS,
+  fontStack,
+  buildFontVars,
+  googleFontsHref,
 } from '@/theme.config';
-import type { Palette } from '@/types/project-content';
+import type { Palette, ThemeFonts } from '@/types/project-content';
 
 // Theme M0 token-contract gate (Tier 1). These millisecond unit tests own
 // per-token correctness for the dual-var pipeline: derivation/drift, var
@@ -97,6 +100,54 @@ describe('onFillInk (luminance-aware, AA-safe category on-fill label)', () => {
       const ink = map.get(`--cc-color-on-category-${cat}`);
       expect(ink === '#ffffff' || ink === '#000000').toBe(true);
     }
+  });
+});
+
+describe('M2 fonts — delivery helpers', () => {
+  // A preset that reuses one face across roles (Werkstatt-style), with weights
+  // out of order + overlapping, to exercise de-dup + numeric sort + union.
+  const fixtureFonts: ThemeFonts = {
+    host: 'google',
+    display: { family: 'Archivo Expanded', weights: ['700', '400'] },
+    mono: { family: 'Archivo', weights: ['400'] },
+    body: { family: 'Archivo', weights: ['400', '500'] },
+  };
+
+  test('fontStack quotes the family and appends a role-correct fallback', () => {
+    const display = fontStack('Hanken Grotesk', 'display');
+    expect(display.startsWith("'Hanken Grotesk',")).toBe(true);
+    expect(display.endsWith('sans-serif')).toBe(true);
+    // mono must degrade to a MONOSPACE face, never a proportional one.
+    expect(fontStack('IBM Plex Mono', 'mono').endsWith('monospace')).toBe(true);
+    expect(fontStack('IBM Plex Sans', 'body').endsWith('sans-serif')).toBe(true);
+  });
+
+  test('buildFontVars emits --font-{display,mono,body} with the right stacks', () => {
+    const vars = buildFontVars(fixtureFonts);
+    expect(vars).toHaveLength(3);
+    const map = new Map(vars.map((d) => [d.slice(0, d.indexOf(':')), d.slice(d.indexOf(':') + 1)]));
+    expect(map.get('--font-display')?.startsWith("'Archivo Expanded',")).toBe(true);
+    expect(map.get('--font-mono')?.endsWith('monospace')).toBe(true);
+    expect(map.get('--font-body')?.endsWith('sans-serif')).toBe(true);
+  });
+
+  test('googleFontsHref de-dups shared families, unions + sorts weights, swaps display', () => {
+    expect(googleFontsHref(fixtureFonts)).toBe(
+      'https://fonts.googleapis.com/css2?family=Archivo+Expanded:wght@400;700&family=Archivo:wght@400;500&display=swap',
+    );
+  });
+
+  test('googleFontsHref encodes spaces and always ends with display=swap', () => {
+    const href = googleFontsHref({
+      host: 'google',
+      display: { family: 'Space Mono', weights: ['400'] },
+      mono: { family: 'Space Mono', weights: ['700'] },
+      body: { family: 'IBM Plex Sans' },
+    });
+    expect(href).toContain('family=Space+Mono:wght@400;700');
+    // a family with no weights emits a bare family= (no :wght@)
+    expect(href).toContain('family=IBM+Plex+Sans&');
+    expect(href.endsWith('&display=swap')).toBe(true);
   });
 });
 

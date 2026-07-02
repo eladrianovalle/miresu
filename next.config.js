@@ -12,9 +12,20 @@ function normalizeBasePath(value = '') {
 
 const exportBasePath = normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH)
 
+// Mirror theme.json's font host into a NEXT_PUBLIC_* env so the root layout can
+// BUILD-TIME gate the next/font import (M2). Next inlines this literal and dead-
+// code-eliminates the self-host branch on `google` builds, so a Google-fonts
+// site never ships preload <link>s for self-hosted woff2 nothing references.
+// theme.json stays the single source of truth (this only derives from it).
+const themeFonts = require('./src/content/theme.json').fonts
+const fontsHost = themeFonts && themeFonts.host === 'self' ? 'self' : 'google'
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   trailingSlash: true,
+  env: {
+    NEXT_PUBLIC_FONTS_HOST: fontsHost,
+  },
   async redirects() {
     return [
       {
