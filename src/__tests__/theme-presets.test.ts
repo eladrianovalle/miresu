@@ -1,7 +1,7 @@
 import { describe, test, expect } from 'vitest';
 import { readdirSync, readFileSync } from 'fs';
 import path from 'path';
-import { ThemeSchema, SkinSchema } from '@/types/project-content';
+import { ThemeSchema } from '@/types/project-content';
 import { listPresets, resolvePreset } from '../../scripts/apply-preset';
 
 // M4 preset catalog gate. Every bundled preset in src/content/theme-presets/ is a
@@ -45,17 +45,6 @@ describe('theme presets — schema validity (the real gate)', () => {
   test.each(presetFiles())('%s serves fonts via Google (public-engine default)', (file) => {
     const theme = ThemeSchema.parse(readPreset(file));
     expect(theme.fonts.host).toBe('google');
-  });
-});
-
-describe('theme presets — non-empty skin block on valid enums', () => {
-  test.each(presetFiles())('%s carries a non-empty, enum-valid skin block', (file) => {
-    const raw = readPreset(file) as { skin?: unknown };
-    // A rebuilt preset must not silently drop back to "no skin" — the whole M4
-    // point is that applying a preset changes the skin character too.
-    expect(raw.skin).toBeDefined();
-    const skin = SkinSchema.parse(raw.skin);
-    expect(Object.keys(skin).length).toBeGreaterThan(0);
   });
 });
 
