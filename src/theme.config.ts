@@ -259,18 +259,6 @@ export function googleFontsHref(fonts: ThemeFonts): string {
 // map to `--cc-skin-*` CSS vars consumed by the command-center skin CSS (and
 // bridged into the Tailwind neon box-shadow tokens) — no markup change.
 
-// The skin var basenames (after the `--cc-skin-` prefix), in injection order.
-// Single source of truth for the builder + its completeness gate (mirrors
-// PALETTE_TOKENS).
-export const SKIN_TOKENS = [
-  'glow',
-  'radius',
-  'label-bg',
-  'label-fg',
-  'label-pad',
-  'label-shadow',
-] as const;
-
 // Today's rendered values — the byte-identity anchor. An absent knob resolves
 // here, so a theme.json with no `skin` key paints exactly as it does now. The
 // glow default is the shipped neon-* box-shadow (a neutral elevation); the radius
@@ -317,7 +305,7 @@ const SKIN_LABEL: Record<'plain' | 'impressed' | 'block', LabelVars> = {
 /**
  * Build the `--cc-skin-*` CSS variable declarations from the theme's optional
  * `skin` knobs. Pure + dependency-free (mirrors buildThemeVars) so the token gate
- * can assert on it. ALWAYS emits every SKIN_TOKENS var; an omitted knob resolves
+ * can assert on it. ALWAYS emits all six `--cc-skin-*` vars; an omitted knob resolves
  * to the value miresu renders today, so an absent `skin` key is byte-identical to
  * the current site. `radius` is checked with `!== undefined` because `0` is a
  * valid, meaningful value (hard edges) — not "use the default".

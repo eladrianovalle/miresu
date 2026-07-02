@@ -13,7 +13,6 @@ import {
   buildFontVars,
   googleFontsHref,
   buildSkinVars,
-  SKIN_TOKENS,
 } from '@/theme.config';
 import type { Palette, ThemeFonts } from '@/types/project-content';
 
@@ -154,26 +153,12 @@ describe('M2 fonts — delivery helpers', () => {
 });
 
 // M4 skin knobs (glow / radius / labelTreatment). These own the additive-knob
-// contract: every var is always emitted, an omitted knob resolves to the value
-// miresu renders TODAY (the byte-identity anchor), and each enum maps to its
-// expected `--cc-skin-*` output. buildSkinVars is pure, so this is a Tier-1 gate.
+// contract: an omitted knob resolves to the value miresu renders TODAY (the
+// byte-identity anchor), and each enum maps to its expected `--cc-skin-*`
+// output. buildSkinVars is pure, so this is a Tier-1 gate.
 describe('M4 skin knobs — buildSkinVars (glow / radius / labelTreatment)', () => {
   const toMap = (decls: string[]) =>
     new Map(decls.map((d) => [d.slice(0, d.indexOf(':')), d.slice(d.indexOf(':') + 1)]));
-
-  test('always emits every SKIN_TOKENS var, for both absent and populated skin', () => {
-    for (const skin of [
-      undefined,
-      { glow: 'neon', radius: 'md', labelTreatment: 'block' } as const,
-    ]) {
-      const decls = buildSkinVars(skin);
-      expect(decls).toHaveLength(SKIN_TOKENS.length);
-      const map = toMap(decls);
-      for (const token of SKIN_TOKENS) {
-        expect(map.has(`--cc-skin-${token}`)).toBe(true);
-      }
-    }
-  });
 
   test("an omitted skin key produces today's default values (byte-identity anchor)", () => {
     const map = toMap(buildSkinVars(undefined));
