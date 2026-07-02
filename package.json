@@ -12,6 +12,7 @@
     "start": "next start",
     "lint": "eslint \"src/**/*.{js,jsx,ts,tsx}\" --max-warnings=0",
     "validate:content": "tsx scripts/validate-content.ts",
+    "theme:preset": "tsx scripts/apply-preset.ts",
     "build:staging": "npm run build:resume && cross-env NEXT_EXPORT=1 next build && tsx scripts/move-export.ts",
     "test:e2e": "playwright test --project=desktop",
     "test:visual": "playwright test --project=visual",
