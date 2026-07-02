@@ -321,15 +321,34 @@ export const ThemeFontsSchema = z.object({
   body: FontDescriptorSchema,
 });
 
+// The visual-character knobs (M4). All optional; an omitted knob (or an absent
+// `skin` key entirely) renders exactly as miresu does today, so existing forks
+// and the byte-identity gate are untouched. Each value maps to a `--cc-skin-*`
+// CSS var in theme.config.ts — a fork changes glow, corner radius, and section-
+// label treatment from theme.json alone, with no code edits.
+export const SkinSchema = z.object({
+  // Accent box-shadow family: `neon` = bright accent halo, `warm` = soft accent
+  // lamplight, `none` = matte. Absent → today's neutral elevation.
+  glow: z.enum(['neon', 'warm', 'none']).optional(),
+  // Corner radius on cards, tabs, and thumbnails: `0` = hard edges, `sm`, `md`.
+  // Absent → today's 2px.
+  radius: z.union([z.literal(0), z.literal('sm'), z.literal('md')]).optional(),
+  // Section/eyebrow labels: `plain` (flat), `impressed` (letterpress inset),
+  // `block` (filled accent block). Absent → `plain`.
+  labelTreatment: z.enum(['plain', 'impressed', 'block']).optional(),
+});
+
 export const ThemeSchema = z.object({
   colors: z.object({ light: PaletteSchema, dark: PaletteSchema }),
   defaultMode: z.enum(['light', 'dark', 'system']),
   enableToggle: z.boolean(),
   fonts: ThemeFontsSchema,
+  skin: SkinSchema.optional(),
 });
 
 export type Palette = z.infer<typeof PaletteSchema>;
 export type ThemeFonts = z.infer<typeof ThemeFontsSchema>;
+export type Skin = z.infer<typeof SkinSchema>;
 export type ThemeContent = z.infer<typeof ThemeSchema>;
 
 // --- Inferred TypeScript types ---

@@ -10,7 +10,7 @@
 // Default: a restrained neutral. The engine exposes three semantic accents —
 // `accent` (primary), `accentSecondary`, `accentTertiary` — equal in the
 // stock palette so the UI reads as a single accent; a fork themes them apart.
-import type { Palette, ThemeFonts } from './types/project-content';
+import type { Palette, ThemeFonts, Skin } from './types/project-content';
 import themeContent from './content/theme.json';
 
 // Both palettes, for the dual-`[data-theme]` injection in the root layout. The
@@ -32,6 +32,11 @@ export const themeFonts = themeContent.fonts as ThemeFonts;
 // `.default`, and a fork's theme.json may predate the `host` field.
 export const fontsHost: 'google' | 'self' =
   (themeContent.fonts as { host?: 'google' | 'self' }).host ?? 'google';
+
+// The optional skin knobs (M4). The raw JSON import bypasses Zod, and a fork's
+// theme.json may omit `skin` entirely → undefined → buildSkinVars uses today's
+// defaults, so the site is byte-identical to before the knobs existed.
+export const themeSkin: Skin | undefined = (themeContent as { skin?: Skin }).skin;
 
 // Pure, dependency-free no-FOUC resolution logic. Single source of truth for
 // BOTH the inline <head> script and the ThemeToggle/tests, so they can never
@@ -243,4 +248,88 @@ export function googleFontsHref(fonts: ThemeFonts): string {
     return `family=${name}:wght@${wght}`;
   });
   return `https://fonts.googleapis.com/css2?${familyParams.join('&')}&display=swap`;
+}
+
+// --- M4: skin knobs (glow / radius / labelTreatment) ----------------------
+
+// A fork alters its visual *character* — accent glow, corner radius, and section-
+// label treatment — from theme.json alone, with NO code edits. Each knob is
+// optional; an omitted knob (or an absent `skin` key) emits the value miresu
+// renders TODAY, so existing forks + the byte-identity gate are untouched. Values
+// map to `--cc-skin-*` CSS vars consumed by the command-center skin CSS (and
+// bridged into the Tailwind neon box-shadow tokens) — no markup change.
+
+// The skin var basenames (after the `--cc-skin-` prefix), in injection order.
+// Single source of truth for the builder + its completeness gate (mirrors
+// PALETTE_TOKENS).
+export const SKIN_TOKENS = [
+  'glow',
+  'radius',
+  'label-bg',
+  'label-fg',
+  'label-pad',
+  'label-shadow',
+] as const;
+
+// Today's rendered values — the byte-identity anchor. An absent knob resolves
+// here, so a theme.json with no `skin` key paints exactly as it does now. The
+// glow default is the shipped neon-* box-shadow (a neutral elevation); the radius
+// default is the pervasive 2px chip/tab/thumbnail corner.
+const SKIN_GLOW_DEFAULT = '0 8px 40px rgba(0, 0, 0, 0.35)';
+const SKIN_RADIUS_DEFAULT = '2px';
+
+// glow enum → accent box-shadow. `neon` = bright accent halo, `warm` = soft
+// accent lamplight, `none` = matte (no shadow).
+const SKIN_GLOW: Record<'neon' | 'warm' | 'none', string> = {
+  neon: '0 0 24px rgb(var(--cc-color-accent-rgb) / 0.5)',
+  warm: '0 6px 28px rgb(var(--cc-color-accent-rgb) / 0.22)',
+  none: 'none',
+};
+
+// radius enum → corner length. `0` = hard edges.
+const SKIN_RADIUS: Record<0 | 'sm' | 'md', string> = {
+  0: '0',
+  sm: '4px',
+  md: '8px',
+};
+
+// labelTreatment enum → the four label vars the skin CSS reads. `plain` (the
+// default) is flat; `impressed` adds a letterpress inset shadow; `block` fills a
+// solid accent block behind the label, using the luminance-safe on-accent ink
+// (buildThemeVars' --cc-color-on-category-games) so the text stays AA-legible.
+type LabelVars = { bg: string; fg: string; pad: string; shadow: string };
+const SKIN_LABEL: Record<'plain' | 'impressed' | 'block', LabelVars> = {
+  plain: { bg: 'transparent', fg: 'var(--cc-color-text-muted)', pad: '0', shadow: 'none' },
+  impressed: {
+    bg: 'transparent',
+    fg: 'var(--cc-color-text-muted)',
+    pad: '0',
+    shadow: '0 1px 0 rgb(var(--cc-color-ivory-rgb) / 0.06), 0 -1px 1px rgb(0 0 0 / 0.55)',
+  },
+  block: {
+    bg: 'var(--cc-color-accent)',
+    fg: 'var(--cc-color-on-category-games)',
+    pad: '2px 8px',
+    shadow: 'none',
+  },
+};
+
+/**
+ * Build the `--cc-skin-*` CSS variable declarations from the theme's optional
+ * `skin` knobs. Pure + dependency-free (mirrors buildThemeVars) so the token gate
+ * can assert on it. ALWAYS emits every SKIN_TOKENS var; an omitted knob resolves
+ * to the value miresu renders today, so an absent `skin` key is byte-identical to
+ * the current site. `radius` is checked with `!== undefined` because `0` is a
+ * valid, meaningful value (hard edges) — not "use the default".
+ */
+export function buildSkinVars(skin?: Skin): string[] {
+  const label = SKIN_LABEL[skin?.labelTreatment ?? 'plain'];
+  return [
+    `--cc-skin-glow:${skin?.glow ? SKIN_GLOW[skin.glow] : SKIN_GLOW_DEFAULT}`,
+    `--cc-skin-radius:${skin?.radius !== undefined ? SKIN_RADIUS[skin.radius] : SKIN_RADIUS_DEFAULT}`,
+    `--cc-skin-label-bg:${label.bg}`,
+    `--cc-skin-label-fg:${label.fg}`,
+    `--cc-skin-label-pad:${label.pad}`,
+    `--cc-skin-label-shadow:${label.shadow}`,
+  ];
 }

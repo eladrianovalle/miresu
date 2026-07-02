@@ -7,6 +7,8 @@ import {
   themeMode,
   resolvedDefaultMode,
   buildThemeVars,
+  themeSkin,
+  buildSkinVars,
   fontsHost,
   themeFonts,
   buildFontVars,
@@ -23,7 +25,13 @@ import './globals.css';
 // working). `color-scheme` per block keeps form controls + scrollbars in sync.
 const DARK_VARS = buildThemeVars(palettes.dark).join(';');
 const LIGHT_VARS = buildThemeVars(palettes.light).join(';');
+// Skin knobs (M4: glow / radius / labelTreatment) are mode-independent — the
+// label-fg default references a per-mode color var, resolved at use time — so
+// they inject once in a plain `:root` block. An absent `skin` key yields today's
+// defaults (buildSkinVars), keeping this pixel-identical to before the knobs.
+const SKIN_VARS = buildSkinVars(themeSkin).join(';');
 const THEME_STYLE =
+  `:root{${SKIN_VARS}}` +
   `:root[data-theme="dark"]{${DARK_VARS};color-scheme:dark}` +
   `:root[data-theme="light"]{${LIGHT_VARS};color-scheme:light}`;
 

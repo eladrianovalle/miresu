@@ -20,7 +20,7 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   padding: 6px 14px;
-  border-radius: 2px;
+  border-radius: var(--cc-skin-radius, 2px);
   color: var(--cc-color-text-muted);
   cursor: pointer;
   border: none;
@@ -66,7 +66,7 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  border-radius: 2px;
+  border-radius: var(--cc-skin-radius, 2px);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
@@ -179,7 +179,7 @@
   align-self: center;
   order: 2;
   margin-left: auto;
-  border-radius: 2px;
+  border-radius: var(--cc-skin-radius, 2px);
   overflow: hidden;
 }
 
@@ -189,7 +189,7 @@
   object-fit: cover;
   display: block;
   background: var(--cc-color-surface-3);
-  border-radius: 2px;
+  border-radius: var(--cc-skin-radius, 2px);
 }
 
 /* Badge overlaid on thumbnail, bottom-left */
@@ -273,7 +273,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 2px 8px;
-  border-radius: 2px;
+  border-radius: var(--cc-skin-radius, 2px);
   border: 1px solid;
   white-space: nowrap;
 }

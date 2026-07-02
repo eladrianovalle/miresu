@@ -5,6 +5,12 @@
      variables by the root layout from src/theme.config.ts — edit the palette
      there. Kept out of this file so the engine stays theme-agnostic. */
 
+  /* Skin tokens (--cc-skin-glow / --cc-skin-radius / --cc-skin-label-*) are
+     likewise injected by the root layout from the theme.json `skin` knobs
+     (buildSkinVars). The skin CSS reads them with a fallback equal to today's
+     value (e.g. `var(--cc-skin-radius, 2px)`), so an absent `skin` key renders
+     exactly as before. Edit the knobs in theme.json, not here. */
+
   /* Fonts */
   --cc-font-display: var(--font-display), sans-serif;
   --cc-font-mono: var(--font-mono), monospace;
