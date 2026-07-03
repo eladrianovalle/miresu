@@ -84,6 +84,14 @@ Content pieces:
 The seed content ships as a fictional person ("Sam Rivera") so you can see every
 surface working before you replace it with your own.
 
+**Categories are a fixed three** — `games` / `client` / `personal`, one per accent
+colour. Rename their display labels in `src/site.config.ts` (see `labels` above);
+the keys themselves are structural and stay. Each category's Zod schema in
+`src/types/project-content.ts` `.extend()`s a shared base with its own fields
+(`games` adds `platforms`/`storeLinks`, `client` adds `scope`/`clientLogo`, …).
+Those extras are an example of the pattern — a non-game fork keeps the base fields
+and swaps the extension for whatever its work needs.
+
 ## Useful commands
 
 ```bash
