@@ -37,6 +37,7 @@ export function FontField({ path, value, onChange, error, hint, readOnly }: Font
         spellCheck={false}
         onChange={(e) => onChange(path, e.target.value)}
         aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
         placeholder="e.g. Inter, or type any family"
         className={`w-full bg-surface-1 border rounded-md px-3 py-2 text-sm font-mono text-text-primary
           ${error ? 'border-accent/60' : 'border-surface-3'}

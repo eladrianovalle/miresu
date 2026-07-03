@@ -17,8 +17,19 @@ const exportBasePath = normalizeBasePath(process.env.NEXT_PUBLIC_BASE_PATH)
 // code-eliminates the self-host branch on `google` builds, so a Google-fonts
 // site never ships preload <link>s for self-hosted woff2 nothing references.
 // theme.json stays the single source of truth (this only derives from it).
-const themeFonts = require('./src/content/theme.json').fonts
-const fontsHost = themeFonts && themeFonts.host === 'self' ? 'self' : 'google'
+// Read defensively: a missing or mid-edit (unparseable) theme.json should give a
+// clear warning + the safe 'google' default, not a cryptic Node crash during
+// config eval. `validate:content` is the real gate for schema issues.
+let fontsHost = 'google'
+try {
+  const themeFonts = require('./src/content/theme.json').fonts
+  if (themeFonts && themeFonts.host === 'self') fontsHost = 'self'
+} catch (err) {
+  console.warn(
+    `[next.config] Could not read src/content/theme.json (${err.message}); ` +
+      `defaulting fonts.host to 'google'.`,
+  )
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
