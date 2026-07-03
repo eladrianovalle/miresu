@@ -113,16 +113,38 @@ after content or theme changes with `npm run test:visual -- --update-snapshots`.
 `npm run build` runs the resume PDF/JSON generators first (`build:resume`), then
 `next build`, so the resume artifacts are present in `public/` for the site.
 
-## Theme
+## Theme & customization
 
-The default theme is a restrained neutral — a clean starting point you restyle to
-make it yours. Edit the palette in `src/theme.config.ts` and the typefaces in
-`src/app/fonts.ts`; the engine reads from there (`tailwind.config.ts` imports the
-palette and the root layout injects it as `:root` CSS variables, so engine files
-stay untouched). The engine exposes three semantic accents — `accent` (primary),
-`accent-secondary`, `accent-tertiary` — all equal in the neutral default; give
-each a distinct value to differentiate (e.g. per category). Custom command-center
-CSS lives under `src/styles/`.
+The default theme is a restrained neutral — a clean starting point you make yours.
+Customization is a **two-tier** feature: easy knobs for the common axes, and a
+full CSS overlay when you outgrow them.
+
+### Tier 1 — knobs in `src/content/theme.json` (no code)
+
+One JSON file drives the whole look:
+
+- **Palette** — a light **and** dark set of 12 semantic tokens each, including the
+  three accents (`accent`, `accent-secondary`, `accent-tertiary`; equal in the
+  neutral default — give each a distinct value to differentiate, e.g. per category).
+- **Fonts** — `fonts.host: "google"` loads any family via a runtime `<link>`, or
+  `"self"` self-hosts (zero external requests). Families live in `theme.json` too.
+- **Mode** — `defaultMode` + a light/dark `enableToggle`.
+- **Skin knobs** — `skin.glow` (`neon`/`warm`/`none`), `skin.radius` (`0`/`sm`/`md`),
+  `skin.labelTreatment` (`plain`/`impressed`/`block`).
+
+Edit it by hand, through the dev-only **`/admin/theme/`** editor (colour + font
+pickers), or apply a **bundled preset** — `npm run apply-preset kiln|werkstatt|nocturne`,
+three looks that share this one layout. No engine files are touched;
+`src/theme.config.ts` is just the typed reader over `theme.json`.
+
+### Tier 2 — the skin overlay in `src/styles/command-center/*.css` (total reskin)
+
+For a look richer than the knobs express, the command-center CSS is a per-fork
+overlay you own outright. Restyle as hard as you like against the `--cc-color-*`
+and `--cc-skin-*` CSS variables the pipeline injects — two forks can look like they
+came from different studios while sharing the same layout.
+
+Reach for tier 1 for the common axes; drop to tier 2 when your skin outgrows a knob.
 
 ## Deploy to GitHub Pages
 
