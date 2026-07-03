@@ -1,0 +1,41 @@
+{
+  "colors": {
+    "light": {
+      "accent": "#d62828",
+      "accentSecondary": "#1d4e89",
+      "accentTertiary": "#f6bd16",
+      "primaryDark": "#f4f1e9",
+      "surface1": "#ffffff",
+      "surface2": "#f4f1e9",
+      "surface3": "#ece7d9",
+      "border": "#141414",
+      "ivory": "#111111",
+      "textPrimary": "#141414",
+      "textSecondary": "#3a3a3a",
+      "textMuted": "#5f5f5f"
+    },
+    "dark": {
+      "accent": "#f0473f",
+      "accentSecondary": "#5b8fd6",
+      "accentTertiary": "#f6bd16",
+      "primaryDark": "#111111",
+      "surface1": "#1a1a1a",
+      "surface2": "#222222",
+      "surface3": "#2c2c2c",
+      "border": "#ededed",
+      "ivory": "#f5f5f5",
+      "textPrimary": "#f0f0f0",
+      "textSecondary": "#c2c2c2",
+      "textMuted": "#969696"
+    }
+  },
+  "defaultMode": "light",
+  "enableToggle": true,
+  "fonts": {
+    "host": "google",
+    "display": { "family": "Archivo", "weights": ["600", "700", "800", "900"], "variable": "--font-display" },
+    "mono": { "family": "Space Mono", "weights": ["400", "700"], "variable": "--font-mono" },
+    "body": { "family": "Archivo", "weights": ["400", "500", "600", "700"], "variable": "--font-body" }
+  },
+  "skin": { "glow": "none", "radius": 0, "labelTreatment": "block" }
+}

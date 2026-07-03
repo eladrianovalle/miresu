@@ -1,0 +1,41 @@
+{
+  "colors": {
+    "light": {
+      "accent": "#3f6b74",
+      "accentSecondary": "#a8623b",
+      "accentTertiary": "#6f7d4e",
+      "primaryDark": "#efe9dc",
+      "surface1": "#e9e4d8",
+      "surface2": "#e3ddcf",
+      "surface3": "#ded7c6",
+      "border": "#c8bfa9",
+      "ivory": "#2a2621",
+      "textPrimary": "#241f19",
+      "textSecondary": "#514a3f",
+      "textMuted": "#6a6255"
+    },
+    "dark": {
+      "accent": "#6ea3ad",
+      "accentSecondary": "#d08a5f",
+      "accentTertiary": "#a3b37a",
+      "primaryDark": "#17140f",
+      "surface1": "#1e1a14",
+      "surface2": "#26211a",
+      "surface3": "#302a20",
+      "border": "#3a3428",
+      "ivory": "#f2ece0",
+      "textPrimary": "#ece6da",
+      "textSecondary": "#b8b0a0",
+      "textMuted": "#8f877a"
+    }
+  },
+  "defaultMode": "light",
+  "enableToggle": true,
+  "fonts": {
+    "host": "google",
+    "display": { "family": "Fraunces", "weights": ["400", "500", "600", "700"], "variable": "--font-display" },
+    "mono": { "family": "IBM Plex Mono", "weights": ["400", "500"], "variable": "--font-mono" },
+    "body": { "family": "Inter", "weights": ["400", "500", "600", "700"], "variable": "--font-body" }
+  },
+  "skin": { "glow": "none", "radius": "sm", "labelTreatment": "impressed" }
+}

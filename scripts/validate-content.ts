@@ -158,6 +158,7 @@ async function main() {
     validateSingleton(contentDir, 'identity.json', IdentitySchema, 'Identity'),
     validateSingleton(contentDir, 'consulting.json', ConsultingContentSchema, 'Consulting'),
     validateSingleton(contentDir, 'theme.json', ThemeSchema, 'Theme'),
+    validateProjectDir(contentDir, 'theme-presets', ThemeSchema, 'Theme/Preset'),
     validateSingleton(contentDir, 'resume/skills.json', SkillsTaxonomySchema, 'Resume/Skills'),
     validateSingleton(contentDir, 'resume/projects.json', ResumeProjectsSchema, 'Resume/Projects'),
     validateSingleton(contentDir, 'resume/education.json', EducationListSchema, 'Resume/Education'),
