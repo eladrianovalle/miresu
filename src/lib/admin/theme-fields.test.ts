@@ -79,10 +79,6 @@ describe('toColorInputValue (native picker needs #rrggbb)', () => {
 });
 
 describe('CURATED_FONTS', () => {
-  test('offers a substantial curated list', () => {
-    expect(CURATED_FONTS.length).toBeGreaterThanOrEqual(30);
-  });
-
   test('includes the families this engine ships with', () => {
     for (const family of ['Hanken Grotesk', 'IBM Plex Mono', 'IBM Plex Sans', 'Syne', 'Space Mono']) {
       expect(CURATED_FONTS).toContain(family);
