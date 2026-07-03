@@ -9,6 +9,7 @@ import {
   EducationListSchema,
   ResumeHeaderSchema,
   ResumeProjectsSchema,
+  ThemeSchema,
 } from '@/types/project-content';
 
 // --- Content type definitions ---
@@ -17,6 +18,7 @@ export type ProjectCategoryKey = 'games' | 'client' | 'personal';
 export type SingletonKey =
   | 'consulting'
   | 'identity'
+  | 'theme'
   | 'resume-header'
   | 'resume-skills'
   | 'resume-education'
@@ -75,6 +77,12 @@ export const CONTENT_TYPES: Record<ContentTypeKey, ContentTypeEntry> = {
     schema: IdentitySchema,
     filePath: 'src/content/identity.json',
     label: 'Identity',
+  },
+  theme: {
+    kind: 'singleton',
+    schema: ThemeSchema,
+    filePath: 'src/content/theme.json',
+    label: 'Theme',
   },
   'resume-header': {
     kind: 'singleton',

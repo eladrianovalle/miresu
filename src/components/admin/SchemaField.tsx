@@ -7,10 +7,20 @@ import { SelectField } from './fields/SelectField';
 import { ArrayField } from './fields/ArrayField';
 import { ObjectField } from './fields/ObjectField';
 import { UploadField } from './fields/UploadField';
+import { ColorField } from './fields/ColorField';
+import { FontField } from './fields/FontField';
 import { assetKindForPath } from '@/lib/admin/asset-fields';
+import { themeFieldKindForPath } from '@/lib/admin/theme-fields';
 import type { JsonSchemaNode } from '@/lib/admin/api-types';
 
 export type { JsonSchemaNode };
+
+/** Stringify a primitive form value for a <select>; anything else → ''. */
+function primitiveToString(value: unknown): string {
+  return typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean'
+    ? String(value)
+    : '';
+}
 
 export interface SchemaFieldProps {
   schema: JsonSchemaNode;
@@ -62,6 +72,28 @@ export function SchemaField(props: SchemaFieldProps) {
     );
   }
 
+  // Rule 1b: Literal union (Zod's z.union of z.literal) -> Select. Zod emits an
+  // `anyOf` of single-`const` nodes (e.g. skin.radius = 0 | 'sm' | 'md'). Show the
+  // consts as options and map the chosen label back to its original typed value
+  // so a numeric literal like 0 round-trips as a number, not the string "0".
+  if (schema.anyOf && schema.anyOf.length > 0 && schema.anyOf.every((m) => 'const' in m)) {
+    const consts = schema.anyOf.map((m) => m.const);
+    return (
+      <SelectField
+        path={path}
+        options={consts.map(primitiveToString)}
+        value={primitiveToString(value)}
+        onChange={(p, v) => {
+          const match = consts.find((c) => primitiveToString(c) === v);
+          onChange(p, match ?? v);
+        }}
+        error={errors?.get(path)}
+        hint={hint}
+        readOnly={readOnly}
+      />
+    );
+  }
+
   // Rule 2: Boolean -> Checkbox
   if (schema.type === 'boolean') {
     return (
@@ -99,6 +131,33 @@ export function SchemaField(props: SchemaFieldProps) {
         <UploadField
           path={path}
           kind={assetKind}
+          value={(value as string) ?? ''}
+          onChange={onChange}
+          error={errors?.get(path)}
+          hint={hint}
+          readOnly={readOnly}
+        />
+      );
+    }
+
+    // Theme palette colors + font families get dedicated widgets.
+    const themeKind = themeFieldKindForPath(path);
+    if (themeKind === 'color') {
+      return (
+        <ColorField
+          path={path}
+          value={(value as string) ?? ''}
+          onChange={onChange}
+          error={errors?.get(path)}
+          hint={hint}
+          readOnly={readOnly}
+        />
+      );
+    }
+    if (themeKind === 'font') {
+      return (
+        <FontField
+          path={path}
           value={(value as string) ?? ''}
           onChange={onChange}
           error={errors?.get(path)}
