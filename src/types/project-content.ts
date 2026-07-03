@@ -181,6 +181,22 @@ export const ProjectBaseSchema = z.object({
 });
 
 // --- Category-specific schemas ---
+//
+// Three fixed category keys (games / client / personal). The count of three is a
+// framework opinion — each maps 1:1 to one of the three semantic accent colours.
+// The keys are structural (content dirs, schemas, resume grouping); their display
+// *labels* are overridable per fork (`labels.categories` in site.config.ts).
+//
+// Each category `.extend()`s ProjectBaseSchema with its own domain fields. The
+// fields below (games' platforms/storeLinks/accentColor, client's scope/clientLogo,
+// …) are an *example* of the pattern, not a framework requirement: a non-game fork
+// keeps the base fields and swaps the extension for its own (e.g. `venue`/`date`
+// for a speaker, `medium`/`edition` for an artist).
+//
+// A future option is to collapse the three into one base schema with these fields
+// optional. Deferred on purpose — it trades the compile-time per-category guarantee
+// for a looser shape and regresses the admin auto-form; do it only when a real fork
+// needs it, not speculatively.
 
 export const GameProjectSchema = ProjectBaseSchema.extend({
   platforms: z.array(z.string()),
