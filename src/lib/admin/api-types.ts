@@ -16,6 +16,9 @@ export interface JsonSchemaNode {
   required?: string[];
   items?: JsonSchemaNode;
   additionalProperties?: boolean;
+  /** Zod literal unions (e.g. skin.radius) emit an anyOf of single-`const` nodes. */
+  anyOf?: JsonSchemaNode[];
+  const?: unknown;
 }
 
 // --- Schema endpoint ---
