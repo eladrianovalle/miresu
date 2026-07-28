@@ -9,28 +9,14 @@
   "relationship": "own",
   "status": "in-progress",
   "year": 2021,
-  "platforms": [
-    "Web"
-  ],
+  "platforms": ["Web"],
   "draft": false,
   "storeLinks": [
-    {
-      "platform": "itch",
-      "url": "https://example.com/atlas-os",
-      "enabled": false
-    }
+    { "platform": "itch", "url": "https://example.com/atlas-os", "enabled": false }
   ],
-  "stack": [
-    "TypeScript",
-    "React",
-    "Next.js",
-    "Design Systems"
-  ],
+  "stack": ["TypeScript", "React", "Next.js", "Design Systems"],
   "resumeTitle": "Independent Designer & Developer",
-  "dateRange": {
-    "start": "2016-01",
-    "end": "present"
-  },
+  "dateRange": { "start": "2016-01", "end": "present" },
   "resumeBullets": [
     "Design and build digital products end to end — from interaction design and prototyping through production front-end code — partnering directly with founders and product teams.",
     "Create and maintain design systems and component libraries that keep design and engineering in sync and accelerate delivery across teams.",
@@ -39,11 +25,7 @@
   ],
   "accentColor": "turquoise",
   "links": [
-    {
-      "label": "Source",
-      "url": "https://github.com/samrivera/atlas-os",
-      "type": "website"
-    }
+    { "label": "Source", "url": "https://github.com/samrivera/atlas-os", "type": "website" }
   ],
   "testimonial": {
     "quote": "Atlas OS saved us weeks of dashboard groundwork.",
