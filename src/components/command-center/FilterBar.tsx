@@ -2,7 +2,7 @@
 
 import { useRouter, usePathname } from 'next/navigation';
 import { useCallback, useRef } from 'react';
-import { useUrlQuery, setUrlQuery } from '@/hooks/useUrlQuery';
+import { useUrlQuery } from '@/hooks/useUrlQuery';
 import type { ProjectCategory } from '@/lib/projects';
 import { categoryLabels } from '@/lib/site-labels';
 
@@ -42,8 +42,10 @@ export function FilterBar({ counts }: FilterBarProps) {
         params.delete('category');
       }
       const nextQuery = params.toString();
+      // Only change the address bar. `useUrlQuery` is watching it, so the tabs
+      // and the list follow from there — the same path every other navigation
+      // takes, which is what keeps them from ever disagreeing with the URL.
       router.push(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
-      setUrlQuery(nextQuery);
     },
     [query, router, pathname],
   );

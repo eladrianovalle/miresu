@@ -20,27 +20,45 @@ import { useSyncExternalStore } from 'react';
  * stay mounted from the exported HTML onward; hydration changes a string, not
  * the shape of the tree, so React updates the nodes already on the page and
  * focus stays where the visitor put it.
+ *
+ * The address bar is the only answer this store gives. It deliberately keeps no
+ * copy of its own, because a copy is a thing that can go stale: leave a project
+ * page for the directory and a remembered `category=games` would leave the
+ * filter tabs, the list, and every project link describing a filter the address
+ * bar no longer mentions.
  */
 
 const listeners = new Set<() => void>();
-
-/** The last query string we read or were told about. */
-let queryString: string | null = null;
-
-function readAddressBar(): string {
-  return window.location.search.replace(/^\?/, '');
-}
 
 function tellListeners() {
   for (const listener of listeners) listener();
 }
 
+/*
+ * Next's router moves between routes by calling `history.pushState` or
+ * `replaceState`, and neither fires an event of its own. Wrapping them is how
+ * we hear about every navigation that isn't the back/forward button: a `<Link>`
+ * click, a `router.push()` such as the mobile "Back to directory" button, and
+ * the filter buttons.
+ */
+function watchHistoryWrites() {
+  for (const method of ['pushState', 'replaceState'] as const) {
+    const write = window.history[method];
+    window.history[method] = function (
+      this: History,
+      ...args: Parameters<History['pushState']>
+    ) {
+      const result = write.apply(this, args);
+      tellListeners();
+      return result;
+    };
+  }
+}
+
 if (typeof window !== 'undefined') {
-  // Back and forward move through history without going through us.
-  window.addEventListener('popstate', () => {
-    queryString = readAddressBar();
-    tellListeners();
-  });
+  // Back and forward move through history without going through the router.
+  window.addEventListener('popstate', tellListeners);
+  watchHistoryWrites();
 }
 
 function subscribe(onChange: () => void) {
@@ -51,10 +69,7 @@ function subscribe(onChange: () => void) {
 }
 
 function getQueryString(): string {
-  if (queryString === null) {
-    queryString = readAddressBar();
-  }
-  return queryString;
+  return window.location.search.replace(/^\?/, '');
 }
 
 // While the page is being built there is no address bar, and no filter can have
@@ -66,14 +81,4 @@ function getQueryStringWhileBuilding(): string {
 
 export function useUrlQuery(): string {
   return useSyncExternalStore(subscribe, getQueryString, getQueryStringWhileBuilding);
-}
-
-/**
- * Point readers at a query string we are navigating to ourselves. Router pushes
- * don't fire `popstate`, and we already know exactly where we're going, so
- * there is nothing to wait for and nothing to re-read.
- */
-export function setUrlQuery(nextQuery: string) {
-  queryString = nextQuery;
-  tellListeners();
 }
