@@ -18,9 +18,10 @@ type DirectoryListProps = {
  *
  * This component never reads the URL's query string — it is handed one. That
  * keeps it renderable during the static export, so the built HTML ships the
- * real list instead of an empty gap. `ProjectDirectory` renders it twice (once
- * unfiltered before the browser takes over, once filtered after) and this is
- * the single copy of the markup they share.
+ * real list instead of an empty gap. It stays mounted from that exported HTML
+ * onward: when the browser takes over and a filter applies, `ProjectDirectory`
+ * hands it a different list of projects rather than replacing it, so the nodes
+ * on the page survive and so does anything attached to them, focus included.
  */
 export function DirectoryList({ projects, query = '' }: DirectoryListProps) {
   const listRef = useRef<HTMLDivElement>(null);
