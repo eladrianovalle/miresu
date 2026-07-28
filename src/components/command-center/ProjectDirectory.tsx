@@ -1,15 +1,16 @@
 'use client';
 
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useMemo, useCallback, useRef } from 'react';
-import { DirectoryItem } from './DirectoryItem';
+import { useMemo } from 'react';
+import { DirectoryList } from './DirectoryList';
+import { useHasHydrated } from '@/hooks/useHasHydrated';
 import type { Project, ProjectCategory } from '@/lib/projects';
 
 type ProjectDirectoryProps = {
   projects: Project[];
 };
 
-function ProjectDirectoryInner({ projects }: ProjectDirectoryProps) {
+function FilteredProjectDirectory({ projects }: ProjectDirectoryProps) {
   const searchParams = useSearchParams();
   const rawCategory = searchParams.get('category');
   const activeCategory = rawCategory && ['games', 'client', 'personal'].includes(rawCategory)
@@ -21,45 +22,21 @@ function ProjectDirectoryInner({ projects }: ProjectDirectoryProps) {
     return projects.filter((p) => p.category === activeCategory);
   }, [projects, activeCategory]);
 
-  const listRef = useRef<HTMLDivElement>(null);
-
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    const items = listRef.current?.querySelectorAll<HTMLElement>('[role="option"]');
-    if (!items?.length) return;
-
-    const currentIndex = Array.from(items).findIndex((el) => el === document.activeElement);
-    let nextIndex: number | null = null;
-
-    if (e.key === 'ArrowDown') nextIndex = Math.min(currentIndex + 1, items.length - 1);
-    if (e.key === 'ArrowUp') nextIndex = Math.max(currentIndex - 1, 0);
-    if (e.key === 'Home') nextIndex = 0;
-    if (e.key === 'End') nextIndex = items.length - 1;
-
-    if (nextIndex !== null && nextIndex !== currentIndex) {
-      e.preventDefault();
-      items[nextIndex].focus();
-    }
-  }, []);
-
-  return (
-    <div
-      id="project-directory"
-      role="listbox"
-      aria-label="Projects"
-      ref={listRef}
-      onKeyDown={handleKeyDown}
-    >
-      {filtered.map((project, i) => (
-        <DirectoryItem key={project.slug} project={project} index={i} />
-      ))}
-    </div>
-  );
+  return <DirectoryList projects={filtered} query={searchParams.toString()} />;
 }
 
-export function ProjectDirectory(props: ProjectDirectoryProps) {
-  return (
-    <Suspense fallback={null}>
-      <ProjectDirectoryInner {...props} />
-    </Suspense>
-  );
+export function ProjectDirectory({ projects }: ProjectDirectoryProps) {
+  const hasHydrated = useHasHydrated();
+
+  // Narrowing the list to one category needs the browser's `?category=`, which
+  // does not exist while the site is being exported to static HTML. So the built
+  // page — and the browser's first render, which has to match it — gets the whole
+  // list, unfiltered. That is the right answer for a visitor who has not picked a
+  // filter, and the only answer for a crawler or for anyone whose JavaScript
+  // never arrives. Filtering is the enhancement that layers on a moment later.
+  if (!hasHydrated) {
+    return <DirectoryList projects={projects} />;
+  }
+
+  return <FilteredProjectDirectory projects={projects} />;
 }

@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import type { Project } from '@/lib/projects';
 import { getHeroImage } from '@/lib/project-utils';
 import { categoryLabels } from '@/lib/site-labels';
@@ -11,6 +11,13 @@ import { DraftBadge } from '@/components/ui/DraftBadge';
 type DirectoryItemProps = {
   project: Project;
   index?: number;
+  /**
+   * The page's current query string, appended to this item's link so the chosen
+   * filter survives the click. Passed in rather than read from the URL here:
+   * reading it would make this item impossible to render during the static
+   * export, and the list it lives in has to ship in the built HTML.
+   */
+  query?: string;
 };
 
 function StatusBadge({ project }: { project: Project }) {
@@ -22,13 +29,11 @@ function StatusBadge({ project }: { project: Project }) {
   return <span className={`cc-status-badge ${statusClass}`}>{project.status}</span>;
 }
 
-export function DirectoryItem({ project, index = 0 }: DirectoryItemProps) {
-  const searchParams = useSearchParams();
+export function DirectoryItem({ project, index = 0, query = '' }: DirectoryItemProps) {
   const pathname = usePathname();
   const imageSrc = project.confidential ? null : (project.thumbnail ?? getHeroImage(project));
   const categoryLabel = categoryLabels[project.category];
 
-  const query = searchParams.toString();
   const href = `/projects/${project.slug}/${query ? `?${query}` : ''}`;
   // The currently-open project (its dossier is showing) stays lit in the list.
   // Compare with the trailing slash stripped from both sides: under static
