@@ -112,11 +112,21 @@ test.describe('Keyboard Navigation', () => {
   test('Enter on directory item navigates to project', async ({ page }) => {
     await page.goto('/');
 
+    // The directory reads useSearchParams(), so Next streams it in behind a
+    // Suspense boundary; for a beat after `goto` resolves the item can still
+    // be sitting in that boundary's hidden template (zero-size, no layout
+    // box). A hidden element can't take focus — the browser just no-ops the
+    // call — so wait for the real "focusable" signal (visible) rather than
+    // assume `goto` resolving means the page is interactive yet.
     const firstItem = page.locator('[role="option"]').first();
+    await expect(firstItem).toBeVisible();
     await firstItem.focus();
     await page.keyboard.press('Enter');
 
-    await expect(page).toHaveURL(/\/projects\//);
+    // The dev server renders /projects/[slug] on demand; under concurrent
+    // test load its render time is not fixed, so give the navigation more
+    // room than the 5s default rather than raise it for every assertion.
+    await expect(page).toHaveURL(/\/projects\//, { timeout: 15_000 });
   });
 
   test('Escape in mobile detail returns to directory', async ({ page }) => {
