@@ -1,7 +1,8 @@
 'use client';
 
-import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { Suspense, useCallback, useRef } from 'react';
+import { useRouter, usePathname } from 'next/navigation';
+import { useCallback, useRef } from 'react';
+import { useUrlQuery } from '@/hooks/useUrlQuery';
 import type { ProjectCategory } from '@/lib/projects';
 import { categoryLabels } from '@/lib/site-labels';
 
@@ -16,27 +17,37 @@ const FILTERS: { label: string; value: ProjectCategory | null }[] = [
   { label: categoryLabels.personal, value: 'personal' },
 ];
 
-function FilterBarInner({ counts }: FilterBarProps) {
-  const searchParams = useSearchParams();
+export function FilterBar({ counts }: FilterBarProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const rawCategory = searchParams.get('category');
+
+  // Empty while the site is being exported to static HTML, and for the browser's
+  // first render, which has to match it. So the built page shows the bar in its
+  // resting state, "All" selected — what an arriving visitor should see before
+  // anything is filtered — and the live selection takes over a moment later,
+  // without disturbing the buttons already on the page.
+  const query = useUrlQuery();
+
+  const rawCategory = new URLSearchParams(query).get('category');
   const activeCategory = rawCategory && ['games', 'client', 'personal'].includes(rawCategory)
     ? (rawCategory as ProjectCategory)
     : null;
 
   const handleFilter = useCallback(
     (value: ProjectCategory | null) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(query);
       if (value) {
         params.set('category', value);
       } else {
         params.delete('category');
       }
-      const query = params.toString();
-      router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+      const nextQuery = params.toString();
+      // Only change the address bar. `useUrlQuery` is watching it, so the tabs
+      // and the list follow from there — the same path every other navigation
+      // takes, which is what keeps them from ever disagreeing with the URL.
+      router.push(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
     },
-    [searchParams, router, pathname],
+    [query, router, pathname],
   );
 
   const total = counts.games + counts.client + counts.personal;
@@ -94,13 +105,5 @@ function FilterBarInner({ counts }: FilterBarProps) {
         );
       })}
     </div>
-  );
-}
-
-export function FilterBar(props: FilterBarProps) {
-  return (
-    <Suspense fallback={<div className="cc-filter-bar" />}>
-      <FilterBarInner {...props} />
-    </Suspense>
   );
 }

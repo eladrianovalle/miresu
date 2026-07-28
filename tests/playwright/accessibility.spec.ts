@@ -6,6 +6,26 @@ import { firstProjectSlug } from './helpers/content';
 const PROJECT_SLUG = firstProjectSlug();
 
 /**
+ * What the directory is currently showing, read off the page rather than
+ * re-derived from the content files: which row comes first, and how long the
+ * list gets, are the app's business (it sorts by year and can hold projects
+ * back from the site), so a test that recomputed either would be guessing.
+ *
+ * `topCategory` is the first row's own category. Filtering by it shortens the
+ * list without dropping that row, which is what lets a test focus the row and
+ * then ask whether the very same element survived.
+ */
+async function readDirectory(page: import('@playwright/test').Page) {
+  const options = page.locator('[role="option"]');
+  const total = await options.count();
+  const topCategory = await options.first().getAttribute('data-category');
+  const inTopCategory = await page
+    .locator(`[role="option"][data-category="${topCategory}"]`)
+    .count();
+  return { total, topCategory, inTopCategory };
+}
+
+/**
  * Run axe against the settled page. Entrance animations (the dossier content
  * staggers in over ~0.4s via cc-juice-in) are jumped to their end state first,
  * so contrast is measured against final colors rather than mid-fade opacity —
@@ -112,12 +132,9 @@ test.describe('Keyboard Navigation', () => {
   test('Enter on directory item navigates to project', async ({ page }) => {
     await page.goto('/');
 
-    // The directory reads useSearchParams(), so Next streams it in behind a
-    // Suspense boundary; for a beat after `goto` resolves the item can still
-    // be sitting in that boundary's hidden template (zero-size, no layout
-    // box). A hidden element can't take focus — the browser just no-ops the
-    // call — so wait for the real "focusable" signal (visible) rather than
-    // assume `goto` resolving means the page is interactive yet.
+    // The list now ships in the exported HTML, so the item is there from the
+    // first paint. Still wait for the real "focusable" signal rather than
+    // assume `goto` resolving means the item can take focus.
     const firstItem = page.locator('[role="option"]').first();
     await expect(firstItem).toBeVisible();
     await firstItem.focus();
@@ -129,11 +146,154 @@ test.describe('Keyboard Navigation', () => {
     await expect(page).toHaveURL(/\/projects\//, { timeout: 15_000 });
   });
 
+  /**
+   * The filter bar and project list ship in the exported HTML, so a visitor can
+   * tab into them before React has hydrated. React must then adopt the nodes
+   * that are already on the page rather than build replacements: replacing them
+   * would strand a keyboard user, dropping focus back to the page body mid-list
+   * with no indication of where they were.
+   *
+   * Focus the element the instant it exists, then wait for the app to come
+   * alive, then check that the very same node still holds focus.
+   *
+   * Loading with `?category=…` is what makes "the app came alive" something a
+   * visitor could see for themselves. The built HTML lists every project with
+   * "All" lit, because there was no address bar to read while it was written.
+   * Narrowing that list to the category the URL asks for is the first thing
+   * only a running app can do — so the narrowed list appearing on screen is an
+   * exact hydration signal, with no React internals consulted and no guessed
+   * wait. `optionsAtGrab` then proves we really did get in first: it records
+   * the list length at the moment we took focus, which must still be the full,
+   * unfiltered one.
+   */
+  for (const [what, selector] of [
+    ['directory item', '[role="option"]'],
+    ['filter tab', '[role="tab"][aria-selected="true"]'],
+  ] as const) {
+    test(`focus on a ${what} survives hydration`, async ({ page }) => {
+      await page.goto('/');
+      const { total, topCategory, inTopCategory } = await readDirectory(page);
+      // The signal only means anything if filtering visibly shortens the list.
+      expect(inTopCategory).toBeLessThan(total);
+
+      await page.addInitScript((sel) => {
+        const grab = () => {
+          const target = document.querySelector<HTMLElement>(sel);
+          if (!target) {
+            requestAnimationFrame(grab);
+            return;
+          }
+          target.focus();
+          // Hold the exact node so we can tell "same node, still focused" from
+          // "a lookalike replacement in its place".
+          const held = window as unknown as {
+            __focusedEarly?: HTMLElement;
+            __optionsAtGrab?: number;
+          };
+          held.__focusedEarly = target;
+          held.__optionsAtGrab = document.querySelectorAll('[role="option"]').length;
+        };
+        requestAnimationFrame(grab);
+      }, selector);
+
+      await page.goto(`/?category=${topCategory}`);
+
+      // The app is live: the list now shows the category the URL asked for.
+      await expect(
+        page.locator(`[role="tab"][data-cat="${topCategory}"]`),
+      ).toHaveAttribute('aria-selected', 'true');
+      await expect(page.locator('[role="option"]')).toHaveCount(inTopCategory);
+
+      const survived = await page.evaluate(() => {
+        const held = window as unknown as {
+          __focusedEarly?: HTMLElement;
+          __optionsAtGrab?: number;
+        };
+        if (!held.__focusedEarly) return { grabbed: false };
+        return {
+          optionsAtGrab: held.__optionsAtGrab,
+          stillInDocument: held.__focusedEarly.isConnected,
+          stillFocused: document.activeElement === held.__focusedEarly,
+        };
+      });
+
+      expect(survived).toEqual({
+        optionsAtGrab: total,
+        stillInDocument: true,
+        stillFocused: true,
+      });
+    });
+  }
+
   test('Escape in mobile detail returns to directory', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
     await page.goto(`/projects/${PROJECT_SLUG}/`);
     await page.keyboard.press('Escape');
     await expect(page).toHaveURL(/\/$/);
+  });
+});
+
+/**
+ * The directory panel stays on screen while you move around the site, so it can
+ * outlive the filter that put it in its current state. Whatever the address bar
+ * says is what the tabs, the list, and the project links have to show — after
+ * any navigation, not just after clicking a filter button.
+ *
+ * Both routes below leave a filtered URL for one without a filter, and neither
+ * goes through the back button: the mobile back control is a router push, and
+ * the Hire link is an ordinary in-app link. Before this was fixed, both left
+ * the directory showing the old category and handing out project links that
+ * quietly put it back.
+ */
+test.describe('The address bar is the source of truth', () => {
+  async function expectNoFilterShown(
+    page: import('@playwright/test').Page,
+    unfiltered: { total: number; topCategory: string | null },
+  ) {
+    await expect(page.locator('[role="tab"][data-cat="all"]')).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    await expect(
+      page.locator(`[role="tab"][data-cat="${unfiltered.topCategory}"]`),
+    ).toHaveAttribute('aria-selected', 'false');
+    await expect(page.locator('[role="option"]')).toHaveCount(unfiltered.total);
+
+    const hrefs = await page
+      .locator('[role="option"]')
+      .evaluateAll((items) => items.map((item) => item.getAttribute('href') ?? ''));
+    expect(hrefs.filter((href) => href.includes('category='))).toEqual([]);
+  }
+
+  test('mobile back to the directory drops the filter with the URL', async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto('/');
+    const unfiltered = await readDirectory(page);
+
+    await page.goto(`/projects/${PROJECT_SLUG}/?category=${unfiltered.topCategory}`);
+    await expect(
+      page.locator(`[role="tab"][data-cat="${unfiltered.topCategory}"]`),
+    ).toHaveAttribute('aria-selected', 'true');
+
+    await page.getByRole('button', { name: 'Back to project directory' }).click();
+    await expect(page).toHaveURL(/\/$/);
+
+    await expectNoFilterShown(page, unfiltered);
+  });
+
+  test('following a link that carries no filter drops it too', async ({ page }) => {
+    await page.goto('/');
+    const unfiltered = await readDirectory(page);
+
+    await page.goto(`/?category=${unfiltered.topCategory}`);
+    await expect(
+      page.locator(`[role="tab"][data-cat="${unfiltered.topCategory}"]`),
+    ).toHaveAttribute('aria-selected', 'true');
+
+    await page.getByRole('link', { name: 'Hire' }).click();
+    await expect(page).toHaveURL(/\/consulting\//);
+
+    await expectNoFilterShown(page, unfiltered);
   });
 });
 
