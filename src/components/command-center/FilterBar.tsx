@@ -1,12 +1,19 @@
 'use client';
 
 import { useSearchParams, useRouter, usePathname } from 'next/navigation';
-import { Suspense, useCallback, useRef } from 'react';
+import { useCallback, useRef } from 'react';
+import { useHasHydrated } from '@/hooks/useHasHydrated';
 import type { ProjectCategory } from '@/lib/projects';
 import { categoryLabels } from '@/lib/site-labels';
 
 type FilterBarProps = {
   counts: Record<ProjectCategory, number>;
+};
+
+type FilterBarControlsProps = FilterBarProps & {
+  activeCategory: ProjectCategory | null;
+  /** The page's current query string, so switching filters keeps any other params. */
+  query?: string;
 };
 
 const FILTERS: { label: string; value: ProjectCategory | null }[] = [
@@ -16,27 +23,28 @@ const FILTERS: { label: string; value: ProjectCategory | null }[] = [
   { label: categoryLabels.personal, value: 'personal' },
 ];
 
-function FilterBarInner({ counts }: FilterBarProps) {
-  const searchParams = useSearchParams();
+/**
+ * The filter buttons themselves. Which one is lit comes in as a prop rather than
+ * being read off the URL here, so these controls can be rendered during the
+ * static export — that is how the built HTML ships a real filter bar instead of
+ * an empty strip.
+ */
+function FilterBarControls({ counts, activeCategory, query = '' }: FilterBarControlsProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const rawCategory = searchParams.get('category');
-  const activeCategory = rawCategory && ['games', 'client', 'personal'].includes(rawCategory)
-    ? (rawCategory as ProjectCategory)
-    : null;
 
   const handleFilter = useCallback(
     (value: ProjectCategory | null) => {
-      const params = new URLSearchParams(searchParams.toString());
+      const params = new URLSearchParams(query);
       if (value) {
         params.set('category', value);
       } else {
         params.delete('category');
       }
-      const query = params.toString();
-      router.push(query ? `${pathname}?${query}` : pathname, { scroll: false });
+      const nextQuery = params.toString();
+      router.push(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
     },
-    [searchParams, router, pathname],
+    [query, router, pathname],
   );
 
   const total = counts.games + counts.client + counts.personal;
@@ -97,10 +105,32 @@ function FilterBarInner({ counts }: FilterBarProps) {
   );
 }
 
-export function FilterBar(props: FilterBarProps) {
+function FilterBarInner({ counts }: FilterBarProps) {
+  const searchParams = useSearchParams();
+  const rawCategory = searchParams.get('category');
+  const activeCategory = rawCategory && ['games', 'client', 'personal'].includes(rawCategory)
+    ? (rawCategory as ProjectCategory)
+    : null;
+
   return (
-    <Suspense fallback={<div className="cc-filter-bar" />}>
-      <FilterBarInner {...props} />
-    </Suspense>
+    <FilterBarControls
+      counts={counts}
+      activeCategory={activeCategory}
+      query={searchParams.toString()}
+    />
   );
+}
+
+export function FilterBar({ counts }: FilterBarProps) {
+  const hasHydrated = useHasHydrated();
+
+  // Knowing which filter is applied needs the browser's `?category=`, which the
+  // static export does not have. So the built page shows the bar in its resting
+  // state, "All" selected — what an arriving visitor should see before anything
+  // is filtered — and the live selection takes over a moment later.
+  if (!hasHydrated) {
+    return <FilterBarControls counts={counts} activeCategory={null} />;
+  }
+
+  return <FilterBarInner counts={counts} />;
 }
