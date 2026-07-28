@@ -112,12 +112,9 @@ test.describe('Keyboard Navigation', () => {
   test('Enter on directory item navigates to project', async ({ page }) => {
     await page.goto('/');
 
-    // The directory reads useSearchParams(), so Next streams it in behind a
-    // Suspense boundary; for a beat after `goto` resolves the item can still
-    // be sitting in that boundary's hidden template (zero-size, no layout
-    // box). A hidden element can't take focus — the browser just no-ops the
-    // call — so wait for the real "focusable" signal (visible) rather than
-    // assume `goto` resolving means the page is interactive yet.
+    // The list now ships in the exported HTML, so the item is there from the
+    // first paint. Still wait for the real "focusable" signal rather than
+    // assume `goto` resolving means the item can take focus.
     const firstItem = page.locator('[role="option"]').first();
     await expect(firstItem).toBeVisible();
     await firstItem.focus();
@@ -128,6 +125,60 @@ test.describe('Keyboard Navigation', () => {
     // room than the 5s default rather than raise it for every assertion.
     await expect(page).toHaveURL(/\/projects\//, { timeout: 15_000 });
   });
+
+  /**
+   * The filter bar and project list ship in the exported HTML, so a visitor can
+   * tab into them before React has hydrated. React must then adopt the nodes
+   * that are already on the page rather than build replacements: replacing them
+   * would strand a keyboard user, dropping focus back to the page body mid-list
+   * with no indication of where they were.
+   *
+   * Focus the element the instant it exists, then wait for React to hydrate it,
+   * then check that the very same node still holds focus.
+   */
+  for (const [what, selector] of [
+    ['directory item', '[role="option"]'],
+    ['filter tab', '[role="tab"][aria-selected="true"]'],
+  ] as const) {
+    test(`focus on a ${what} survives hydration`, async ({ page }) => {
+      await page.addInitScript((sel) => {
+        const grab = () => {
+          const target = document.querySelector<HTMLElement>(sel);
+          if (!target) {
+            requestAnimationFrame(grab);
+            return;
+          }
+          target.focus();
+          // Hold the exact node so we can tell "same node, still focused" from
+          // "a lookalike replacement in its place".
+          (window as unknown as { __focusedEarly?: HTMLElement }).__focusedEarly = target;
+        };
+        requestAnimationFrame(grab);
+      }, selector);
+
+      await page.goto('/');
+
+      // React stamps its own bookkeeping keys onto every DOM node it owns, so
+      // their presence is the precise "hydration has reached this element"
+      // signal — no fixed wait needed.
+      await page.waitForFunction((sel) => {
+        const el = document.querySelector(sel);
+        return !!el && Object.keys(el).some((key) => key.startsWith('__reactFiber$'));
+      }, selector);
+
+      const survived = await page.evaluate(() => {
+        const held = (window as unknown as { __focusedEarly?: HTMLElement }).__focusedEarly;
+        if (!held) return { grabbed: false };
+        return {
+          grabbed: true,
+          stillInDocument: held.isConnected,
+          stillFocused: document.activeElement === held,
+        };
+      });
+
+      expect(survived).toEqual({ grabbed: true, stillInDocument: true, stillFocused: true });
+    });
+  }
 
   test('Escape in mobile detail returns to directory', async ({ page }) => {
     await page.setViewportSize({ width: 360, height: 800 });
