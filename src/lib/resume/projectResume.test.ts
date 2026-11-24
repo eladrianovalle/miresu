@@ -203,14 +203,14 @@ describe('projectResume — header override', () => {
     const model = projectResume([], identity, {
       header: {
         email: 'override@orcpunk.com',
-        phone: '917.825.7155',
+        phone: '555.010.0199',
         location: 'White Plains, NY',
         links: [{ label: 'Portfolio', url: 'https://orcpunk.com' }],
       },
     });
     // Name always comes from identity.
     expect(model.header.name).toBe('Test Person');
-    expect(model.header.phone).toBe('917.825.7155');
+    expect(model.header.phone).toBe('555.010.0199');
     expect(model.header.location).toBe('White Plains, NY');
     expect(model.header.email).toBe('override@orcpunk.com');
     expect(model.header.links).toEqual([
