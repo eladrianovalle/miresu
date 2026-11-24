@@ -16,7 +16,7 @@ export const metadata: Metadata = buildMetadata({
 
 export default function PrivacyPage() {
   return (
-    <main>
+    <main className="min-h-screen bg-primary-dark text-text-primary [&_a]:text-accent-secondary">
       <div className="container tablet">
         <Link
           href="/"
