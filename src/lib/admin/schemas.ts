@@ -88,25 +88,25 @@ export const CONTENT_TYPES: Record<ContentTypeKey, ContentTypeEntry> = {
     kind: 'singleton',
     schema: ResumeHeaderSchema,
     filePath: 'src/content/resume/header.json',
-    label: 'Résumé — Header',
+    label: 'Resume — Header',
   },
   'resume-skills': {
     kind: 'singleton',
     schema: SkillsTaxonomySchema,
     filePath: 'src/content/resume/skills.json',
-    label: 'Résumé — Skills',
+    label: 'Resume — Skills',
   },
   'resume-education': {
     kind: 'singleton',
     schema: EducationListSchema,
     filePath: 'src/content/resume/education.json',
-    label: 'Résumé — Education',
+    label: 'Resume — Education',
   },
   'resume-projects': {
     kind: 'singleton',
     schema: ResumeProjectsSchema,
     filePath: 'src/content/resume/projects.json',
-    label: 'Résumé — Projects',
+    label: 'Resume — Projects',
   },
 } as const;
 
