@@ -1,5 +1,14 @@
 /* stylelint-disable at-rule-no-unknown */
 @import '../styles/reset.css';
 
+/* The page's base, under everything, is the theme's background, not the
+   reset's white. Browsers show it wherever the page doesn't reach: Safari's
+   toolbar and status bar areas on iPhone, and when a page is pulled past its
+   edge. White there draws a seam around a dark page. */
+html,
+body {
+  background-color: var(--cc-color-primary-dark);
+}
+
 /* stylelint-disable-next-line at-rule-no-unknown */
 @tailwind utilities;
